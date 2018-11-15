@@ -24,24 +24,21 @@
  * @subpackage Gravityforms_Nutshell_Integration/includes
  * @author     Gulo <Gulo Solutions>
  */
-class Gravityforms_Nutshell_Integration_i18n {
+class Gravityforms_Nutshell_Integration_i18n
+{
 
 
-	/**
-	 * Load the plugin text domain for translation.
-	 *
-	 * @since    1.0.0
-	 */
-	public function load_plugin_textdomain() {
-
-		load_plugin_textdomain(
-			'gravityforms-nutshell-integration',
-			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
-		);
-
-	}
-
-
-
+    /**
+     * Load the plugin text domain for translation.
+     *
+     * @since    1.0.0
+     */
+    public function load_plugin_textdomain()
+    {
+        load_plugin_textdomain(
+            'gravityforms-nutshell-integration',
+            false,
+            dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
+        );
+    }
 }

@@ -20,17 +20,17 @@
  * @subpackage Gravityforms_Nutshell_Integration/includes
  * @author     Gulo <Gulo Solutions>
  */
-class Gravityforms_Nutshell_Integration_Deactivator {
+class Gravityforms_Nutshell_Integration_Deactivator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function deactivate() {
-
-	}
-
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function deactivate()
+    {
+    }
 }
