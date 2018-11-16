@@ -108,19 +108,34 @@ class Gravityforms_Nutshell_Integration_Public
         $gravity_forms = new Controllers\GravityFormsController();
     }
 
-    public function post_to_nutshell_2( $form )
+    public function post_to_nutshell_2($form)
     {
+        $id = $name = $email = $phone = '';
 
-    	    error_log(print_r($form['fields'][0]->label
-, true));
+        $field_object = RGFormsModel::get_form_meta($form['form_id']);
 
-    	// foreach ($form['fields'] as $key=>$value) {
+        foreach ($field_object['fields'] as $field) {
+            if (strtolower($field->label) == 'name') {
+                $id = $field->id;
+                $name = $form[$id];
+            }
 
-    	// 	  error_log(print_r($inputs, true));
-    	// }
+            if (strtolower($field->label) == 'email') {
+                $id = $field->id;
+                $email = $form[$id];
+            }
+        }
 
-    	//  error_log(print_r($entry, true));
+        $nutshell = new Controllers\NutshellController();
 
-    	 global $wpdb;
+        $contacts = $nutshell->findNutshellContacts();
+
+        error_log(print_r($contacts, true));
+
+        // error_log(print_r($name, true));
+
+        // error_log(print_r($email, true));
+
+        //global $wpdb;
     }
 }

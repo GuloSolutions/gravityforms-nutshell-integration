@@ -1,49 +1,38 @@
 <?php
 
-namespace App\Controllers;
+namespace Controllers;
 
-use NutshellApi;
+use NutshellApi\NutshellApi;
+use GravityFormsController;
 
-use App\Controllers\GravityFormsController;
+class NutshellController
+{
+    public $api;
 
+    public function __construct()
+    {
+        $username = $apiKey = '';
 
-class NutshellController {
+        if (defined('NUTSHELL_API_APIKEY') && defined('NUTSHELL_API_USERNAME')) {
+            $apiKey = NUTSHELL_API_APIKEY;
 
-	$apiKey;
+            $username = NUTSHELL_API_USERNAME;
 
-	$username;
+            $this->api = new NutshellApi($username, $apiKey);
+        }
+    }
 
-	$api;
+    public function getContact()
+    {
+        $this->result = $this->api->call('getContact', $params);
+    }
 
-	$gravity_data;
+    public function findNutshellContacts()
+    {
+        $params = array( 'contactId' => 132 );
 
-	public function __construct()
-	{
-		$gravity = new GravityForms();
+        $result = $this->api->findContacts($params);
 
-		$gravity_data = $gravity->get();
-
-		$this->api = new NutshellApi($username, $apiKey);
-	}
-
-	public function getContact()
-	{
-		$this->result = $this->api->call('getContact', $params);
-	}
-
-	public function findContacts(params)
-	{
-		$result = $api->findContacts($params);
-	}
-
-
-	$params = array( 'contactId' => 132 );
-	$result = $api->call('getContact', $params);
-
-	$params = array(
-			'query' => array(
-				'leadId' => 1209,
-			),
-	);
-
+        return $result;
+    }
 }
