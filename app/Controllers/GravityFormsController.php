@@ -2,30 +2,28 @@
 
 namespace Controllers;
 
+use Controllers\NutshellController;
+
 class GravityFormsController
 {
-
-    // $base_url = 'http://localhost/wpdev/gravityformsapi/';
-    // $api_key = 'your_api_key';
-    // $private_key = 'your_private_key';
-
-    // private $method  = 'GET';
-
-    // private $route;
-
-    // private $date;
+    private $nutshell;
+    private $contacts = [];
 
     public function __construct()
     {
         if (!$this->checkIfGFActive()) {
             return;
         }
+
+        $this->nutshell->getInstanceData();
+        $this->nutshell->getUser();
+        $this->nutshell->findNutshellContacts();
     }
 
     public function checkIfGFActive()
     {
         if (class_exists('GFCommon')) {
-            error_log(print_r("active", true));
+            $this->nutshell = new NutshellController();
             return true;
         }
         return false;
@@ -34,20 +32,16 @@ class GravityFormsController
     public function addAction()
     {
         add_action('gform_after_submission_2', 'post_to_third_party_2', 10, 2);
-        function post_to_third_party_7($entry, $form)
+
+        function post_to_third_party_2($entry, $form)
         {
-            $baseURI = 'https://app-2GCK1V3Z33.marketingautomation.services/webforms/receivePostback/WxviTCKbWEDiVzA/';
-            $endpoint = '1234io3l-c442-8c9e-1234-9933b6n1gi6s';
-            $post_url = $baseURI . $endpoint;
-            $body = array(
-            'First Name' => rgar($entry, '30'),
-            'Last Name' => rgar($entry, '31'),
-            'Email Name' => rgar($entry, '3'),
-            'Phone Number' => rgar($entry, '10'),
-            'trackingid__sb' => $_COOKIE['__ss_tk']
-            );
-            $request = new WP_Http();
-            $response = $request->post($post_url, array( 'body' => $body ));
+            error_log(print_r($form, true));
+
+            error_log(print_r('after submit', true));
+
+            $contacts = $this->nutshell->getContacts();
+            error_log(print_r('contacts', true));
+            error_log(print_r($contacts, true));
         }
     }
 

@@ -114,6 +114,10 @@ class Gravityforms_Nutshell_Integration_Public
 
         $field_object = RGFormsModel::get_form_meta($form['form_id']);
 
+
+                // error_log(print_r($field_object, true));
+
+
         foreach ($field_object['fields'] as $field) {
             if (strtolower($field->label) == 'name') {
                 $id = $field->id;
@@ -126,15 +130,15 @@ class Gravityforms_Nutshell_Integration_Public
             }
         }
 
-        $nutshell = new Controllers\NutshellController();
+        // $nutshell = new Controllers\NutshellController();
 
-        $contacts = $nutshell->findNutshellContacts();
+        // $contacts = $nutshell->findNutshellContacts();
 
-        error_log(print_r($contacts, true));
+        // error_log(print_r($contacts, true));
 
-        // error_log(print_r($name, true));
+        error_log(print_r($name, true));
 
-        // error_log(print_r($email, true));
+        error_log(print_r($email, true));
 
         //global $wpdb;
     }

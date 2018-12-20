@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "~6.0",
         "composer/installers": "~1.0",
         "nesbot/carbon": "~1.0",
         "nutshellcrm/nutshell-api-php":"dev-master"
@@ -28,7 +28,9 @@
     "autoload": {
         "psr-4": {
             "Models\\": "app/Models",
-            "Controllers\\": "app/Controllers"
+            "Controllers\\": "app/Controllers",
+            "Nutshell\\": "vendor/nutshellcrm/nutshell-api-php"
+
         },
         "extra": {
             "installer-paths": {
