@@ -67,18 +67,24 @@ class NutshellController
     {
         $params = array(
             'contact' => array(
-                'name' => 'Joan Smith',
-                'phone' => array(
-                    '734-555-9090',
-                    'cell' => '734-555-6711',
-                ),
-                'email' => array(
-                    'jsmith@example.com',
-                    'blackberry' => 'jsmith@att.blackberry.com',
-                ),
+                'name' => $params['name'],
+                'phone' => $params['phone'],
+                'email' => $params['email']
             ),
         );
         $newContact = $api->call('newContact', $params);
         $newContactId = $newContact->id;
+
+        if ($newContactId) {
+            return true;
+        }
+        return false;
+    }
+
+    public function addNote($params)
+    {
+        $entity = $params['entity'];
+        $note = $params['note'];
+        $newNote = $api->call('newNote', $entity, $note);
     }
 }

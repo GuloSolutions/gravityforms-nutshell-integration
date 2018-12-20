@@ -33,6 +33,15 @@ class Gravityforms_Nutshell_Integration_Public
     private $plugin_name;
 
     /**
+     * The Nutshell API var.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $plugin_name    The ID of this plugin.
+     */
+    private $nutshell;
+
+    /**
      * The version of this plugin.
      *
      * @since    1.0.0
@@ -104,19 +113,18 @@ class Gravityforms_Nutshell_Integration_Public
     public function startService()
     {
         global $gravity_forms;
-
-        $gravity_forms = new Controllers\GravityFormsController();
+        $gravity_forms = Controllers\GravityFormsController::getInstance();
     }
 
     public function post_to_nutshell_2($form)
     {
+        global $gravity_forms;
+        $names = [];
+        $params = [];
+
         $id = $name = $email = $phone = '';
 
         $field_object = RGFormsModel::get_form_meta($form['form_id']);
-
-
-                // error_log(print_r($field_object, true));
-
 
         foreach ($field_object['fields'] as $field) {
             if (strtolower($field->label) == 'name') {
@@ -128,18 +136,33 @@ class Gravityforms_Nutshell_Integration_Public
                 $id = $field->id;
                 $email = $form[$id];
             }
+
+            if (strtolower($field->label) == 'phone') {
+                $id = $field->id;
+                $phone = $form[$id];
+            }
         }
 
-        // $nutshell = new Controllers\NutshellController();
+        $contacts = $gravity_forms->getContacts();
 
-        // $contacts = $nutshell->findNutshellContacts();
+        foreach ($contacts as $contact) {
+            error_log(print_r(strtolower($contact->name), true));
+            $contact->name = strtolower($contact->name);
+            $names[] = $contact->name;
+        }
 
-        // error_log(print_r($contacts, true));
+        $name = strtolower($name);
 
-        error_log(print_r($name, true));
+        if (array_search($name, $names) > 0) {
+            return;
+        } else {
+            $params = [
+                    'name' => ucwords($name),
+                    'phone' => $phone,
+                    'email' => $email
+            ];
 
-        error_log(print_r($email, true));
-
-        //global $wpdb;
+            $gravity_forms->addContact($params);
+        }
     }
 }
