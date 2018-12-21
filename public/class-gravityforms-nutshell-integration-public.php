@@ -114,6 +114,18 @@ class Gravityforms_Nutshell_Integration_Public
     {
         global $gravity_forms;
 
+        // $forms = GFAPI::get_forms();
+
+        // foreach($forms as $form){
+        //     error_log(print_r($form['name'], true));
+        //     error_log(print_r($form['fields'][0], true));
+        //     foreach($form['fields'] as $field){
+        //         error_log(print_r($field->label, true));
+        //     }
+        // }
+
+        //error_log(print_r($form['name'], true));
+
         $gravity_forms = Controllers\GravityFormsController::getInstance();
     }
 

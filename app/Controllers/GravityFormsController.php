@@ -51,7 +51,6 @@ class GravityFormsController
         if (empty(self::$instance)) {
             self::$instance = new GravityFormsController();
         }
-
         return self::$instance;
     }
 }

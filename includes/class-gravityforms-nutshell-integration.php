@@ -153,9 +153,26 @@ class Gravityforms_Nutshell_Integration
     private function define_admin_hooks()
     {
         $plugin_admin = new Gravityforms_Nutshell_Integration_Admin($this->get_plugin_name(), $this->get_version());
+        error_log(print_r('in enqeue', true));
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 1, 10);
+    }
+
+    private function enqueue_scripts($hook)
+
+
+    {
+        error_log(print_r('in enqeue 2 ', true));
+
+        error_log(print_r($hook, true));
+
+
+        if ('options-general_my-setting-admin.php' !== $hook) {
+
+            return;
+        }
+        wp_enqueue_script('form_script', plugin_dir_url(__FILE__) . 'public/js/gravityforms-nutshell-integration-public.js');
     }
 
     /**
@@ -171,7 +188,6 @@ class Gravityforms_Nutshell_Integration
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_action('init', $plugin_public, 'startService', 10);
-        $this->loader->add_action('gform_post_submission_2', $plugin_public, 'post_to_nutshell_2', 10);
     }
 
     /**

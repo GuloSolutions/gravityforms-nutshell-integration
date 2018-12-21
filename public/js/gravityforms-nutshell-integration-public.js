@@ -1,6 +1,12 @@
 (function( $ ) {
 	'use strict';
 
+
+
+	$('body').append('<p>Test<p/>');
+
+
+
 	/**
 	 * All of the code for your public-facing JavaScript source
 	 * should reside in this file.

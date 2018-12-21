@@ -40,7 +40,7 @@ class MySettingsPage
         // Set class property
         $this->options = get_option('my_option_name'); ?>
         <div class="wrap">
-            <?php echo '<h1>' . $this->name .' '.'settings</h1>'; ?>
+            <?php echo '<h3>' . $this->name .' '.'settings</h3>'; ?>
 
             <form method="post" action="options.php">
             <?php
