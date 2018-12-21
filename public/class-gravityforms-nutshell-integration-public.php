@@ -113,56 +113,64 @@ class Gravityforms_Nutshell_Integration_Public
     public function startService()
     {
         global $gravity_forms;
+
         $gravity_forms = Controllers\GravityFormsController::getInstance();
     }
 
     public function post_to_nutshell_2($form)
     {
         global $gravity_forms;
-        $names = [];
-        $params = [];
 
-        $id = $name = $email = $phone = '';
+        $saved_form_ids = [];
 
-        $field_object = RGFormsModel::get_form_meta($form['form_id']);
+        $saved_form_ids = get_option('my_option_name');
 
-        foreach ($field_object['fields'] as $field) {
-            if (strtolower($field->label) == 'name') {
-                $id = $field->id;
-                $name = $form[$id];
+        if ($form->form_id == $saved_form_ids['id_number']) {
+            $names = [];
+            $params = [];
+
+            $id = $name = $email = $phone = '';
+
+            $field_object = RGFormsModel::get_form_meta($form['form_id']);
+
+            foreach ($field_object['fields'] as $field) {
+                if (strtolower($field->label) == 'name') {
+                    $id = $field->id;
+                    $name = $form[$id];
+                }
+
+                if (strtolower($field->label) == 'email') {
+                    $id = $field->id;
+                    $email = $form[$id];
+                }
+
+                if (strtolower($field->label) == 'phone') {
+                    $id = $field->id;
+                    $phone = $form[$id];
+                }
             }
 
-            if (strtolower($field->label) == 'email') {
-                $id = $field->id;
-                $email = $form[$id];
+            $contacts = $gravity_forms->getContacts();
+
+            foreach ($contacts as $contact) {
+                error_log(print_r(strtolower($contact->name), true));
+                $contact->name = strtolower($contact->name);
+                $names[] = $contact->name;
             }
 
-            if (strtolower($field->label) == 'phone') {
-                $id = $field->id;
-                $phone = $form[$id];
+            $name = strtolower($name);
+
+            if (array_search($name, $names) > 0) {
+                return;
+            } else {
+                $params = [
+                        'name' => ucwords($name),
+                        'phone' => $phone,
+                        'email' => $email
+                ];
+
+                $gravity_forms->addContact($params);
             }
-        }
-
-        $contacts = $gravity_forms->getContacts();
-
-        foreach ($contacts as $contact) {
-            error_log(print_r(strtolower($contact->name), true));
-            $contact->name = strtolower($contact->name);
-            $names[] = $contact->name;
-        }
-
-        $name = strtolower($name);
-
-        if (array_search($name, $names) > 0) {
-            return;
-        } else {
-            $params = [
-                    'name' => ucwords($name),
-                    'phone' => $phone,
-                    'email' => $email
-            ];
-
-            $gravity_forms->addContact($params);
         }
     }
 }
