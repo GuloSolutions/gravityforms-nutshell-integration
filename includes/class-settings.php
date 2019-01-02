@@ -82,9 +82,11 @@ class MySettingsPage
                 );
 
             foreach ($form['fields'] as $field) {
+                $button = sprintf('<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">%s</button>', $field->label);
+
                 add_settings_field(
                         $field->label,
-                        $field->label,
+                        $button,
                         array( $this, 'title_callback' ),
                         'my-setting-admin',
                         $form['title']
@@ -126,11 +128,11 @@ class MySettingsPage
     /**
      * Get the settings option array and print one of its values
      */
-    public function title_callback()
-    {
-        printf(
-            '<input type="text" id="title" name="my_option_name[title]" value="%s" />',
-            isset($this->options['title']) ? esc_attr($this->options['title']) : ''
-        );
-    }
+    // public function title_callback()
+    // {
+    //     printf(
+    //         '<input type="text" id="title" name="my_option_name[title]" value="%s" />',
+    //         isset($this->options['title']) ? esc_attr($this->options['title']) : ''
+    //     );
+    // }
 }
