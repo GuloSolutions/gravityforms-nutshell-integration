@@ -170,7 +170,6 @@ class Gravityforms_Nutshell_Integration
 
         wp_enqueue_script('css_script', plugin_dir_url(__FILE__) . 'admin/css/gravityforms-nutshell-integration-admin.css');
         wp_enqueue_script('bootstrap', plugin_dir_url(__FILE__) . 'admin/css/gravityforms-nutshell-integration-admin-bootstrap.css');
-
     }
 
     private function enqueue_scripts($hook)

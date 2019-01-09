@@ -6,6 +6,7 @@ class MySettingsPage
      */
     private $options;
     private $name;
+    private static $id;
 
     /**
      * Start up
@@ -38,16 +39,19 @@ class MySettingsPage
     public function create_admin_page()
     {
         // Set class property
-        $this->options = get_option('my_option_name'); ?>
-        <div class="wrap">
-            <?php echo '<h3>' . $this->name .' '.'settings</h3>'; ?>
+        $this->options = get_option('my_option_name');
+        error_log(print_r($this->options), true);
+        ?>
 
-            <form method="post" action="options.php">
-            <?php
+        <div class="wrap">
+            <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
+            <form id="test" class="gf_nutshell_options" method="post" action="update-options.php">
+                <?php
                 // This prints out all hidden setting fields
                 settings_fields('my_option_group');
-        do_settings_sections('my-setting-admin');
-        submit_button(); ?>
+                do_settings_sections('my-setting-admin');
+                //echo '<input type="text" class="btn btn-primary" id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">TEST</button>';
+                submit_button(); ?>
             </form>
         </div>
         <?php
@@ -59,12 +63,20 @@ class MySettingsPage
     public function page_init()
     {
         $forms = GFAPI::get_forms();
+        $this->options = get_option('form_option_name');
+        error_log(print_r($this->options), true);
 
-        register_setting(
-            'my_option_group', // Option group
-            'form_option_name', // Option name
-            array( $this, 'sanitize' ) // Sanitize
-        );
+        global $new_whitelist_options;
+
+        //$opts = $new_whitelist_options['general'];
+
+        error_log(print_r($new_whitelist_options, true));
+
+        // register_setting(
+        //     'my_option_group', // Option group
+        //     'form_option_name', // Option name
+        //     array( $this, 'sanitize' ) // Sanitize
+        // );
 
         add_settings_section(
                 'setting_section_id', // ID
@@ -82,14 +94,26 @@ class MySettingsPage
                 );
 
             foreach ($form['fields'] as $field) {
-                $button = sprintf('<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">%s</button>', $field->label);
+
+                error_log(print_r($field, true));
+                $option_name = str_replace(' ', '_', $field->label);
+                $option_name = strtolower($option_name);
+
+                error_log(print_r($option_name, true));
+
+                register_setting(
+                    $form['title'], // Option group
+                    $option_name, // Option name
+                    array( $this, 'sanitize' ) // Sanitize
+                );
 
                 add_settings_field(
                         $field->label,
-                        $button,
-                        array( $this, 'title_callback' ),
+                        $option_name,
+                        array( $this, 'title_callback'),
                         'my-setting-admin',
-                        $form['title']
+                        $form['title'],
+                        array('label' => $field->label)
                 );
             }
         }
@@ -103,6 +127,7 @@ class MySettingsPage
     public function sanitize($input)
     {
         $new_input = array();
+
         if (isset($input['id_number'])) {
             $new_input['id_number'] = absint($input['id_number']);
         }
@@ -128,11 +153,20 @@ class MySettingsPage
     /**
      * Get the settings option array and print one of its values
      */
-    // public function title_callback()
-    // {
-    //     printf(
-    //         '<input type="text" id="title" name="my_option_name[title]" value="%s" />',
-    //         isset($this->options['title']) ? esc_attr($this->options['title']) : ''
-    //     );
-    // }
+    public function title_callback($args)
+    {
+        //$this->options = get_option('form_option_name');
+
+        error_log(print_r($args, true));
+
+        static $id;
+        if ($id === null) {
+            $id = 0;
+        }
+        printf(
+            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" id="toggle-%s" data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">On</button>', $args['label'], $id)
+        );
+        $id++;
+
+    }
 }

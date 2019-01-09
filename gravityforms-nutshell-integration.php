@@ -67,6 +67,8 @@ register_deactivation_hook(__FILE__, 'deactivate_gravityforms_nutshell_integrati
 require plugin_dir_path(__FILE__) . 'includes/class-gravityforms-nutshell-integration.php';
 require plugin_dir_path(__FILE__) . 'public/class-gravityforms-nutshell-integration-public.php';
 require plugin_dir_path(__FILE__) . 'includes/class-settings.php';
+require plugin_dir_path(__FILE__) . 'includes/update-options.php';
+
 
 
 /**
@@ -90,7 +92,8 @@ if (is_file(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
 function run_gravityforms_nutshell_integration()
 {
     $plugin_name = get_plugin_data(__FILE__, $markup = true, $translate = true)['Name'];
-    if (is_admin()) {
+
+    if (is_admin() && !is_null($plugin_name)) {
         $my_settings_page = new MySettingsPage($plugin_name);
     }
 
