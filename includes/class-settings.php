@@ -40,8 +40,7 @@ class MySettingsPage
     {
         // Set class property
         $this->options = get_option('my_option_name');
-        error_log(print_r($this->options), true);
-        ?>
+        error_log(print_r($this->options), true); ?>
 
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
@@ -49,9 +48,8 @@ class MySettingsPage
                 <?php
                 // This prints out all hidden setting fields
                 settings_fields('my_option_group');
-                do_settings_sections('my-setting-admin');
-                //echo '<input type="text" class="btn btn-primary" id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">TEST</button>';
-                submit_button(); ?>
+        do_settings_sections('my-setting-admin');
+        submit_button(); ?>
             </form>
         </div>
         <?php
@@ -68,20 +66,12 @@ class MySettingsPage
 
         global $new_whitelist_options;
 
-        //$opts = $new_whitelist_options['general'];
-
         error_log(print_r($new_whitelist_options, true));
-
-        // register_setting(
-        //     'my_option_group', // Option group
-        //     'form_option_name', // Option name
-        //     array( $this, 'sanitize' ) // Sanitize
-        // );
 
         add_settings_section(
                 'setting_section_id', // ID
                 'Choose a form and fields below', // Title
-                array( $this, 'print_section_info' ), // Callback
+                 array( $this, 'print_section_info' ), // Callback
                 'my-setting-admin' // Page
         );
 
@@ -94,7 +84,6 @@ class MySettingsPage
                 );
 
             foreach ($form['fields'] as $field) {
-
                 error_log(print_r($field, true));
                 $option_name = str_replace(' ', '_', $field->label);
                 $option_name = strtolower($option_name);
@@ -109,11 +98,11 @@ class MySettingsPage
 
                 add_settings_field(
                         $field->label,
-                        $option_name,
+                        $field->label,
                         array( $this, 'title_callback'),
                         'my-setting-admin',
                         $form['title'],
-                        array('label' => $field->label)
+                        array('label' => $option_name)
                 );
             }
         }
@@ -155,18 +144,23 @@ class MySettingsPage
      */
     public function title_callback($args)
     {
-        //$this->options = get_option('form_option_name');
-
-        error_log(print_r($args, true));
-
+        $current_option = '';
         static $id;
         if ($id === null) {
             $id = 0;
         }
+
+        $current_option = get_option($args['label']);
+
+        if ('1' === $current_option) {
+            $current_option = 'checked';
+        } else {
+            $current_option = '';
+        }
+
         printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" id="toggle-%s" data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">On</button>', $args['label'], $id)
+            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">On</button>', $args['label'], $current_option, $id)
         );
         $id++;
-
     }
 }

@@ -161,9 +161,6 @@ class Gravityforms_Nutshell_Integration
 
     private function enqueue_styles($hook)
     {
-        error_log(print_r('in enqeue styles ', true));
-        error_log(print_r($hook, true));
-
         if ('options-general_my-setting-admin.php' !== $hook) {
             return;
         }
@@ -174,9 +171,6 @@ class Gravityforms_Nutshell_Integration
 
     private function enqueue_scripts($hook)
     {
-        error_log(print_r('in enqeue 2 ', true));
-        error_log(print_r($hook, true));
-
         if ('options-general_my-setting-admin.php' !== $hook) {
             return;
         }
