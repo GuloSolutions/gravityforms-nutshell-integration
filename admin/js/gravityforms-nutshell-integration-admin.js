@@ -5,8 +5,6 @@
 
 	  $('#test').submit( function () {
 	    var b =  $(this).serialize();
-	    console.log('in form');
-	    console.log(b);
 
 	    $.post('options.php', b ).error(
 	        function() {
@@ -24,10 +22,7 @@
 	    	t.attr('checked', true);
 	    	var num = _id.split('-')[1];
 	    	var text = t.closest('table').find('th')[num].innerHTML;
-	    	console.log(text);
-	    	 console.log(t);
-
-	    	 var data = {
+	    	var data = {
 	    	 	'option_name': 'form_option_test',
 	    	 	'option_value': 'new test'
 	    	 }

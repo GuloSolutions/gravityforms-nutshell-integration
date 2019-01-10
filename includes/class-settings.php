@@ -64,10 +64,6 @@ class MySettingsPage
         $this->options = get_option('form_option_name');
         error_log(print_r($this->options), true);
 
-        global $new_whitelist_options;
-
-        error_log(print_r($new_whitelist_options, true));
-
         add_settings_section(
                 'setting_section_id', // ID
                 'Choose a form and fields below', // Title
@@ -88,8 +84,6 @@ class MySettingsPage
                 $option_name = str_replace(' ', '_', $field->label);
                 $option_name = strtolower($option_name);
 
-                error_log(print_r($option_name, true));
-
                 register_setting(
                     $form['title'], // Option group
                     $option_name, // Option name
@@ -109,42 +103,12 @@ class MySettingsPage
     }
 
     /**
-     * Sanitize each setting field as needed
-     *
-     * @param array $input Contains all settings fields as array keys
-     */
-    public function sanitize($input)
-    {
-        $new_input = array();
-
-        if (isset($input['id_number'])) {
-            $new_input['id_number'] = absint($input['id_number']);
-        }
-
-        if (isset($input['title'])) {
-            $new_input['title'] = sanitize_text_field($input['title']);
-        }
-
-        return $new_input;
-    }
-
-    /**
-     * Get the settings option array and print one of its values
-     */
-    public function id_number_callback()
-    {
-        printf(
-            '<input type="text" id="id_number" name="my_option_name[id_number]" value="%s" />',
-            isset($this->options['id_number']) ? esc_attr($this->options['id_number']) : ''
-        );
-    }
-
-    /**
      * Get the settings option array and print one of its values
      */
     public function title_callback($args)
     {
-        $current_option = '';
+        $current_option = $input_text ='';
+
         static $id;
         if ($id === null) {
             $id = 0;
@@ -154,12 +118,14 @@ class MySettingsPage
 
         if ('1' === $current_option) {
             $current_option = 'checked';
+            $input_text = 'on';
         } else {
             $current_option = '';
+            $input_text = 'off';
         }
 
         printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">On</button>', $args['label'], $current_option, $id)
+            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
         );
         $id++;
     }
