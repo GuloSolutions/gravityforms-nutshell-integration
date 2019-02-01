@@ -4,6 +4,7 @@ namespace Controllers;
 
 use GravityFormsController;
 
+// At this time Nutshell is not using composer or PSR-4
 require_once(dirname(__FILE__).'/../../vendor/nutshellcrm/nutshell-api-php/NutshellApi.php');
 
 class NutshellController

@@ -1,4 +1,8 @@
 <?php
+
+
+require_once('form-options.php');
+
 class MySettingsPage
 {
     /**
@@ -7,6 +11,7 @@ class MySettingsPage
     private $options;
     private $name;
     private static $id;
+    private $labels;
 
     /**
      * Start up
@@ -44,7 +49,7 @@ class MySettingsPage
 
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
-            <form id="test" class="gf_nutshell_options" method="post" action="update-options.php">
+            <form id="test" name = "settingsform" class="gf_nutshell_options" method="post" action="update-options.php">
                 <?php
                 // This prints out all hidden setting fields
                 settings_fields('my_option_group');
@@ -60,9 +65,12 @@ class MySettingsPage
      */
     public function page_init()
     {
+        global $all_options;
+
+        $all_options = [];
+
         $forms = GFAPI::get_forms();
         $this->options = get_option('form_option_name');
-        error_log(print_r($this->options), true);
 
         add_settings_section(
                 'setting_section_id', // ID
@@ -79,13 +87,19 @@ class MySettingsPage
                     'my-setting-admin' // Page
                 );
 
+            $form_title = str_replace(' ', '_', strtolower($form['title']));
+
             foreach ($form['fields'] as $field) {
-                error_log(print_r($field, true));
                 $option_name = str_replace(' ', '_', $field->label);
+                $option_name = $option_name;
                 $option_name = strtolower($option_name);
+                $option_name .= '_' . $from_title;
+                $form_labels[] = $option_name;
+                $this->labels[] = $option_name;
+                $all_options[] = $option_name;
 
                 register_setting(
-                    $form['title'], // Option group
+                    'my_option_group', // Option group
                     $option_name, // Option name
                     array( $this, 'sanitize' ) // Sanitize
                 );
@@ -99,6 +113,10 @@ class MySettingsPage
                         array('label' => $option_name)
                 );
             }
+        }
+        if (isset($options)) {
+            error_log(print_r($options, true));
+            $options->getFormOptions($all_options);
         }
     }
 
@@ -114,9 +132,14 @@ class MySettingsPage
             $id = 0;
         }
 
-        $current_option = get_option($args['label']);
+        //error_log(print_r($args, true));
 
-        if ('1' === $current_option) {
+        $current_option = get_option($args['label']);
+        //error_log(print_r(get_option('curr option'), true));
+
+        //error_log(print_r(get_option($current_option), true));
+
+        if (!empty($current_option)) {
             $current_option = 'checked';
             $input_text = 'on';
         } else {
@@ -125,8 +148,18 @@ class MySettingsPage
         }
 
         printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
+            sprintf('<input type="checkbox" name="checkbox[%s]"  class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
         );
         $id++;
+    }
+
+    public function print_section_info()
+    {
+        return '';
+    }
+
+    public function getOptions()
+    {
+        return $this->labels;
     }
 }

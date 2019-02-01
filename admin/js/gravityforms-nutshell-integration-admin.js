@@ -1,39 +1,34 @@
 (function( $ ) {
 	'use strict';
 
-	$( window ).on('load',function() {
+ $('form#test').submit( function (e) {
 
-	  $('#test').submit( function () {
-	    var b =  $(this).serialize();
+ 	 	console.log('Saved');
 
-	    $.post('options.php', b ).error(
-	        function() {
-	            alert('error');
-	        }).success( function() {
-	            alert('success');
-	        });
-	        return false;
-	    });
+ 	 	window.location.replace("/wp-admin/options.php");
 
-	    $('#toggle-0').click(function (e) {
-	    	var _id = e.target.id;
-	    	var t = $('#' + e.target.id);
-	    	t.innerHTML = 'Off';
-	    	t.attr('checked', true);
-	    	var num = _id.split('-')[1];
-	    	var text = t.closest('table').find('th')[num].innerHTML;
-	    	var data = {
-	    	 	'option_name': 'form_option_test',
-	    	 	'option_value': 'new test'
-	    	 }
 
-	    	$.post( 'options.php', data).error(
-	                    function() {
-	                        alert('error');
-	                    }).success( function() {
-	                        alert('success');
-	                    });
-	                   return false;
-	           });
-		});
+
+ 	//e.preventDefault();
+
+ 	console.log('Saved');
+
+ // 	e.preventDefault();
+
+	// $("#test :input").each(function(){
+ // 		var input = $(this);
+ // 		alert(input);
+ // 		// This is the jquery object of the input, do what you will
+	// });
+
+});
+
+
+	//$( window ).on('load',function() {
+
+	  // $('#test').submit( function () {
+	  //   alert('Options saved');
+	  //       return false;
+	  //   });
+	//});
 })( jQuery );
