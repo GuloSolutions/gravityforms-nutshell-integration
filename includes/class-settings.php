@@ -44,8 +44,7 @@ class MySettingsPage
     public function create_admin_page()
     {
         // Set class property
-        $this->options = get_option('my_option_name');
-        error_log(print_r($this->options), true); ?>
+        $this->options = get_option('my_option_name'); ?>
 
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
@@ -65,9 +64,6 @@ class MySettingsPage
      */
     public function page_init()
     {
-        global $all_options;
-
-        $all_options = [];
 
         $forms = GFAPI::get_forms();
         $this->options = get_option('form_option_name');
@@ -93,7 +89,7 @@ class MySettingsPage
                 $option_name = str_replace(' ', '_', $field->label);
                 $option_name = $option_name;
                 $option_name = strtolower($option_name);
-                $option_name .= '_' . $from_title;
+                $option_name .= '_' . $form_title;
                 $form_labels[] = $option_name;
                 $this->labels[] = $option_name;
                 $all_options[] = $option_name;

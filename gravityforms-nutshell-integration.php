@@ -66,7 +66,6 @@ register_deactivation_hook(__FILE__, 'deactivate_gravityforms_nutshell_integrati
  */
 require plugin_dir_path(__FILE__) . 'includes/class-gravityforms-nutshell-integration.php';
 require plugin_dir_path(__FILE__) . 'public/class-gravityforms-nutshell-integration-public.php';
-// require plugin_dir_path(__FILE__) . 'includes/form-options.php';
 require plugin_dir_path(__FILE__) . 'includes/class-settings.php';
 require plugin_dir_path(__FILE__) . 'includes/update-options.php';
 

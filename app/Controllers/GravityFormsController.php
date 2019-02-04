@@ -27,7 +27,6 @@ class GravityFormsController
             $this->nutshell = new NutshellController();
             return true;
         }
-
         return false;
     }
 

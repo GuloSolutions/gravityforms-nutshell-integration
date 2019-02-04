@@ -131,7 +131,13 @@ class Gravityforms_Nutshell_Integration_Public
 
     public function post_to_nutshell_2($form)
     {
+
+        error_log(print_r('in form', true));
+
         global $gravity_forms;
+
+        error_log(print_r(strtolower('in post'), true));
+
 
         $saved_form_ids = [];
 
@@ -163,6 +169,7 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             $contacts = $gravity_forms->getContacts();
+            // error_log(print_r(strtolower('in controller'), true));
 
             foreach ($contacts as $contact) {
                 error_log(print_r(strtolower($contact->name), true));
