@@ -1,8 +1,5 @@
 <?php
 
-
-require_once('form-options.php');
-
 class MySettingsPage
 {
     /**
@@ -64,7 +61,6 @@ class MySettingsPage
      */
     public function page_init()
     {
-
         $forms = GFAPI::get_forms();
         $this->options = get_option('form_option_name');
 
@@ -110,10 +106,6 @@ class MySettingsPage
                 );
             }
         }
-        if (isset($options)) {
-            error_log(print_r($options, true));
-            $options->getFormOptions($all_options);
-        }
     }
 
     /**
@@ -128,12 +120,7 @@ class MySettingsPage
             $id = 0;
         }
 
-        //error_log(print_r($args, true));
-
         $current_option = get_option($args['label']);
-        //error_log(print_r(get_option('curr option'), true));
-
-        //error_log(print_r(get_option($current_option), true));
 
         if (!empty($current_option)) {
             $current_option = 'checked';

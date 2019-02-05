@@ -191,6 +191,8 @@ class Gravityforms_Nutshell_Integration
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_action('init', $plugin_public, 'startService', 10);
+        $this->loader->add_action('init', $plugin_public, 'after_submission', 10, 2);
+
     }
 
     /**
