@@ -5,10 +5,9 @@ namespace Controllers;
 use Controllers\NutshellController;
 use Controllers\GravityFormsDataController;
 
-
 class GravityFormsController
 {
-    private $nutshell;
+    public $nutshell;
     private static $instance;
     private $contacts = [];
     public $gf_data;
@@ -46,6 +45,7 @@ class GravityFormsController
 
     public function addNote($params)
     {
+        error_log(print_r('add contact', true));
         $this->nutshell->addContact($params);
     }
 
@@ -58,6 +58,6 @@ class GravityFormsController
     }
     public function post_to_nutshell()
     {
-        error_log(print_r('called', true));
+        $newContact = $this->nutshell->addContact($params = []);
     }
 }

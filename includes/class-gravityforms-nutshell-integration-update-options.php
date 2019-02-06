@@ -11,9 +11,6 @@ if (!empty($_POST)) {
     $unchecked = [];
 
 
-    // error_log(print_r($_POST, true));
-
-
     // get form info reconstructing it from forms
     $forms = GFAPI::get_forms();
     foreach ($forms as $form) {

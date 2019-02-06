@@ -114,17 +114,6 @@ class Gravityforms_Nutshell_Integration_Public
     {
         global $gravity_forms;
 
-        // leaving this for now here so we can check which forms are active
-
-        // $forms = GFAPI::get_forms();
-        // foreach($forms as $form){
-        //     error_log(print_r($form['name'], true));
-        //     error_log(print_r($form['fields'][0], true));
-        //     foreach($form['fields'] as $field){
-        //         error_log(print_r($field->label, true));
-        //     }
-        // }
-
         $gravity_forms = new Controllers\GravityFormsController();
     }
 
@@ -133,8 +122,13 @@ class Gravityforms_Nutshell_Integration_Public
 
         add_action('gform_after_submission', 'send_data_to_nutshell', 10, 2);
 
+        $controller = Controllers\GravityFormsController::getInstance();
+
         function send_data_to_nutshell($entry, $form)
         {
+
+            global $gravity_forms;
+
             $idLabelMap = [];
             $dataToSend = [];
 
@@ -152,72 +146,17 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             error_log(print_r($dataToSend, true));
+
+            foreach ($contacts as $contact) {
+                $contact->name = strtolower($contact->name);
+                $names[] = $contact->name;
+            }
+
+            if (array_search(strtolower($data['name']), $names) > 0) {
+                 return;
+            }
+                $gravity_forms->post_to_nutshell($dataToSend);
+            }
         }
     }
-
-
-    // public function send_data_to_nutshell($entry, $form)
-    // {
-    //     error_log(print_r('in second form', true));
-
-    //     error_log(print_r($entry, true));
-
-
-
-    //     // global $gravity_forms;
-
-
-
-    //     // $saved_form_ids = [];
-
-    //     // $saved_form_ids = get_option('my_option_name');
-
-    //     // if ($form->form_id == $saved_form_ids['id_number']) {
-    //     //     $names = [];
-    //     //     $params = [];
-
-    //     //     $id = $name = $email = $phone = '';
-
-    //     //     $field_object = RGFormsModel::get_form_meta($form['form_id']);
-
-    //     //     foreach ($field_object['fields'] as $field) {
-    //     //         if (strtolower($field->label) == 'name') {
-    //     //             $id = $field->id;
-    //     //             $name = $form[$id];
-    //     //         }
-
-    //     //         if (strtolower($field->label) == 'email') {
-    //     //             $id = $field->id;
-    //     //             $email = $form[$id];
-    //     //         }
-
-    //     //         if (strtolower($field->label) == 'phone') {
-    //     //             $id = $field->id;
-    //     //             $phone = $form[$id];
-    //     //         }
-    //     //     }
-
-    //     //     $contacts = $gravity_forms->getContacts();
-
-    //     //     foreach ($contacts as $contact) {
-    //     //         //error_log(print_r(strtolower($contact->name), true));
-    //     //         $contact->name = strtolower($contact->name);
-    //     //         $names[] = $contact->name;
-    //     //     }
-
-    //     //     $name = strtolower($name);
-
-    //     //     if (array_search($name, $names) > 0) {
-    //     //         return;
-    //     //     } else {
-    //     //         $params = [
-    //     //                 'name' => ucwords($name),
-    //     //                 'phone' => $phone,
-    //     //                 'email' => $email
-    //     //         ];
-
-    //     //         $gravity_forms->addContact($params);
-    //     //     }
-    //     // }
-    //}
 }
