@@ -122,8 +122,6 @@ class Gravityforms_Nutshell_Integration_Public
 
         add_action('gform_after_submission', 'send_data_to_nutshell', 10, 2);
 
-        $controller = Controllers\GravityFormsController::getInstance();
-
         function send_data_to_nutshell($entry, $form)
         {
 
@@ -133,30 +131,41 @@ class Gravityforms_Nutshell_Integration_Public
             $dataToSend = [];
 
             error_log(print_r($entry, true));
-            // error_log(print_r($form, true));
 
-            foreach ($form['fields'] as $field) {
+            foreach ($form['fields'] as $field){
                 $idLabelMap[$field->id] = $field->label;
             }
 
+            error_log(print_r($idLabelMap, true));
+
             foreach($entry as $k=>$v){
-                if (array_keys($idLabelMap, $k) !== null){
-                    $dataToSend[$idLabelMap[$k]] = $v;
+                if (array_keys($idLabelMap, $k) !== NULL) {
+                    if(!empty($idLabelMap[$k])) {
+                        $dataToSend[$idLabelMap[$k]] = $v;
+                    }
                 }
             }
 
             error_log(print_r($dataToSend, true));
+
+            $contacts = $gravity_forms->getContacts();
 
             foreach ($contacts as $contact) {
                 $contact->name = strtolower($contact->name);
                 $names[] = $contact->name;
             }
 
-            if (array_search(strtolower($data['name']), $names) > 0) {
+            if (array_search(strtolower($dataToSend['Name']), $names) > 0) {
                  return;
             }
-                $gravity_forms->post_to_nutshell($dataToSend);
-            }
+
+            $params['contact'] = $dataToSend;
+
+            error_log(print_r($params, true));
+
+            exit;
+
+            $gravity_forms->addContact($params);
         }
     }
 }

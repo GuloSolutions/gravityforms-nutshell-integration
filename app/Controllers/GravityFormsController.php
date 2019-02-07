@@ -56,8 +56,4 @@ class GravityFormsController
             return self::$instance;
         }
     }
-    public function post_to_nutshell()
-    {
-        $newContact = $this->nutshell->addContact($params = []);
-    }
 }
