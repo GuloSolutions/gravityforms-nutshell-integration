@@ -170,7 +170,7 @@ class Gravityforms_Nutshell_Integration_Public
 
         error_log(print_r('in prerender', true));
 
-        add_action('gform_pre_render_1', 'set_is_note', 1, 1);
+        add_action('gform_pre_render', 'set_is_note', 10, 1);
 
         function set_is_note($form)
         {
