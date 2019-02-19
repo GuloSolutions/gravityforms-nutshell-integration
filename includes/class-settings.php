@@ -45,7 +45,8 @@ class MySettingsPage
 
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
-            <form id="test" name = "settingsform" class="gf_nutshell_options" method="post" action="update-options.php">
+            <form id="test" name= "settingsform" class="gf_nutshell_options" method="post" action="update-options.php">
+                <input type="text" label>
                 <?php
                 // This prints out all hidden setting fields
                 settings_fields('my_option_group');
@@ -105,6 +106,14 @@ class MySettingsPage
                         array('label' => $option_name)
                 );
             }
+            add_settings_field(
+                    "note",
+                    "Designate a field as a note",
+                    array( $this, 'note_callback'),
+                    'my-setting-admin',
+                    $form['title'],
+                    array('label' => $option_name)
+            );
         }
     }
 
@@ -114,6 +123,8 @@ class MySettingsPage
     public function title_callback($args)
     {
         $current_option = $input_text ='';
+
+        error_log(print_r($args, true));
 
         static $id;
         if ($id === null) {
@@ -131,9 +142,16 @@ class MySettingsPage
         }
 
         printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]"  class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
+            sprintf('<button input type="checkbox" name="checkbox[%s]"  class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
         );
         $id++;
+    }
+
+    public function note_callback($args)
+    {
+        printf(
+            sprintf('<input type="text" name="note_%s">', $args['label'])
+        );
     }
 
     public function print_section_info()

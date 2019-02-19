@@ -10,7 +10,6 @@ if (!empty($_POST)) {
     $all_options = [];
     $unchecked = [];
 
-
     // get form info reconstructing it from forms
     $forms = GFAPI::get_forms();
     foreach ($forms as $form) {
@@ -22,6 +21,12 @@ if (!empty($_POST)) {
             $all_options[] = $option_name;
         }
     }
+
+    error_log(print_r('notes', true));
+
+    error_log(print_r($_POST['note'], true));
+
+
 
     if (isset($_POST['checkbox'])) {
         $check_values = array_keys($_POST['checkbox']);

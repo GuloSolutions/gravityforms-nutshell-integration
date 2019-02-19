@@ -124,7 +124,6 @@ class Gravityforms_Nutshell_Integration_Public
 
         function send_data_to_nutshell($entry, $form)
         {
-
             global $gravity_forms;
 
             $idLabelMap = [];
@@ -150,10 +149,6 @@ class Gravityforms_Nutshell_Integration_Public
 
             $contacts = $gravity_forms->getContacts();
 
-                        error_log(print_r($contacts, true));
-
-            // error_log(print_r($gravity_forms->getContact(13336), true));
-
             foreach ($contacts as $contact) {
                 $contact->name = strtolower($contact->name);
                 $names[] = $contact->name;
@@ -165,11 +160,31 @@ class Gravityforms_Nutshell_Integration_Public
 
             $params['contact'] = $dataToSend;
 
-            error_log(print_r($params, true));
-
             if ($gravity_forms->addContact($params)) {
                 error_log(print_r('added', true));
             }
         }
     }
+
+    public function pre_render_add_note(){
+
+        error_log(print_r('in prerender', true));
+
+        add_action('gform_pre_render_1', 'set_is_note', 1, 1);
+
+        function set_is_note($form)
+        {
+            error_log(print_r('in prerender2', true));
+            $props = array(
+                'id' => 100,
+                'label' => 'Is it a note?',
+                'type' => 'checkbox'
+            );
+            $field = GF_Fields::create( $props );
+            array_push( $form['fields'], $field );
+
+            return $form;
+        }
+    }
+
 }

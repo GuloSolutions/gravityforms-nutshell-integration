@@ -45,8 +45,8 @@ class GravityFormsController
 
     public function addNote($params)
     {
-        error_log(print_r('add contact', true));
-        $this->nutshell->addContact($params);
+        error_log(print_r('add note', true));
+        $this->nutshell->addNote($params);
     }
 
     public static function getInstance()
