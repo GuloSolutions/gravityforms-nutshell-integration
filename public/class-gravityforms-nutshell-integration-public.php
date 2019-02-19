@@ -140,8 +140,8 @@ class Gravityforms_Nutshell_Integration_Public
 
             foreach($entry as $k=>$v){
                 if (array_keys($idLabelMap, $k) !== NULL) {
-                    if(!empty($idLabelMap[$k])) {
-                        $dataToSend[$idLabelMap[$k]] = $v;
+                    if(!empty($idLabelMap[$k]) && (strtolower($idLabelMap[$k]) == 'name' || strtolower($idLabelMap[$k]) == 'email' || strtolower($idLabelMap[$k]) == 'phone')) {
+                        $dataToSend[strtolower($idLabelMap[$k])] = $v;
                     }
                 }
             }
@@ -150,12 +150,16 @@ class Gravityforms_Nutshell_Integration_Public
 
             $contacts = $gravity_forms->getContacts();
 
+                        error_log(print_r($contacts, true));
+
+            // error_log(print_r($gravity_forms->getContact(13336), true));
+
             foreach ($contacts as $contact) {
                 $contact->name = strtolower($contact->name);
                 $names[] = $contact->name;
             }
 
-            if (array_search(strtolower($dataToSend['Name']), $names) > 0) {
+            if (array_search($dataToSend['name'], $names) > 0) {
                  return;
             }
 
@@ -163,9 +167,9 @@ class Gravityforms_Nutshell_Integration_Public
 
             error_log(print_r($params, true));
 
-            exit;
-
-            $gravity_forms->addContact($params);
+            if ($gravity_forms->addContact($params)) {
+                error_log(print_r('added', true));
+            }
         }
     }
 }

@@ -27,7 +27,6 @@ class GravityFormsController
     {
         if (class_exists('GFCommon')) {
             $this->nutshell = new NutshellController();
-            // $this->gf_data = new GravityFormsDataController();
             return true;
         }
         return false;
@@ -40,7 +39,8 @@ class GravityFormsController
 
     public function addContact($params)
     {
-        $this->nutshell->addContact($params);
+        $copy_params = $params;
+        $this->nutshell->addContact($copy_params);
     }
 
     public function addNote($params)

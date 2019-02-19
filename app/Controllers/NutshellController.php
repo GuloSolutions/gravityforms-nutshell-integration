@@ -68,7 +68,14 @@ class NutshellController
     {
         error_log(print_r('in add', true));
 
-        $newContact = $this->api->call('newContact', $params);
+        error_log(print_r($params, true));
+
+        $params['contact']['creator'] = $this->id;
+
+        $newContact = $this->api->newContact($params);
+
+        error_log(print_r($newContact, true));
+
         $newContactId = $newContact->id;
 
         if ($newContactId) {
