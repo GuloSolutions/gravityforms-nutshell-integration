@@ -17,7 +17,7 @@ class NutshellController
     public function __construct()
     {
         $username = $apiKey = '';
-        if (defined('NUTSHELL_API_APIKEY') && defined('NUTSHELL_API_USERNAME')) {
+        if (defined('NUTSHELL_API_APIKEY_IMPERSONATION') && defined('NUTSHELL_API_USERNAME')) {
             $apiKey = NUTSHELL_API_APIKEY;
             $username = NUTSHELL_API_USERNAME;
             $this->api = new \NutshellApi($username, $apiKey);
@@ -64,13 +64,18 @@ class NutshellController
         return $this->contacts;
     }
 
+    public function getContact($contactID)
+    {
+        return $this->api->getContact($contactID);
+    }
+
     public function addContact($params)
     {
         error_log(print_r('in add', true));
 
         error_log(print_r($params, true));
 
-        $params['contact']['creator'] = $this->id;
+        $params['contact']['owner'] = $this->id;
 
         $newContact = $this->api->newContact($params);
 
@@ -89,5 +94,10 @@ class NutshellController
         $entity = $params['entity'];
         $note = $params['note'];
         $newNote = $api->call('newNote', $entity, $note);
+    }
+
+    public function editContact($contactID, $contact)
+    {
+        $this->api->editContact($contactID, $contact);
     }
 }

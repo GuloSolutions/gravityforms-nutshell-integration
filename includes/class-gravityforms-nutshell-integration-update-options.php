@@ -1,6 +1,6 @@
 <?php
 
-use Controllers\GravityFormsController;
+use Controllers\GravityFormsDataController;
 
 include_once('/home/radboris/gravityforms-nutshell-integration/app/Controllers/GravityFormsDataController.php');
 
@@ -9,6 +9,9 @@ const GRAVITYFORMS_NUTSHELL_PLUGIN_SETTINGS_PAGE = '/wp-admin/options-general.ph
 if (!empty($_POST) && isset($_POST['checkbox'])) {
     $all_options = [];
     $unchecked = [];
+
+            error_log(print_r($_POST['nutshell'], true));
+
 
     // get form info reconstructing it from forms
     $forms = GFAPI::get_forms();
@@ -23,6 +26,7 @@ if (!empty($_POST) && isset($_POST['checkbox'])) {
     }
 
     if (isset($_POST['checkbox'])) {
+
         error_log(print_r('this is user', true));
 
         error_log(print_r($_POST['nutshell'], true));
@@ -37,6 +41,11 @@ if (!empty($_POST) && isset($_POST['checkbox'])) {
         foreach ($unchecked as $u) {
             update_option($u, 0);
         }
+
+        $form = new GravityFormsDataController();
+        $form->sendData();
+
+        error_log(print_r($form->sendData(), true));
 
         header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . GRAVITYFORMS_NUTSHELL_PLUGIN_SETTINGS_PAGE);
         exit;

@@ -46,12 +46,12 @@ class MySettingsPage
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
             <form id="test" name= "settingsform" class="gf_nutshell_options" method="post" action="update-options.php">
-                <input type="text" label>
                 <?php
                 // This prints out all hidden setting fields
                 settings_fields('my_option_group');
         do_settings_sections('my-setting-admin');
-        submit_button(); ?>
+        //submit_button();
+        ?>
             </form>
         </div>
         <?php
@@ -107,8 +107,8 @@ class MySettingsPage
                 );
             }
             add_settings_field(
-                    "note",
-                    "Designate a field as a note",
+                    "nutshell",
+                    "Select a Nutshell user to associate with the form",
                     array( $this, 'note_callback'),
                     'my-setting-admin',
                     $form['title'],
@@ -140,7 +140,6 @@ class MySettingsPage
             $current_option = '';
             $input_text = 'off';
         }
-
         printf(
             sprintf('<button input type="checkbox" name="checkbox[%s]"  class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
         );
@@ -150,9 +149,15 @@ class MySettingsPage
     public function note_callback($args)
     {
         printf(
-            sprintf('<input type="text" name="note_%s">', $args['label'])
+            sprintf('<select name="nutshell">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    </select>', $args['label'])
         );
     }
+
+
 
     public function print_section_info()
     {

@@ -49,6 +49,17 @@ class GravityFormsController
         $this->nutshell->addNote($params);
     }
 
+    public function editContact()
+    {
+        $this->nutshell->editContact($params);
+    }
+
+    public function getContact($contactID)
+    {
+        $this->nutshell->getContact($contactID);
+    }
+
+
     public static function getInstance()
     {
         if (empty(self::$instance)) {

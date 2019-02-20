@@ -174,16 +174,21 @@ class Gravityforms_Nutshell_Integration_Public
 
         function set_is_note($form)
         {
+            if ($form['title'] !=  'Newsletter') {
+
+            error_log(print_r($form, true));
+
             error_log(print_r('in prerender2', true));
             $props = array(
                 'id' => 100,
-                'label' => 'Is it a note?',
-                'type' => 'checkbox'
+                'type' => 'hidden',
+                'value' => 'Test'
             );
             $field = GF_Fields::create( $props );
             array_push( $form['fields'], $field );
 
             return $form;
+            }
         }
     }
 
