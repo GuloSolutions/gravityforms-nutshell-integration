@@ -45,12 +45,11 @@ class MySettingsPage
 
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
-            <form id="test" name= "settingsform" class="gf_nutshell_options" method="post" action="update-options.php">
+            <form id="test" class="gf_nutshell_options" method="post" action="options.php">
                 <?php
-                // This prints out all hidden setting fields
                 settings_fields('my_option_group');
-        do_settings_sections('my-setting-admin');
-        //submit_button();
+            do_settings_sections('my-setting-admin');
+         submit_button();
         ?>
             </form>
         </div>
@@ -63,13 +62,11 @@ class MySettingsPage
     public function page_init()
     {
         $forms = GFAPI::get_forms();
-        $this->options = get_option('form_option_name');
 
-        add_settings_section(
-                'setting_section_id', // ID
-                'Choose a form and fields below', // Title
-                 array( $this, 'print_section_info' ), // Callback
-                'my-setting-admin' // Page
+        register_setting(
+            'my_option_group', // Option group
+            'my_option_name' // Option name
+            //array( $this, 'sanitize' ) // Sanitize
         );
 
         foreach ($forms as $form) {
@@ -81,83 +78,45 @@ class MySettingsPage
                 );
 
             $form_title = str_replace(' ', '_', strtolower($form['title']));
-
-            foreach ($form['fields'] as $field) {
-                $option_name = str_replace(' ', '_', $field->label);
-                $option_name = $option_name;
-                $option_name = strtolower($option_name);
-                $option_name .= '_' . $form_title;
-                $form_labels[] = $option_name;
-                $this->labels[] = $option_name;
-                $all_options[] = $option_name;
-
                 register_setting(
                     'my_option_group', // Option group
-                    $option_name, // Option name
-                    array( $this, 'sanitize' ) // Sanitize
+                    $form_title // Option name
+                    //array( $this, 'sanitize' ) // Sanitize
                 );
 
                 add_settings_field(
-                        $field->label,
-                        $field->label,
-                        array( $this, 'title_callback'),
+                        $form_title,
+                        "Select a Nutshell user to associate with the form",
+                        array( $this, 'note_callback'),
                         'my-setting-admin',
                         $form['title'],
-                        array('label' => $option_name)
+                        array('title' => $form_title)
                 );
-            }
-            add_settings_field(
-                    "nutshell",
-                    "Select a Nutshell user to associate with the form",
-                    array( $this, 'note_callback'),
-                    'my-setting-admin',
-                    $form['title'],
-                    array('label' => $option_name)
-            );
         }
-    }
-
-    /**
-     * Get the settings option array and print one of its values
-     */
-    public function title_callback($args)
-    {
-        $current_option = $input_text ='';
-
-        error_log(print_r($args, true));
-
-        static $id;
-        if ($id === null) {
-            $id = 0;
-        }
-
-        $current_option = get_option($args['label']);
-
-        if (!empty($current_option)) {
-            $current_option = 'checked';
-            $input_text = 'on';
-        } else {
-            $current_option = '';
-            $input_text = 'off';
-        }
-        printf(
-            sprintf('<button input type="checkbox" name="checkbox[%s]"  class="btn btn-primary" %s id="toggle-%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</button>', $args['label'], $current_option, $id, $input_text)
-        );
-        $id++;
     }
 
     public function note_callback($args)
     {
+
+        $current_option = $input_text ='';
+        $current_option = get_option($args['title']);
+
         printf(
-            sprintf('<select name="nutshell">
-                    <option value="small">Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
-                    </select>', $args['label'])
+            sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($current_option) ? $current_option: "Please enter an email")
         );
     }
 
+    public function sanitize( $input )
+    {
+        // $new_input = array();
+        // if( isset( $input['id_number'] ) )
+        //     $new_input['id_number'] = absint( $input['id_number'] );
 
+        // if( isset( $input['title'] ) )
+        //     $new_input['title'] = sanitize_text_field( $input['title'] );
+
+        // return $new_input;
+    }
 
     public function print_section_info()
     {
