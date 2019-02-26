@@ -39,8 +39,11 @@ class GravityFormsController
 
     public function addContact($params)
     {
+        exit;
         $copy_params = $params;
-        $this->nutshell->addContact($copy_params);
+        $new_contact = $this->nutshell->addContact($copy_params);
+
+        return $new_contact;
     }
 
     public function addNote($params)
@@ -49,14 +52,17 @@ class GravityFormsController
         $this->nutshell->addNote($params);
     }
 
-    public function editContact()
+    public function editContact($params)
     {
-        $this->nutshell->editContact($params);
+        $params = (array) $params;
+        $this->nutshell->editContact((array)$params);
+               // $this->nutshell->call('editContact', $params);
     }
 
     public function getContact($contactID)
     {
-        $this->nutshell->getContact($contactID);
+        error_log(print_r($contactID, true));
+        return $this->nutshell->getContact($contactID);
     }
 
 

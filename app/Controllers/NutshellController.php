@@ -41,9 +41,11 @@ class NutshellController
         $this->result = $this->api->call('getNote', array($userId));
     }
 
-    public function getContact()
+    public function getContact($id)
     {
-        $this->result = $this->api->call('getContact', $params);
+        error_log(print_r($id, true));
+        $contact = $this->api->getContact(['contactId' => $id]);
+        return $contact;
     }
 
     public function findNutshellContacts()
@@ -64,27 +66,14 @@ class NutshellController
         return $this->contacts;
     }
 
-    public function getContact($contactID)
-    {
-        return $this->api->getContact($contactID);
-    }
-
     public function addContact($params)
     {
-        error_log(print_r('in add', true));
-
-        error_log(print_r($params, true));
-
-        $params['contact']['owner'] = $this->id;
-
         $newContact = $this->api->newContact($params);
-
-        error_log(print_r($newContact, true));
 
         $newContactId = $newContact->id;
 
         if ($newContactId) {
-            return true;
+            return $newContactId;
         }
         return false;
     }
@@ -96,8 +85,16 @@ class NutshellController
         $newNote = $api->call('newNote', $entity, $note);
     }
 
-    public function editContact($contactID, $contact)
+    public function editContact($params)
     {
-        $this->api->editContact($contactID, $contact);
+
+        // $params->email = (array) $params->email;
+
+        // $params->name = (array) $params->name;
+        // $params->phone = (array) $params->phone;
+
+        $phone = ['phone' => '1111111111'];
+
+        $this->api->editContact($params['id'], $params['rev'][0], $phone);
     }
 }

@@ -113,39 +113,35 @@ class Gravityforms_Nutshell_Integration_Public
     public function startService()
     {
         global $gravity_forms;
-
         $gravity_forms = new Controllers\GravityFormsController();
     }
 
     public function after_submission()
     {
-
         add_action('gform_after_submission', 'send_data_to_nutshell', 10, 2);
 
         function send_data_to_nutshell($entry, $form)
         {
             global $gravity_forms;
+            $newContactId = '';
+            $fields_to_update = [];
 
             $idLabelMap = [];
             $dataToSend = [];
 
-            error_log(print_r($entry, true));
-
-            foreach ($form['fields'] as $field){
+            foreach ($form['fields'] as $field) {
                 $idLabelMap[$field->id] = $field->label;
             }
 
             error_log(print_r($idLabelMap, true));
 
-            foreach($entry as $k=>$v){
-                if (array_keys($idLabelMap, $k) !== NULL) {
-                    if(!empty($idLabelMap[$k]) && (strtolower($idLabelMap[$k]) == 'name' || strtolower($idLabelMap[$k]) == 'email' || strtolower($idLabelMap[$k]) == 'phone')) {
+            foreach ($entry as $k=>$v) {
+                if (array_keys($idLabelMap, $k) !== null) {
+                    if (!empty($idLabelMap[$k]) && (strtolower($idLabelMap[$k]) == 'name' || strtolower($idLabelMap[$k]) == 'email' || strtolower($idLabelMap[$k]) == 'phone')) {
                         $dataToSend[strtolower($idLabelMap[$k])] = $v;
                     }
                 }
             }
-
-            error_log(print_r($dataToSend, true));
 
             $contacts = $gravity_forms->getContacts();
 
@@ -155,19 +151,53 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             if (array_search($dataToSend['name'], $names) > 0) {
-                 return;
+                return;
+            }
+
+            $editContact = $gravity_forms->getContact(13604);
+
+            error_log(print_r($editContact, true));
+
+            exit;
+
+            $email = 'dweeq@c.com';
+
+            $emailKey = array_search($email, (array) $editContact->email);
+            $phoneKey = array_search($phone, (array) $editContact->phone);
+            $notesKey = array_search($notes, (array) $editContact->notes);
+
+            $editContact->phone = (array) $editContact->phone;
+
+            $editContact->email = (array) $editContact->email;
+            $editContact->rev = (array) $editContact->rev;
+
+            if (!$emailKey) {
+                $fields_to_update['email'] = $dataToSend['email'];
+                // $email = $dataToSend['email'];
+
+                // $gravity_forms->editContact($editContact);
+            }
+
+            if (!$emailPhone) {
+                $fields_to_update['phone'] = $dataToSend['email'];
+                $gravity_forms->editContact($editContact);
             }
 
             $params['contact'] = $dataToSend;
 
-            if ($gravity_forms->addContact($params)) {
-                error_log(print_r('added', true));
+            if ($newContactId = $gravity_forms->addContact($params)) {
+                error_log(print_r('Created new contact with ID ', true));
+                error_log(print_r($newContactId, true));
+            } else {
+                throw new Exception($e);
+                error_log(print_r('Failed to create contact', true));
+                error_log(print_r($dataToSend, true));
             }
         }
     }
 
-    public function pre_render_add_note(){
-
+    public function pre_render_add_note()
+    {
         error_log(print_r('in prerender', true));
 
         add_action('gform_pre_render', 'set_is_note', 10, 1);
@@ -175,21 +205,48 @@ class Gravityforms_Nutshell_Integration_Public
         function set_is_note($form)
         {
             if ($form['title'] !=  'Newsletter') {
+                error_log(print_r($form, true));
 
-            error_log(print_r($form, true));
-
-            error_log(print_r('in prerender2', true));
-            $props = array(
+                error_log(print_r('in prerender2', true));
+                $props = array(
                 'id' => 100,
                 'type' => 'hidden',
                 'value' => 'Test'
             );
-            $field = GF_Fields::create( $props );
-            array_push( $form['fields'], $field );
+                $field = GF_Fields::create($props);
+                array_push($form['fields'], $field);
 
-            return $form;
+                return $form;
             }
         }
     }
 
+    //convert nested object to array
+    public static function object_to_array($obj)
+    {
+        if (is_object($obj)) {
+            $obj = (array) Gravityforms_Nutshell_Integration_Public::dismount($obj);
+        }
+        if (is_array($obj)) {
+            $new = array();
+            foreach ($obj as $key => $val) {
+                $new[$key] = Gravityforms_Nutshell_Integration_Public::object_to_array($val);
+            }
+        } else {
+            $new = $obj;
+        }
+        return $new;
+    }
+
+    public static function dismount($object)
+    {
+        $reflectionClass = new ReflectionClass(get_class($object));
+        $array = array();
+        foreach ($reflectionClass->getProperties() as $property) {
+            $property->setAccessible(true);
+            $array[$property->getName()] = $property->getValue($object);
+            $property->setAccessible(false);
+        }
+        return $array;
+    }
 }
