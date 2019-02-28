@@ -150,14 +150,10 @@ class Gravityforms_Nutshell_Integration_Public
                 $idLabelMap[$field->id] = $field->label;
             }
 
-            error_log(print_r(get_option('checkbox'), true));
-
 
             $options = get_option('checkbox');
 
             // exit;
-
-            // (strtolower($idLabelMap[$k]) == 'name' || strtolower($idLabelMap[$k]) == 'email' || strtolower($idLabelMap[$k]) == 'phone')
 
             foreach ($entry as $k=>$v) {
                 if (array_keys($idLabelMap, $k) !== null) {
