@@ -87,28 +87,29 @@ class MySettingsPage
                         array('title' => $form_title)
                 );
 
-
             register_setting(
                     'my_option_group', // Option group
                     'checkbox' // Option name
                     //array( $this, 'sanitize' ) // Sanitize
                 );
 
-                foreach ($form['fields'] as $field) {
-                $option_name = str_replace(' ', '_', $field->label);
-                $option_name = $option_name;
-                $option_name = strtolower($option_name);
-                $option_name .= '_' . $form_title;
-                $form_labels[] = $option_name;
+            foreach ($form['fields'] as $field) {
+                if (!empty($field->label)) {
+                        $option_name = str_replace(' ', '_', $field->label);
+                        $option_name = $option_name;
+                        $option_name = strtolower($option_name);
+                        $option_name .= '_' . $form_title;
+                        $form_labels[] = $option_name;
 
-                add_settings_field(
-                        $option_name,
-                        $field->label,
-                        array( $this, 'title_callback'),
-                        'my-setting-admin',
-                        $form['title'],
-                        array('label' => $option_name)
-                );
+                        add_settings_field(
+                                $option_name,
+                                $field->label,
+                                array( $this, 'title_callback'),
+                                'my-setting-admin',
+                                $form['title'],
+                                array('label' => $option_name)
+                        );
+                }
             }
         }
     }
@@ -116,10 +117,10 @@ class MySettingsPage
     public function title_callback($args)
     {
         $current_option = $input_text ='';
-        static $id;
-        if ($id === null) {
-            $id = 0;
-        }
+
+        $current_option = get_option('checkbox');
+
+        error_log(print_r($args, true));
 
         if (!empty($current_option[$args['label']])) {
             $current_option = 'checked';
@@ -129,7 +130,7 @@ class MySettingsPage
             $input_text = 'Not a note';
         }
         printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option,$args['label'], $input_text)
+            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option, $args['label'], $input_text)
         );
         $id++;
     }
