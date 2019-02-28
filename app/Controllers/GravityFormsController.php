@@ -48,15 +48,13 @@ class GravityFormsController
 
     public function addNote($params)
     {
-        error_log(print_r('add note', true));
         $this->nutshell->addNote($params);
     }
 
-    public function editContact($params)
+    public function editContact($params, $fields_to_update)
     {
         $params = (array) $params;
-        $this->nutshell->editContact((array)$params);
-               // $this->nutshell->call('editContact', $params);
+        $this->nutshell->editContact((array)$params, $fields_to_update);
     }
 
     public function getContact($contactID)

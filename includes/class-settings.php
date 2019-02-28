@@ -48,9 +48,8 @@ class MySettingsPage
             <form id="test" class="gf_nutshell_options" method="post" action="options.php">
                 <?php
                 settings_fields('my_option_group');
-            do_settings_sections('my-setting-admin');
-         submit_button();
-        ?>
+        do_settings_sections('my-setting-admin');
+        submit_button(); ?>
             </form>
         </div>
         <?php
@@ -62,12 +61,7 @@ class MySettingsPage
     public function page_init()
     {
         $forms = GFAPI::get_forms();
-
-        register_setting(
-            'my_option_group', // Option group
-            'my_option_name' // Option name
-            //array( $this, 'sanitize' ) // Sanitize
-        );
+        $checkbox = [];
 
         foreach ($forms as $form) {
             add_settings_section(
@@ -78,13 +72,13 @@ class MySettingsPage
                 );
 
             $form_title = str_replace(' ', '_', strtolower($form['title']));
-                register_setting(
+            register_setting(
                     'my_option_group', // Option group
                     $form_title // Option name
                     //array( $this, 'sanitize' ) // Sanitize
                 );
 
-                add_settings_field(
+            add_settings_field(
                         $form_title,
                         "Select a Nutshell user to associate with the form",
                         array( $this, 'note_callback'),
@@ -92,12 +86,56 @@ class MySettingsPage
                         $form['title'],
                         array('title' => $form_title)
                 );
+
+
+            register_setting(
+                    'my_option_group', // Option group
+                    'checkbox' // Option name
+                    //array( $this, 'sanitize' ) // Sanitize
+                );
+
+                foreach ($form['fields'] as $field) {
+                $option_name = str_replace(' ', '_', $field->label);
+                $option_name = $option_name;
+                $option_name = strtolower($option_name);
+                $option_name .= '_' . $form_title;
+                $form_labels[] = $option_name;
+
+                add_settings_field(
+                        $option_name,
+                        $field->label,
+                        array( $this, 'title_callback'),
+                        'my-setting-admin',
+                        $form['title'],
+                        array('label' => $option_name)
+                );
+            }
         }
+    }
+
+    public function title_callback($args)
+    {
+        $current_option = $input_text ='';
+        static $id;
+        if ($id === null) {
+            $id = 0;
+        }
+
+        if (!empty($current_option[$args['label']])) {
+            $current_option = 'checked';
+            $input_text = 'Designated as a note';
+        } else {
+            $current_option = '';
+            $input_text = 'Not a note';
+        }
+        printf(
+            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option,$args['label'], $input_text)
+        );
+        $id++;
     }
 
     public function note_callback($args)
     {
-
         $current_option = $input_text ='';
         $current_option = get_option($args['title']);
 
@@ -106,8 +144,14 @@ class MySettingsPage
         );
     }
 
-    public function sanitize( $input )
+    public function sanitize($input)
     {
+        $new_input = array();
+
+        if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
+            $new_input['title'] = sanitize_text_field($input['title']);
+        }
+
         // $new_input = array();
         // if( isset( $input['id_number'] ) )
         //     $new_input['id_number'] = absint( $input['id_number'] );
@@ -121,10 +165,5 @@ class MySettingsPage
     public function print_section_info()
     {
         return '';
-    }
-
-    public function getOptions()
-    {
-        return $this->labels;
     }
 }

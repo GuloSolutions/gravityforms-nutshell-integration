@@ -123,25 +123,64 @@ class Gravityforms_Nutshell_Integration_Public
         function send_data_to_nutshell($entry, $form)
         {
             global $gravity_forms;
-            $newContactId = '';
+            $newContactId = $form_title = $form_owner = '';
             $fields_to_update = [];
-
             $idLabelMap = [];
             $dataToSend = [];
 
+            $form_title = str_replace(' ', '_', strtolower($form['title']));
+
             foreach ($form['fields'] as $field) {
+                if (!empty($field->label)) {
+                    $option_name = str_replace(' ', '_', $field->label);
+                    $option_name = strtolower($option_name);
+                    $option_name .= '_'.$form_title;
+                    $all_options[] = $option_name;
+                }
+            }
+
+            //get form owner
+            $form_owner = get_option($form_title);
+            $notes = 'notes';
+
+            foreach ($form['fields'] as $field) {
+                 $option_name = str_replace(' ', '_', $field->label);
+                 $option_name = strtolower($option_name);
+                 $option_name .= '_'.$form_title;
                 $idLabelMap[$field->id] = $field->label;
             }
 
-            error_log(print_r($idLabelMap, true));
+            error_log(print_r(get_option('checkbox'), true));
+
+
+            $options = get_option('checkbox');
+
+            // exit;
+
+            // (strtolower($idLabelMap[$k]) == 'name' || strtolower($idLabelMap[$k]) == 'email' || strtolower($idLabelMap[$k]) == 'phone')
 
             foreach ($entry as $k=>$v) {
                 if (array_keys($idLabelMap, $k) !== null) {
-                    if (!empty($idLabelMap[$k]) && (strtolower($idLabelMap[$k]) == 'name' || strtolower($idLabelMap[$k]) == 'email' || strtolower($idLabelMap[$k]) == 'phone')) {
+                    if (!empty($idLabelMap[$k])) {
                         $dataToSend[strtolower($idLabelMap[$k])] = $v;
                     }
                 }
             }
+
+            foreach($dataToSend as $k=>$v){
+                 $option_name = str_replace(' ', '_', $k);
+                 $option_name = strtolower($option_name);
+                 $option_name .= '_'.$form_title;
+
+                 if (in_array($option_name, array_keys($options)) && $options[$option_name] == 'on'){
+                    unset($dataToSend[$k]);
+                    $dataToSend[$notes] = $v;
+                }
+            }
+
+            error_log(print_r($dataToSend, true));
+
+            exit;
 
             $contacts = $gravity_forms->getContacts();
 
@@ -160,28 +199,28 @@ class Gravityforms_Nutshell_Integration_Public
 
             exit;
 
-            $email = 'dweeq@c.com';
+            $email = 'dwqqssssqqeeq@c.com';
 
             $emailKey = array_search($email, (array) $editContact->email);
             $phoneKey = array_search($phone, (array) $editContact->phone);
             $notesKey = array_search($notes, (array) $editContact->notes);
 
             $editContact->phone = (array) $editContact->phone;
-
             $editContact->email = (array) $editContact->email;
             $editContact->rev = (array) $editContact->rev;
+            $editContact->notes = (array) $editContact->notes;
 
-            if (!$emailKey) {
+            if (!$emailKey || !$phoneKey) {
                 $fields_to_update['email'] = $dataToSend['email'];
-                // $email = $dataToSend['email'];
-
-                // $gravity_forms->editContact($editContact);
+                $fields_to_update['phone'] = $dataToSend['phone'];
+                $gravity_forms->editContact($editContact, $fields_to_update);
             }
 
-            if (!$emailPhone) {
-                $fields_to_update['phone'] = $dataToSend['email'];
-                $gravity_forms->editContact($editContact);
+
+            if (!empty($dataToSend['organization'])) {
+                    $fields_to_update['company'] = $dataToSend['organization'];
             }
+
 
             $params['contact'] = $dataToSend;
 
@@ -198,8 +237,6 @@ class Gravityforms_Nutshell_Integration_Public
 
     public function pre_render_add_note()
     {
-        error_log(print_r('in prerender', true));
-
         add_action('gform_pre_render', 'set_is_note', 10, 1);
 
         function set_is_note($form)

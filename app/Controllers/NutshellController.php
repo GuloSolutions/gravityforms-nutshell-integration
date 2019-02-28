@@ -85,7 +85,7 @@ class NutshellController
         $newNote = $api->call('newNote', $entity, $note);
     }
 
-    public function editContact($params)
+    public function editContact($params, $fields_to_update)
     {
 
         // $params->email = (array) $params->email;
@@ -93,8 +93,11 @@ class NutshellController
         // $params->name = (array) $params->name;
         // $params->phone = (array) $params->phone;
 
-        $phone = ['phone' => '1111111111'];
+        // $phone = ['phone' => '1111111111'];
 
-        $this->api->editContact($params['id'], $params['rev'][0], $phone);
+        // $fields_to_update = ['phone' => "4444444444",
+        //                     'email' => "new@mail.com"];
+
+        $this->api->editContact($params['id'], $params['rev'][0], $fields_to_update);
     }
 }
