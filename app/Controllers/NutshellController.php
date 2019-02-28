@@ -43,7 +43,6 @@ class NutshellController
 
     public function getContact($id)
     {
-        error_log(print_r($id, true));
         $contact = $this->api->getContact(['contactId' => $id]);
         return $contact;
     }
@@ -78,26 +77,14 @@ class NutshellController
         return false;
     }
 
-    public function addNote($params)
+    public function addNote($params, $note)
     {
         $entity = $params['entity'];
-        $note = $params['note'];
-        $newNote = $api->call('newNote', $entity, $note);
+        $newNote = $this->api->newNote($entity, $note);
     }
 
     public function editContact($params, $fields_to_update)
     {
-
-        // $params->email = (array) $params->email;
-
-        // $params->name = (array) $params->name;
-        // $params->phone = (array) $params->phone;
-
-        // $phone = ['phone' => '1111111111'];
-
-        // $fields_to_update = ['phone' => "4444444444",
-        //                     'email' => "new@mail.com"];
-
         $this->api->editContact($params['id'], $params['rev'][0], $fields_to_update);
     }
 }

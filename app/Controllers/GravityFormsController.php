@@ -46,9 +46,9 @@ class GravityFormsController
         return $new_contact;
     }
 
-    public function addNote($params)
+    public function addNote($params, $note)
     {
-        $this->nutshell->addNote($params);
+        $this->nutshell->addNote($params, $note);
     }
 
     public function editContact($params, $fields_to_update)

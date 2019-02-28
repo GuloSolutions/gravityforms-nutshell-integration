@@ -124,6 +124,7 @@ class Gravityforms_Nutshell_Integration_Public
         {
             global $gravity_forms;
             $newContactId = $form_title = $form_owner = '';
+            $notes = 'notes';
             $fields_to_update = [];
             $idLabelMap = [];
             $dataToSend = [];
@@ -139,21 +140,18 @@ class Gravityforms_Nutshell_Integration_Public
                 }
             }
 
-            //get form owner
+            // get form owner for admin form
             $form_owner = get_option($form_title);
-            $notes = 'notes';
 
             foreach ($form['fields'] as $field) {
-                 $option_name = str_replace(' ', '_', $field->label);
-                 $option_name = strtolower($option_name);
-                 $option_name .= '_'.$form_title;
+                $option_name = str_replace(' ', '_', $field->label);
+                $option_name = strtolower($option_name);
+                $option_name .= '_'.$form_title;
                 $idLabelMap[$field->id] = $field->label;
             }
 
-
+            // get options for admin form
             $options = get_option('checkbox');
-
-            // exit;
 
             foreach ($entry as $k=>$v) {
                 if (array_keys($idLabelMap, $k) !== null) {
@@ -163,20 +161,16 @@ class Gravityforms_Nutshell_Integration_Public
                 }
             }
 
-            foreach($dataToSend as $k=>$v){
-                 $option_name = str_replace(' ', '_', $k);
-                 $option_name = strtolower($option_name);
-                 $option_name .= '_'.$form_title;
+            foreach ($dataToSend as $k=>$v) {
+                $option_name = str_replace(' ', '_', $k);
+                $option_name = strtolower($option_name);
+                $option_name .= '_'.$form_title;
 
-                 if (in_array($option_name, array_keys($options)) && $options[$option_name] == 'on'){
+                if (in_array($option_name, array_keys($options)) && $options[$option_name] == 'on') {
                     unset($dataToSend[$k]);
                     $dataToSend[$notes] = $v;
                 }
             }
-
-            error_log(print_r($dataToSend, true));
-
-            exit;
 
             $contacts = $gravity_forms->getContacts();
 
@@ -197,9 +191,9 @@ class Gravityforms_Nutshell_Integration_Public
 
             $email = 'dwqqssssqqeeq@c.com';
 
+
             $emailKey = array_search($email, (array) $editContact->email);
-            $phoneKey = array_search($phone, (array) $editContact->phone);
-            $notesKey = array_search($notes, (array) $editContact->notes);
+            $phoneKey = array_search($dataToSend['phone'], (array) $editContact->phone);
 
             $editContact->phone = (array) $editContact->phone;
             $editContact->email = (array) $editContact->email;
@@ -210,12 +204,12 @@ class Gravityforms_Nutshell_Integration_Public
                 $fields_to_update['email'] = $dataToSend['email'];
                 $fields_to_update['phone'] = $dataToSend['phone'];
                 $gravity_forms->editContact($editContact, $fields_to_update);
+                $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $editContact->id]], $dataToSend[$notes]);
             }
 
-
-            if (!empty($dataToSend['organization'])) {
-                    $fields_to_update['company'] = $dataToSend['organization'];
-            }
+            // if (!empty($dataToSend['organization'])) {
+            //     $fields_to_update['company'] = $dataToSend['organization'];
+            // }
 
 
             $params['contact'] = $dataToSend;
