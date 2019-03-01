@@ -191,12 +191,8 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             $contact = $gravity_forms->searchContacts($dataToSend['name']);
-
-                                        error_log(print_r('found contact', true));
-
-                        error_log(print_r($contact, true));
-
-
+            error_log(print_r('found contact', true));
+            error_log(print_r($contact, true));
             if ($contact) {
                 //$editContact = $gravity_forms->getContact(13604);
                 $editContact = $gravity_forms->getContact($contact[0]->id);

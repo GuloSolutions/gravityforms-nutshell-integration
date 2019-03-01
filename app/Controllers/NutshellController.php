@@ -90,7 +90,7 @@ class NutshellController
 
     public function findUsers($email)
     {
-        return $this->api->searchContactsAndUsers(['string' => 'manny@gulosolutions.com']);
+        return $this->api->searchContactsAndUsers(['string' => $email]);
     }
 
     public function searchContacts($name)
