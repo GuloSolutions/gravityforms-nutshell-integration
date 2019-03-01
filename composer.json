@@ -30,13 +30,6 @@
             "Controllers\\": "app/Controllers",
             "Nutshell\\": "vendor/nutshellcrm/nutshell-api-php"
 
-        },
-        "extra": {
-            "installer-paths": {
-                "./wp-content/plugins/{$name}/": [
-                    "type:wordpress-plugin"
-                    ]
-                }
         }
     }
 }
