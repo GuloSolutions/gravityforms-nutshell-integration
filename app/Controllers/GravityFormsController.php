@@ -39,7 +39,6 @@ class GravityFormsController
 
     public function addContact($params)
     {
-        exit;
         $copy_params = $params;
         $new_contact = $this->nutshell->addContact($copy_params);
 
@@ -59,10 +58,23 @@ class GravityFormsController
 
     public function getContact($contactID)
     {
-        error_log(print_r($contactID, true));
         return $this->nutshell->getContact($contactID);
     }
 
+    public function getMasterUser()
+    {
+        return $this->nutshell->getInstanceData();
+    }
+
+    public function findUsers($email)
+    {
+        return $this->nutshell->findUsers($email);
+    }
+
+    public function searchContacts($name)
+    {
+        return $this->nutshell->searchContacts($name);
+    }
 
     public static function getInstance()
     {

@@ -49,7 +49,7 @@ class NutshellController
 
     public function findNutshellContacts()
     {
-        $params = array( 'contactId' => $this->id);
+        $params = array('contactId' => $this->id, 'orderBy' => 'modifiedTime');
         $result = $this->api->findContacts($params);
 
         return $result;
@@ -86,5 +86,15 @@ class NutshellController
     public function editContact($params, $fields_to_update)
     {
         $this->api->editContact($params['id'], $params['rev'][0], $fields_to_update);
+    }
+
+    public function findUsers($email)
+    {
+        return $this->api->searchContactsAndUsers(['string' => 'manny@gulosolutions.com']);
+    }
+
+    public function searchContacts($name)
+    {
+        return $this->api->searchContacts(['string' => $name, 'limit' => 1]);
     }
 }

@@ -123,11 +123,9 @@ class Gravityforms_Nutshell_Integration_Public
         function send_data_to_nutshell($entry, $form)
         {
             global $gravity_forms;
-            $newContactId = $form_title = $form_owner = '';
+            $newContactId = $form_title = $form_owner = $user_id = '';
             $notes = 'notes';
-            $fields_to_update = [];
-            $idLabelMap = [];
-            $dataToSend = [];
+            $fields_to_update = $idLabelMap = $dataToSend = $new_contact = $editContact = $users = [];
 
             $form_title = str_replace(' ', '_', strtolower($form['title']));
 
@@ -142,6 +140,26 @@ class Gravityforms_Nutshell_Integration_Public
 
             // get form owner for admin form
             $form_owner = get_option($form_title);
+
+            $form_owner = 'manny@gulosolutions.com';
+
+            // get user id
+            try {
+                $users = $gravity_forms->findUsers('manny@gulosolutions.com');
+                if (!$users) {
+                    throw new Exception('No user(s) with this email');
+                }
+            } catch (Exception $e) {
+                error_log(print_r($e->getMessage(), true));
+            }
+
+            error_log(print_r($user_id, true));
+
+            $filtered = array_filter((array)$users, function ($v) {
+                return $v->entityType != 'Contacts';
+            });
+
+            $user_id = array_values($filtered)[0]->id;
 
             foreach ($form['fields'] as $field) {
                 $option_name = str_replace(' ', '_', $field->label);
@@ -172,55 +190,69 @@ class Gravityforms_Nutshell_Integration_Public
                 }
             }
 
-            $contacts = $gravity_forms->getContacts();
+            $contact = $gravity_forms->searchContacts($dataToSend['name']);
 
-            foreach ($contacts as $contact) {
-                $contact->name = strtolower($contact->name);
-                $names[] = $contact->name;
-            }
+                                        error_log(print_r('found contact', true));
 
-            if (array_search($dataToSend['name'], $names) > 0) {
-                return;
-            }
-
-            $editContact = $gravity_forms->getContact(13604);
-
-            error_log(print_r($editContact, true));
-
-            exit;
-
-            $email = 'dwqqssssqqeeq@c.com';
+                        error_log(print_r($contact, true));
 
 
-            $emailKey = array_search($email, (array) $editContact->email);
-            $phoneKey = array_search($dataToSend['phone'], (array) $editContact->phone);
+            if ($contact) {
+                //$editContact = $gravity_forms->getContact(13604);
+                $editContact = $gravity_forms->getContact($contact[0]->id);
 
-            $editContact->phone = (array) $editContact->phone;
-            $editContact->email = (array) $editContact->email;
-            $editContact->rev = (array) $editContact->rev;
-            $editContact->notes = (array) $editContact->notes;
+                error_log(print_r($editContact, true));
 
-            if (!$emailKey || !$phoneKey) {
-                $fields_to_update['email'] = $dataToSend['email'];
-                $fields_to_update['phone'] = $dataToSend['phone'];
+                $emailKey = array_search($dataToSend['email'], (array) $editContact->email);
+                $phoneKey = array_search($dataToSend['phone'], (array) $editContact->phone);
+
+                $editContact->phone = (array) $editContact->phone;
+                $editContact->email = (array) $editContact->email;
+                $editContact->rev = (array) $editContact->rev;
+                $editContact->notes = (array) $editContact->notes;
+
+                if (!$emailKey || !$phoneKey) {
+                    $fields_to_update['email'] = $dataToSend['email'];
+                    $fields_to_update['phone'] = $dataToSend['phone'];
+                    $fields_to_update['owner'] = ['entityType' => 'Users', 'id' =>  $user_id];
+                }
+
+                if (!empty($dataToSend['organization'])) {
+                    $fields_to_update['description'] = $dataToSend['organization'];
+                }
+
                 $gravity_forms->editContact($editContact, $fields_to_update);
-                $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $editContact->id]], $dataToSend[$notes]);
-            }
 
-            // if (!empty($dataToSend['organization'])) {
-            //     $fields_to_update['company'] = $dataToSend['organization'];
-            // }
-
-
-            $params['contact'] = $dataToSend;
-
-            if ($newContactId = $gravity_forms->addContact($params)) {
-                error_log(print_r('Created new contact with ID ', true));
-                error_log(print_r($newContactId, true));
+                if (!empty($dataToSend[$notes])) {
+                    $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $editContact->id]], $dataToSend[$notes]);
+                }
             } else {
-                throw new Exception($e);
-                error_log(print_r('Failed to create contact', true));
-                error_log(print_r($dataToSend, true));
+                $new_contact['name'] = $dataToSend['name'];
+                $new_contact['email'] = $dataToSend['email'];
+                $new_contact['phone'] = $dataToSend['phone'];
+                $new_contact['owner'] = ['entityType' => 'Users', 'id' =>  $user_id];
+
+                if (!empty($dataToSend['organization'])) {
+                    $new_contact['description'] = $dataToSend['organization'];
+                }
+
+                error_log(print_r('new contact', true));
+                error_log(print_r($new_contact, true));
+
+                $params['contact'] = $new_contact;
+
+                if ($newContactId = $gravity_forms->addContact($params)) {
+                    error_log(print_r('Created new contact with ID ', true));
+                    error_log(print_r($newContactId, true));
+
+                    if (!empty($dataToSend[$notes])) {
+                        $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $editContact->id]], $dataToSend[$notes]);
+                    }
+                } else {
+                    throw new Exception($e);
+                    error_log(print_r('Failed to create contact', true));
+                    error_log(print_r($dataToSend, true));
+                }
             }
         }
     }

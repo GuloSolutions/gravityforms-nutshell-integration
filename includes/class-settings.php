@@ -109,7 +109,7 @@ class MySettingsPage
                                 $form['title'],
                                 array('label' => $option_name)
                         );
-                }
+                    }
             }
         }
     }
