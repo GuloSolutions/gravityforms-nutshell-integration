@@ -3,7 +3,6 @@
 namespace Controllers;
 
 use Controllers\NutshellController;
-use Controllers\GravityFormsDataController;
 
 class GravityFormsController
 {
