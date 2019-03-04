@@ -6,4 +6,8 @@
 
 - Add API creds in admin section
 
+## 1.0.2 - 2019-03-04
+
+- Remove unused imports
+
 
