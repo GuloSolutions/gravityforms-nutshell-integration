@@ -27,7 +27,8 @@
     "autoload": {
         "psr-4": {
             "Controllers\\": "app/Controllers",
-            "Nutshell\\": "vendor/nutshellcrm/nutshell-api-php"
+            "Nutshell\\": "vendor/nutshellcrm/nutshell-api-php",
+            "GravityFormsController\\": "app/GravityFormsController"
 
         }
     },
