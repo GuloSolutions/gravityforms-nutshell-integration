@@ -17,11 +17,12 @@ class NutshellController
     public function __construct()
     {
         $username = $apiKey = '';
-        //if (defined('NUTSHELL_API_APIKEY_IMPERSONATION') && defined('NUTSHELL_API_USERNAME')) {
-            $apiKey = '4fb90195f717456ed9f66350c71a7e03a9a7b376';
-            $username = 'zwilson@gulosolutions.com';
+        $username = get_option('nutshell_api_username');
+        $apiKey = get_option('nutshell_api_key');
+
+        if ($username && $apiKey) {
             $this->api = new \NutshellApi($username, $apiKey);
-        //}
+        }
     }
 
     public function getInstanceData()

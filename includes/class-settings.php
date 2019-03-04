@@ -40,8 +40,7 @@ class MySettingsPage
      */
     public function create_admin_page()
     {
-        // Set class property
-        $this->options = get_option('my_option_name'); ?>
+        ?>
 
         <div class="wrap">
             <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
@@ -63,6 +62,43 @@ class MySettingsPage
         $forms = GFAPI::get_forms();
         $checkbox = [];
 
+        register_setting(
+            'my_option_group', // Option group
+            'nutshell_api_username' // Option name
+                    //array( $this, 'sanitize' ) // Sanitize
+        );
+
+        register_setting(
+            'my_option_group', // Option group
+            'nutshell_api_key' // Option name
+                    //array( $this, 'sanitize' ) // Sanitize
+        );
+
+        add_settings_field(
+                'nutshell_api_username',
+                "Enter API username",
+                array( $this, 'user_callback'),
+                'my-setting-admin',
+                'creds',
+                array('title' => 'nutshell_api_username')
+            );
+
+        add_settings_field(
+                'nutshell_api_key',
+                "Enter API key",
+                array( $this, 'api_callback'),
+                'my-setting-admin',
+                'creds',
+                array('title' => 'nutshell_api_key')
+            );
+
+        add_settings_section(
+                'creds', // ID
+                'User credentials', // Title
+                array( $this, 'print_user_info' ), // Callback
+                'my-setting-admin' // Page
+            );
+
         foreach ($forms as $form) {
             add_settings_section(
                     $form['title'], // ID
@@ -79,13 +115,13 @@ class MySettingsPage
                 );
 
             add_settings_field(
-                        $form_title,
-                        "Select a Nutshell user to associate with the form",
-                        array( $this, 'note_callback'),
-                        'my-setting-admin',
-                        $form['title'],
-                        array('title' => $form_title)
-                );
+                $form_title,
+                "Select a Nutshell user to associate with the form",
+                array( $this, 'note_callback'),
+                'my-setting-admin',
+                $form['title'],
+                array('title' => $form_title)
+            );
 
             register_setting(
                     'my_option_group', // Option group
@@ -114,6 +150,24 @@ class MySettingsPage
         }
     }
 
+    public function user_callback($args)
+    {
+        $current_option = $input_text ='';
+        $current_option = get_option($args['title']);
+        printf(
+            sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($current_option) ? $current_option: "Please enter an value")
+        );
+    }
+
+    public function api_callback($args)
+    {
+        $current_option = $input_text ='';
+        $current_option = get_option($args['title']);
+        printf(
+            sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($current_option) ? $current_option: "Please enter an value")
+        );
+    }
+
     public function title_callback($args)
     {
         $current_option = $input_text ='';
@@ -129,7 +183,6 @@ class MySettingsPage
         printf(
             sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option, $args['label'], $input_text)
         );
-        $id++;
     }
 
     public function note_callback($args)
@@ -161,6 +214,11 @@ class MySettingsPage
     }
 
     public function print_section_info()
+    {
+        return '';
+    }
+
+    public function print_user_info()
     {
         return '';
     }

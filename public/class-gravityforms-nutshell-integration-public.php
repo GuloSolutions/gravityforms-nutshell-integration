@@ -141,19 +141,16 @@ class Gravityforms_Nutshell_Integration_Public
             // get form owner for admin form
             $form_owner = get_option($form_title);
 
-            $form_owner = 'manny@gulosolutions.com';
-
             // get user id
             try {
-                $users = $gravity_forms->findUsers('manny@gulosolutions.com');
-                if (!$users) {
+                $users = $gravity_forms->findUsers($form_owner);
+                if (!$users || $users->entityType != 'Users') {
                     throw new Exception('No user(s) with this email');
                 }
             } catch (Exception $e) {
                 error_log(print_r($e->getMessage(), true));
+                return;
             }
-
-            error_log(print_r($user_id, true));
 
             $filtered = array_filter((array)$users, function ($v) {
                 return $v->entityType != 'Contacts';
