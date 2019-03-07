@@ -33,7 +33,7 @@
      "extra": {
             "installer-paths": {
                 "./wp-content/plugins/{$name}/": [
-                    "type:wordpress-plugin"
+                    "vendor:gulo-solutions"
             ]
         }
     }
