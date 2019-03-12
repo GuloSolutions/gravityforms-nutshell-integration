@@ -35,11 +35,7 @@
         },
         "files": ["NutshellApi.php"]
     },
-     "extra": {
-            "installer-paths": {
-                "./wp-content/plugins/{$name}/": [
-                    "vendor:gulo-solutions"
-            ]
-        }
-    }
+      "config": {
+        "vendor-dir": "vendor/"
+    },
 }
