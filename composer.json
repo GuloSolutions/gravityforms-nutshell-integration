@@ -10,6 +10,7 @@
             "type":"git",
             "url": "https://github.com/nutshellcrm/nutshell-api-php.git"
         },
+    ],
      "require": {
         "composer/installers": "~1.0",
         "nesbot/carbon": "~1.0",
@@ -24,5 +25,5 @@
     },
       "config": {
         "vendor-dir": "vendor/"
-    },
+    }
 }
