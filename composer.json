@@ -9,7 +9,7 @@
         {
             "type":"git",
             "url": "https://github.com/nutshellcrm/nutshell-api-php.git"
-        },
+        }
     ],
      "require": {
         "composer/installers": "~1.0",
