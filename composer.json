@@ -7,7 +7,7 @@
     "type": "wordpress-plugin",
     "repositories": [
         {
-            "type":"package",
+            "type":"vcs",
             "package": {
               "name": "nutshellcrm/nutshell-api-php",
               "version":"master",
