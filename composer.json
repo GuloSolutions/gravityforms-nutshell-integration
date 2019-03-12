@@ -28,7 +28,8 @@
         "psr-4": {
             "Controllers\\": "app/Controllers",
             "Nutshell\\": "vendor/nutshellcrm/nutshell-api-php"
-        }
+        },
+        "files": ["NutshellApi.php"]
     },
      "extra": {
             "installer-paths": {
