@@ -91,11 +91,14 @@ function run_gravityforms_nutshell_integration()
 {
     $plugin_name = get_plugin_data(__FILE__, $markup = true, $translate = true)['Name'];
 
+    // load settings
     if (is_admin() && !is_null($plugin_name)) {
         $my_settings_page = new MySettingsPage($plugin_name);
     }
-
-    $plugin = new Gravityforms_Nutshell_Integration();
-    $plugin->run();
+    // run plugin if API info exists
+    if (get_option('nutshell_api_username') && get_option('nutshell_api_key')) {
+        $plugin = new Gravityforms_Nutshell_Integration();
+        $plugin->run();
+    }
 }
 run_gravityforms_nutshell_integration();

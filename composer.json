@@ -7,23 +7,41 @@
     "type": "wordpress-plugin",
     "repositories": [
         {
-            "type":"git",
-            "url": "https://github.com/nutshellcrm/nutshell-api-php"
+            "type":"package",
+            "package": {
+              "name": "nutshellcrm/nutshell-api-php",
+              "version":"master",
+              "source": {
+                  "url": "https://github.com/nutshellcrm/nutshell-api-php",
+                  "type": "git",
+                  "reference":"master"
+                }
+            }
         }
     ],
-     "require": {
+    "require": {
         "composer/installers": "~1.0",
         "nesbot/carbon": "~1.0",
-        "nutshellcrm / nutshell-api-php": "dev-master"
+        "nutshellcrm/nutshell-api-php":"dev-master"
     },
     "autoload": {
         "psr-4": {
+            "Models\\": "app/Models",
             "Controllers\\": "app/Controllers",
             "Nutshell\\": "vendor/nutshellcrm/nutshell-api-php"
+
         },
-        "files": ["NutshellApi.php"]
-    },
-      "config": {
-        "vendor-dir": "vendor/"
+    "autoload": {
+            "classmap": [
+            "vendor/nutshellcrm/nutshell-api-php/NutshellApi.php"
+    ]
+},
+        "extra": {
+            "installer-paths": {
+                "./wp-content/plugins/{$name}/": [
+                    "type:wordpress-plugin"
+                    ]
+                }
+        }
     }
 }

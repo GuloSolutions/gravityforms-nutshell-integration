@@ -4,9 +4,6 @@ namespace Controllers;
 
 use GravityFormsController;
 
-// At this time Nutshell is not using composer or PSR-4
-require_once(dirname(__FILE__).'/../../vendor/nutshellcrm/nutshell-api-php/NutshellApi.php');
-
 class NutshellController
 {
     public $api;
@@ -19,7 +16,6 @@ class NutshellController
         $username = $apiKey = '';
         $username = get_option('nutshell_api_username');
         $apiKey = get_option('nutshell_api_key');
-
         if ($username && $apiKey) {
             $this->api = new \NutshellApi($username, $apiKey);
         }
