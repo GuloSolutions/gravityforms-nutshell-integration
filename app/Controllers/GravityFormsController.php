@@ -75,6 +75,16 @@ class GravityFormsController
         return $this->nutshell->searchContacts($name);
     }
 
+    public function searchByEmail($email)
+    {
+        return $this->nutshell->searchByEmail($email);
+    }
+
+    public function getNutshellUser($userId = null, $rev= null)
+    {
+        return $this->nutshell->getUser($userId, $rev);
+    }
+
     public static function getInstance()
     {
         if (empty(self::$instance)) {
