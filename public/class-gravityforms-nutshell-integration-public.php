@@ -137,14 +137,13 @@ class Gravityforms_Nutshell_Integration_Public
                     $all_options[] = $option_name;
                 }
             }
-
-            // get form owner for admin form
+            // get form owner for admin
             $form_owner = get_option($form_title);
 
             // get user id
             try {
                 $users = $gravity_forms->findUsers($form_owner);
-                if (!$users || $users->entityType != 'Users') {
+                if (!$users) {
                     throw new Exception('No user(s) with this email');
                 }
             } catch (Exception $e) {
@@ -187,14 +186,10 @@ class Gravityforms_Nutshell_Integration_Public
                 }
             }
 
-            $contact = $gravity_forms->searchContacts($dataToSend['name']);
-            error_log(print_r('found contact', true));
-            error_log(print_r($contact, true));
-            if ($contact) {
-                //$editContact = $gravity_forms->getContact(13604);
-                $editContact = $gravity_forms->getContact($contact[0]->id);
+            $contact = $gravity_forms->searchByEmail($dataToSend['email']);
 
-                error_log(print_r($editContact, true));
+            if (!empty($contact)) {
+                $editContact = $gravity_forms->getContact($contact->contacts[0]->id);
 
                 $emailKey = array_search($dataToSend['email'], (array) $editContact->email);
                 $phoneKey = array_search($dataToSend['phone'], (array) $editContact->phone);
@@ -239,7 +234,7 @@ class Gravityforms_Nutshell_Integration_Public
                     error_log(print_r($newContactId, true));
 
                     if (!empty($dataToSend[$notes])) {
-                        $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $editContact->id]], $dataToSend[$notes]);
+                        $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $newContactId]], $dataToSend[$notes]);
                     }
                 } else {
                     throw new Exception($e);
@@ -257,9 +252,6 @@ class Gravityforms_Nutshell_Integration_Public
         function set_is_note($form)
         {
             if ($form['title'] !=  'Newsletter') {
-                error_log(print_r($form, true));
-
-                error_log(print_r('in prerender2', true));
                 $props = array(
                 'id' => 100,
                 'type' => 'hidden',
@@ -271,34 +263,5 @@ class Gravityforms_Nutshell_Integration_Public
                 return $form;
             }
         }
-    }
-
-    //convert nested object to array
-    public static function object_to_array($obj)
-    {
-        if (is_object($obj)) {
-            $obj = (array) Gravityforms_Nutshell_Integration_Public::dismount($obj);
-        }
-        if (is_array($obj)) {
-            $new = array();
-            foreach ($obj as $key => $val) {
-                $new[$key] = Gravityforms_Nutshell_Integration_Public::object_to_array($val);
-            }
-        } else {
-            $new = $obj;
-        }
-        return $new;
-    }
-
-    public static function dismount($object)
-    {
-        $reflectionClass = new ReflectionClass(get_class($object));
-        $array = array();
-        foreach ($reflectionClass->getProperties() as $property) {
-            $property->setAccessible(true);
-            $array[$property->getName()] = $property->getValue($object);
-            $property->setAccessible(false);
-        }
-        return $array;
     }
 }
