@@ -16,6 +16,7 @@ class NutshellController
         $username = $apiKey = '';
         $username = get_option('nutshell_api_username');
         $apiKey = get_option('nutshell_api_key');
+
         if ($username && $apiKey) {
             $this->api = new \NutshellApi($username, $apiKey);
         }
@@ -87,11 +88,21 @@ class NutshellController
 
     public function findUsers($email)
     {
-        return $this->api->searchContactsAndUsers(['string' => $email]);
+        return $this->api->searchContactsAndUsers(['string' => $email, 'stubResponses' => false ]);
     }
 
     public function searchContacts($name)
     {
-        return $this->api->searchContacts(['string' => $name, 'limit' => 1]);
+        return $this->api->searchContacts(['string' => $name]);
+    }
+
+    public function searchByEmail($email)
+    {
+        return $this->api->searchByEmail($email);
+    }
+
+    public function getNutshellUser($userId, $rev)
+    {
+        return $this->api->getUser($userId, $rev);
     }
 }
