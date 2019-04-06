@@ -185,10 +185,10 @@ class Gravityforms_Nutshell_Integration_Public
                     $dataToSend[$notes] = $v;
                 }
             }
-
+            // search methods return stubs; get methods full info
             $contact = $gravity_forms->searchByEmail($dataToSend['email']);
 
-            if (!empty($contact)) {
+            if (!empty($contact->contacts[0]->id)) {
                 $editContact = $gravity_forms->getContact($contact->contacts[0]->id);
 
                 $emailKey = array_search($dataToSend['email'], (array) $editContact->email);
