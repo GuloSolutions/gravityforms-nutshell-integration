@@ -1,4 +1,3 @@
-./vendor
 ./php_errors.log
 ./includes/.php_cs.cache
 ./*/.php_cs.cache
