@@ -4,6 +4,8 @@ namespace Controllers;
 
 use GravityFormsController;
 
+require_once(dirname(__FILE__).'/../../vendor/nutshellcrm/nutshell-api-php/NutshellApi.php');
+
 class NutshellController
 {
     public $api;
