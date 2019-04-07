@@ -111,7 +111,6 @@ class MySettingsPage
             register_setting(
                     'my_option_group', // Option group
                     $form_title // Option name
-                    //array( $this, 'sanitize' ) // Sanitize
                 );
 
             add_settings_field(
@@ -126,7 +125,6 @@ class MySettingsPage
             register_setting(
                     'my_option_group', // Option group
                     'checkbox' // Option name
-                    //array( $this, 'sanitize' ) // Sanitize
                 );
 
             foreach ($form['fields'] as $field) {
@@ -202,15 +200,6 @@ class MySettingsPage
         if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
             $new_input['title'] = sanitize_text_field($input['title']);
         }
-
-        // $new_input = array();
-        // if( isset( $input['id_number'] ) )
-        //     $new_input['id_number'] = absint( $input['id_number'] );
-
-        // if( isset( $input['title'] ) )
-        //     $new_input['title'] = sanitize_text_field( $input['title'] );
-
-        // return $new_input;
     }
 
     public function print_section_info()

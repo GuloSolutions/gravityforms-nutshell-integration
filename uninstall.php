@@ -29,3 +29,7 @@
 if (! defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
+
+delete_option('nutshell_api_username');
+
+delete_option('nutshell_api_key');
