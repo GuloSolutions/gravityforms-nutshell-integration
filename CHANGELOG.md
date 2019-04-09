@@ -10,4 +10,10 @@
 
 - Remove unused imports
 
+## 1.0.3 - 2019-04-09
+
+- Add more Nutshell API methods
+- Remove API info after unistall
+- Run frontend functionality if API keys exist
+
 
