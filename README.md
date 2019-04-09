@@ -26,7 +26,7 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
  ```
  ## require
 ```
-  "gulo-solutions/gravityforms-nutshell-integration": "~1.1.0"
+  "gulo-solutions/gravityforms-nutshell-integration": "dev-master"
 ```
 2. run `composer update` or `composer install`
 3. Activate the plugin through the 'Plugins' menu in WordPress
