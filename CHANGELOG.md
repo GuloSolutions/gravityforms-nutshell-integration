@@ -16,4 +16,8 @@
 - Remove API info after unistall
 - Run frontend functionality if API keys exist
 
+## 1.1.0 - 2019-04-09
+
+- Latest tag only stable
+
 
