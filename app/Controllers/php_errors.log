@@ -1,3 +1,0 @@
-[13-Nov-2018 14:55:20 America/Chicago] PHP Warning:  Version warning: Imagick was compiled against Image Magick version 1650 but version 1666 is loaded. Imagick will run but may behave surprisingly in Unknown on line 0
-[13-Nov-2018 14:55:20 America/Chicago] PHP Warning:  require_once(../NutshellApi.php): failed to open stream: No such file or directory in /home/radboris/gravityforms-nutshell-integration/app/Controllers/NutshellController.php on line 8
-[13-Nov-2018 14:55:20 America/Chicago] PHP Fatal error:  require_once(): Failed opening required '../NutshellApi.php' (include_path='.:/usr/local/lib/php:/usr/local/bin') in /home/radboris/gravityforms-nutshell-integration/app/Controllers/NutshellController.php on line 8
