@@ -66,7 +66,7 @@ register_deactivation_hook(__FILE__, 'deactivate_gravityforms_nutshell_integrati
  */
 require plugin_dir_path(__FILE__) . 'includes/class-gravityforms-nutshell-integration.php';
 require plugin_dir_path(__FILE__) . 'public/class-gravityforms-nutshell-integration-public.php';
-require plugin_dir_path(__FILE__) . 'includes/class-settings.php';
+require plugin_dir_path(__FILE__) . 'includes/class-gravityforms-nutshell-settings.php';
 
 
 /**
@@ -93,7 +93,7 @@ function run_gravityforms_nutshell_integration()
 
     // load settings
     if (is_admin() && !is_null($plugin_name)) {
-        $my_settings_page = new MySettingsPage($plugin_name);
+        $my_settings_page = new GravityNutshellSettingsPage($plugin_name);
     }
     // run plugin if API info exists
     if (get_option('nutshell_api_username') && get_option('nutshell_api_key')) {

@@ -6,12 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
-    'Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
-    'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
     'Nutshell\\' => array($vendorDir . '/nutshellcrm/nutshell-api-php'),
     'Models\\' => array($baseDir . '/app/Models'),
     'Controllers\\' => array($baseDir . '/app/Controllers'),
-    'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
-    '' => array($vendorDir . '/nesbot/carbon/src'),
 );

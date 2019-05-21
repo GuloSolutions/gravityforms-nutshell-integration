@@ -6,17 +6,7 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit20b99cc003c2328c3146323676566a0f
 {
-    public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
-        'S' => 
-        array (
-            'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Contracts\\' => 18,
-            'Symfony\\Component\\Translation\\' => 30,
-        ),
         'N' => 
         array (
             'Nutshell\\' => 9,
@@ -28,23 +18,10 @@ class ComposerStaticInit20b99cc003c2328c3146323676566a0f
         'C' => 
         array (
             'Controllers\\' => 12,
-            'Composer\\Installers\\' => 20,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Contracts\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/contracts',
-        ),
-        'Symfony\\Component\\Translation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/translation',
-        ),
         'Nutshell\\' => 
         array (
             0 => __DIR__ . '/..' . '/nutshellcrm/nutshell-api-php',
@@ -57,14 +34,6 @@ class ComposerStaticInit20b99cc003c2328c3146323676566a0f
         array (
             0 => __DIR__ . '/../..' . '/app/Controllers',
         ),
-        'Composer\\Installers\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
-        ),
-    );
-
-    public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -72,7 +41,6 @@ class ComposerStaticInit20b99cc003c2328c3146323676566a0f
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit20b99cc003c2328c3146323676566a0f::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit20b99cc003c2328c3146323676566a0f::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit20b99cc003c2328c3146323676566a0f::$fallbackDirsPsr4;
 
         }, null, ClassLoader::class);
     }
