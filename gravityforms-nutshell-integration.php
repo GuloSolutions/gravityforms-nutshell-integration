@@ -13,7 +13,7 @@
  * @package           Gravityforms_Nutshell_Integration
  *
  * @wordpress-plugin
- * Plugin Name:       gravityforms-nutshell-integration
+ * Plugin Name:       Gravity Forms Integration
  * Plugin URI:        https://www.gulosolutions.com/
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.1.0
