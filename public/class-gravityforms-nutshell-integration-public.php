@@ -143,7 +143,8 @@ class Gravityforms_Nutshell_Integration_Public
             // get user id
             try {
                 $users = $gravity_forms->findUsers($form_owner);
-                if (!$users) {
+                // throw an exception if the user  is a Contact or does not exist
+                if ($users[0]->entityType != 'Users') {
                     throw new Exception('No user(s) with this email');
                 }
             } catch (Exception $e) {
@@ -224,22 +225,14 @@ class Gravityforms_Nutshell_Integration_Public
                     $new_contact['description'] = $dataToSend['organization'];
                 }
 
-                error_log(print_r('new contact', true));
-                error_log(print_r($new_contact, true));
-
                 $params['contact'] = $new_contact;
 
                 if ($newContactId = $gravity_forms->addContact($params)) {
-                    error_log(print_r('Created new contact with ID ', true));
-                    error_log(print_r($newContactId, true));
-
                     if (!empty($dataToSend[$notes])) {
                         $gravity_forms->addNote(['entity' => ['entityType' =>'Contacts', 'id' => $newContactId]], $dataToSend[$notes]);
                     }
                 } else {
                     throw new Exception($e);
-                    error_log(print_r('Failed to create contact', true));
-                    error_log(print_r($dataToSend, true));
                 }
             }
         }
