@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Controllers;
 
 use GravityFormsController;
@@ -18,22 +19,41 @@ class NutshellController
         $username = $apiKey = '';
         $username = get_option('nutshell_api_username');
         $apiKey = get_option('nutshell_api_key');
-
         if ($username && $apiKey) {
-            $this->api = new \NutshellApi($username, $apiKey);
+            try {
+                $this->api = new \NutshellApi($username, $apiKey);
+            } catch (\NutshellApiException $e) {
+                $this->addMessage();
+                error_log(print_r($e->getMessage(), true));
+                return;
+            }
         }
     }
 
     public function getInstanceData()
     {
-        $this->id = $this->api->instanceData()->id;
-        return $this->id;
+        if ($this->api) {
+            $this->id = $this->api->instanceData()->id;
+            return $this->id;
+        }
+        return;
+    }
+
+    public function addMessage()
+    {
+        global $error;
+
+        $error = true;
+
+        //return $error;
     }
 
     public function getUser()
     {
-        $this->user = $this->api->getUser($this->id);
-        return $this->user;
+        if ($this->api) {
+            $this->user = $this->api->getUser($this->id);
+            return $this->user;
+        }
     }
 
     public function getNote()
@@ -49,10 +69,11 @@ class NutshellController
 
     public function findNutshellContacts()
     {
-        $params = array('contactId' => $this->id, 'orderBy' => 'modifiedTime');
-        $result = $this->api->findContacts($params);
-
-        return $result;
+        if ($this->api) {
+            $params = array('contactId' => $this->id, 'orderBy' => 'modifiedTime');
+            $result = $this->api->findContacts($params);
+            return $result;
+        }
     }
 
     public function getAuthenticatedUser()

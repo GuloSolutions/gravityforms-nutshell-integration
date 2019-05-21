@@ -157,6 +157,7 @@ class Gravityforms_Nutshell_Integration
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 1, 10);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 1, 10);
+        $this->loader->add_action('admin_notices', $plugin_admin, 'add_error_message', 1, 10);
     }
 
     private function enqueue_styles($hook)

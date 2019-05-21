@@ -99,4 +99,16 @@ class Gravityforms_Nutshell_Integration_Admin
 
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/gravityforms-nutshell-integration-admin.js', array( 'jquery' ), $this->version, false);
     }
+
+    public function add_error_message()
+    {
+        global $error;
+        if ($error) {
+            ?>
+            <div class="error notice">
+                <p><?php _e('There has been an error. Bummer!', 'my_plugin_textdomain'); ?></p>
+            </div>
+            <?php
+        }
+    }
 }

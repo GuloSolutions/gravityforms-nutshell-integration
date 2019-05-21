@@ -96,6 +96,11 @@ function run_gravityforms_nutshell_integration()
         $my_settings_page = new GravityNutshellSettingsPage($plugin_name);
     }
     // run plugin if API info exists
+
+    error_log(print_r("from init", true));
+
+        error_log(print_r(get_option('nutshell_api_key'), true));
+
     if (get_option('nutshell_api_username') && get_option('nutshell_api_key')) {
         $plugin = new Gravityforms_Nutshell_Integration();
         $plugin->run();

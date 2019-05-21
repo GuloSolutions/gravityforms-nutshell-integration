@@ -92,4 +92,9 @@ class GravityFormsController
             return self::$instance;
         }
     }
+
+    public function addMessage()
+    {
+        $this->nutshell->addMessage();
+    }
 }
