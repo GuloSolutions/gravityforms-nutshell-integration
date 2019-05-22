@@ -169,11 +169,11 @@ class GravityNutshellSettingsPage
 
     public function sanitize_apikey($input)
     {
-        $new_value = '';
-        if ($new_value = sanitize_text_field($input)) {
-            error_log(print_r($new_value, true));
+        $clean = '';
+
+        if ($clean = filter_var($input, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH)) {
+            return $clean;
         }
-        return $new_value;
     }
 
     public function user_callback($args)

@@ -103,10 +103,12 @@ class Gravityforms_Nutshell_Integration_Admin
     public function add_error_message()
     {
         global $error;
+        global $err_message;
+
         if ($error) {
             ?>
             <div class="error notice">
-                <p><?php _e('There has been an error. Bummer!', 'my_plugin_textdomain'); ?></p>
+                <p><?php _e('There has been an error -- '.$err_message.'!', 'my_plugin_textdomain'); ?></p>
             </div>
             <?php
         }

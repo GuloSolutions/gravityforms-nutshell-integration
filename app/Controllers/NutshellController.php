@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Controllers;
 
 use GravityFormsController;
@@ -19,12 +18,12 @@ class NutshellController
         $username = $apiKey = '';
         $username = get_option('nutshell_api_username');
         $apiKey = get_option('nutshell_api_key');
+
         if ($username && $apiKey) {
             try {
                 $this->api = new \NutshellApi($username, $apiKey);
             } catch (\NutshellApiException $e) {
-                $this->addMessage();
-                error_log(print_r($e->getMessage(), true));
+                $this->addMessage($e);
                 return;
             }
         }
@@ -33,26 +32,35 @@ class NutshellController
     public function getInstanceData()
     {
         if ($this->api) {
-            $this->id = $this->api->instanceData()->id;
-            return $this->id;
+            try {
+                $this->id = $this->api->instanceData()->id;
+                return $this->id;
+            } catch (\NutshellApiException $e) {
+                $this->addMessage($e);
+                return;
+            }
         }
-        return;
     }
 
-    public function addMessage()
+    public function addMessage(\NutshellApiException $e)
     {
         global $error;
+        global $err_message;
 
         $error = true;
 
-        //return $error;
+        $err_message = '';
+        $err_message=$e->getMessage();
     }
 
     public function getUser()
     {
         if ($this->api) {
-            $this->user = $this->api->getUser($this->id);
-            return $this->user;
+            try {
+                $this->user = $this->api->getUser($this->id);
+                return $this->user;
+            } catch (\NutshellApiException $e) {
+            }
         }
     }
 
@@ -70,15 +78,21 @@ class NutshellController
     public function findNutshellContacts()
     {
         if ($this->api) {
-            $params = array('contactId' => $this->id, 'orderBy' => 'modifiedTime');
-            $result = $this->api->findContacts($params);
-            return $result;
+            try {
+                $params = array('contactId' => $this->id, 'orderBy' => 'modifiedTime');
+                $result = $this->api->findContacts($params);
+                return $result;
+            } catch (\NutshellApiException $e) {
+            }
         }
     }
 
     public function getAuthenticatedUser()
     {
-        return $this->user;
+        try {
+            return $this->user;
+        } catch (\NutshellApiException $e) {
+        }
     }
 
     public function getContacts()
