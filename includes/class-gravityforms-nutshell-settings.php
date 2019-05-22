@@ -157,7 +157,6 @@ class GravityNutshellSettingsPage
         return;
     }
 
-
     public function sanitize_email_forms($input)
     {
         if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
