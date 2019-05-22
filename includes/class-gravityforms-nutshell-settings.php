@@ -205,11 +205,12 @@ class GravityNutshellSettingsPage
 
         if (!empty($current_option[$args['label']])) {
             $current_option = 'checked';
-            $input_text = 'Designated as a note';
         } else {
             $current_option = '';
-            $input_text = 'Not a note';
         }
+
+        $input_text = 'Designate as a note';
+
         printf(
             sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option, $args['label'], $input_text)
         );
