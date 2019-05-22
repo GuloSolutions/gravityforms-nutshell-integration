@@ -220,6 +220,7 @@ class GravityNutshellSettingsPage
     {
         $current_option=$input_text=$clean='';
         $current_option = get_option($args['title']);
+        $clean = filter_var($current_option, FILTER_VALIDATE_EMAIL);
 
         printf(
             sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($clean) ? $clean: "Please enter an email")
