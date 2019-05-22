@@ -30,7 +30,7 @@ class GravityNutshellSettingsPage
             'Settings Admin',
             $this->name,
             'manage_options',
-            'my-setting-admin',
+            'wp-gf-nutshell-admin',
             array( $this, 'create_admin_page' )
         );
     }
@@ -47,7 +47,7 @@ class GravityNutshellSettingsPage
             <form id="test" class="gf_nutshell_options" method="post" action="options.php">
                 <?php
                 settings_fields('my_option_group');
-        do_settings_sections('my-setting-admin');
+        do_settings_sections('wp-gf-nutshell-admin');
         submit_button(); ?>
             </form>
         </div>
@@ -78,7 +78,7 @@ class GravityNutshellSettingsPage
                 'nutshell_api_username',
                 "Enter API username",
                 array( $this, 'user_callback'),
-                'my-setting-admin',
+                'wp-gf-nutshell-admin',
                 'creds',
                 array('title' => 'nutshell_api_username')
             );
@@ -87,7 +87,7 @@ class GravityNutshellSettingsPage
                 'nutshell_api_key',
                 "Enter API key",
                 array( $this, 'api_callback'),
-                'my-setting-admin',
+                'wp-gf-nutshell-admin',
                 'creds',
                 array('title' => 'nutshell_api_key')
             );
@@ -96,7 +96,7 @@ class GravityNutshellSettingsPage
                 'creds', // ID,
                 'API info',
                 array( $this, 'print_user_info' ), // Callback
-                'my-setting-admin' // Page
+                'wp-gf-nutshell-admin'
             );
 
         foreach ($forms as $form) {
@@ -104,7 +104,7 @@ class GravityNutshellSettingsPage
                     $form['title'], // ID
                     $form['title'], // Title
                     array( $this, 'print_section_info' ), // Callback
-                    'my-setting-admin' // Page
+                    'wp-gf-nutshell-admin'
                 );
 
             $form_title = str_replace(' ', '_', strtolower($form['title']));
@@ -118,7 +118,7 @@ class GravityNutshellSettingsPage
                 $form_title,
                 "Select a Nutshell user to associate with the form",
                 array( $this, 'note_callback'),
-                'my-setting-admin',
+                'wp-gf-nutshell-admin',
                 $form['title'],
                 array('title' => $form_title)
             );
@@ -140,7 +140,7 @@ class GravityNutshellSettingsPage
                         $option_name,
                         $field->label,
                         array( $this, 'title_callback'),
-                        'my-setting-admin',
+                        'wp-gf-nutshell-admin',
                         $form['title'],
                         array('label' => $option_name)
                     );
