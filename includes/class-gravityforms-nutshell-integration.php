@@ -153,26 +153,19 @@ class Gravityforms_Nutshell_Integration
     private function define_admin_hooks()
     {
         $plugin_admin = new Gravityforms_Nutshell_Integration_Admin($this->get_plugin_name(), $this->get_version());
-        error_log(print_r('in enqeue', true));
-
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles', 1, 10);
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 1, 10);
         $this->loader->add_action('admin_notices', $plugin_admin, 'add_error_message', 1, 10);
     }
 
     private function enqueue_styles($hook)
     {
-        if ('options-general_my-setting-admin.php' !== $hook) {
+        if ('options-general_wp-gf-nutshell-admin.php' !== $hook) {
             return;
         }
-
-        wp_enqueue_script('css_script', plugin_dir_url(__FILE__) . 'admin/css/gravityforms-nutshell-integration-admin.css');
-        wp_enqueue_script('bootstrap', plugin_dir_url(__FILE__) . 'admin/css/gravityforms-nutshell-integration-admin-bootstrap.css');
     }
 
     private function enqueue_scripts($hook)
     {
-        if ('options-general_my-setting-admin.php' !== $hook) {
+        if ('options-general_wp-gf-nutshell-admin.php' !== $hook) {
             return;
         }
 
