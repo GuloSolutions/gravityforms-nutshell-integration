@@ -14,14 +14,14 @@
  *
  * @wordpress-plugin
  * Plugin Name:       WP GF Nutshell
- * Plugin URI:        https://www.gulosolutions.com/
+ * Plugin URI:        https://wordpress.org/wp-gf-nutshell
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.1.1
  * Author:            Gulo
  * Author URI:        https://www.gulosolutions.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       gravityforms-nutshell-integration
+ * Text Domain:       wp-gf-nutshell
  * Domain Path:       /languages
  */
 
