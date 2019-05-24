@@ -1,10 +1,10 @@
 === Nutshell Gravity Forms WordPress Plugin ===
 
 Contributors: radboris, zwilson, fsimmons
-Tags: api, forms, gravityforms, Nutshell, crm
 Donate link: https://www.gulosolutions.com/
+Tags: api, forms, gravityforms, Nutshell, crm
 Requires at least: 3.0.1
-Tested up to: 5.2
+Tested up to: 5.2.1
 Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,8 +17,7 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 == Installation ==
 
-1. Include the plugin in the main composer file under the package and require keys:
-   ### package
+* Include the plugin in the main composer file under the package and require keys:
    ```
    {
       "url": "https://github.com/GuloSolutions/gravityforms-nutshell-integration.git",
@@ -26,7 +25,6 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
    }
    ```
 
-   ### require
    ```
      "gulo-solutions/gravityforms-nutshell-integration": "dev-master"
    ```
@@ -36,39 +34,39 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 == Frequently Asked Questions ==
 
-## What needs to be done in a future release? 
+* What needs to be done in a future release?
 
-- Addng Nutshell tags to Contacts from admin
+  Add Nutshell tags to Contacts from admin
 
-=== Upgrade Notice ===
+== Upgrade Notice ==
 
 == Screenshots ==
 
-=== Changelog ===
+== Changelog ==
 
-## 1.0.0 - 2019-03-01
+1.0.0 - 2019-03-01
 
-- Initial release
+* Initial release
 
-## 1.0.1 - 2019-03-04
+1.0.1 - 2019-03-04
 
-- Add API creds in admin section
+* Add API creds in admin section
 
-## 1.0.2 - 2019-03-04
+1.0.2 - 2019-03-04
 
-- Remove unused imports
+* Remove unused imports
 
-## 1.0.3 - 2019-04-09
+1.0.3 - 2019-04-09
 
-- Add more Nutshell API methods
-- Remove API info after uninstall
-- Run frontend functionality if API keys exist
+* Add more Nutshell API methods
+* Remove API info after uninstall
+* Run frontend functionality if API keys exist
 
-## 1.1.0 - 2019-04-09
+1.1.0 - 2019-04-09
 
-- Latest tag only stable
+* Latest tag only stable
 
-## 1.1.1 - 2019-05-22
+1.1.1 - 2019-05-22
 
-- Changes to the admin interface, plugin name, sanitization of input, admin forms
-- Catch NUTSHELL API errors if no key or missing user
+* Changes to the admin interface, plugin name, sanitization of input, admin forms
+* Catch NUTSHELL API errors if no key or missing user
