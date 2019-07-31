@@ -106,8 +106,6 @@ class Gravityforms_Nutshell_Integration_Public
          * between the defined hooks and the functions defined in this
          * class.
          */
-
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/gravityforms-nutshell-integration-public.js', array( 'jquery' ), $this->version, false);
     }
 
     public function startService()
@@ -146,7 +144,6 @@ class Gravityforms_Nutshell_Integration_Public
                 // throw an exception if the user  is a Contact or does not exist
                 if ($users[0]->entityType != 'Users') {
                     if (isset($users[1]) && $users[1]->entityType != 'Users') {
-                        error_log(print_r($users, true));
                         throw new Exception('No user(s) with this email');
                     }
                 }
