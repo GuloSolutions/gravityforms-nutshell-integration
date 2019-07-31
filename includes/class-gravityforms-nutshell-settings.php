@@ -41,17 +41,16 @@ class GravityNutshellSettingsPage
     public function create_admin_page()
     {
         ?>
-
-        <div class="wrap">
-            <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
-            <form id="test" class="gf_nutshell_options" method="post" action="options.php">
-                <?php
+    <div class="wrap">
+        <?php echo '<h4>' . $this->name .' '.'Settings</h4>'; ?>
+        <form id="test" class="gf_nutshell_options" method="post" action="options.php">
+            <?php
                 settings_fields('my_option_group');
         do_settings_sections('wp-gf-nutshell-admin');
         submit_button(); ?>
-            </form>
-        </div>
-        <?php
+        </form>
+    </div>
+    <?php
     }
 
     /**
@@ -179,22 +178,18 @@ class GravityNutshellSettingsPage
     {
         $current_option = $input_text ='';
         $current_option = get_option($args['title']);
-        $clean = filter_var($current_option, FILTER_VALIDATE_EMAIL);
+        $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
 
-        printf(
-            sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($clean) ? $clean: "Please enter a value")
-        );
+        $this->print_text_input($args);
     }
 
     public function api_callback($args)
     {
         $current_option=$input_text=$clean='';
         $current_option = get_option($args['title']);
-        $clean = filter_var($current_option, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+        $args['value'] = filter_var($current_option, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 
-        printf(
-            sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($clean) ? $clean: "Please enter a value")
-        );
+        $this->print_text_input($args);
     }
 
     public function title_callback($args)
@@ -211,7 +206,7 @@ class GravityNutshellSettingsPage
         $input_text = 'Designate as a note';
 
         printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s"  data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option, $args['label'], $input_text)
+            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s" data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option, $args['label'], $input_text)
         );
     }
 
@@ -219,11 +214,9 @@ class GravityNutshellSettingsPage
     {
         $current_option=$input_text=$clean='';
         $current_option = get_option($args['title']);
-        $clean = filter_var($current_option, FILTER_VALIDATE_EMAIL);
+        $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
 
-        printf(
-            sprintf('<input type="text" id=%s name="%s" value="%s"></input>', $args['title'], $args['title'], !empty($clean) ? $clean: "Please enter an email")
-        );
+        $this->print_text_input($args, 'email');
     }
 
     public function print_section_info()
@@ -234,5 +227,18 @@ class GravityNutshellSettingsPage
     public function print_user_info()
     {
         return '';
+    }
+
+    /*
+     * Output text input
+     */
+    private function print_text_input($args, $type = 'value')
+    {
+        $placeholder = "Please enter a $type";
+        $value = !empty($args['value']) ? $args['value'] : '';
+
+        printf(
+            sprintf('<input type="text" id=%s name="%s" placeholder="%s" value="%s"></input>', $args['title'], $args['title'], $placeholder, $value)
+        );
     }
 }
