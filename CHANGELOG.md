@@ -25,5 +25,10 @@
 - Changes to the admin interface, plugin name, sanitization of input, admin forms
 - Catch NUTSHELL API errors if no key or missing user
 
+## 1.1.2 - 2019-07-31
+
+- Minor improvements and cleanup
+- Add utm code
+
 
 
