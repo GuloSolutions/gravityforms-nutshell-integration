@@ -30,7 +30,7 @@ class GravityNutshellSettingsPage
             'Settings Admin',
             $this->name,
             'manage_options',
-            'wp-gf-nutshell-admin',
+            'gravityforms-nutshell-integration',
             array( $this, 'create_admin_page' )
         );
     }

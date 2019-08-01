@@ -80,3 +80,7 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 - Admin form improvements: fixed: placeholder text and value text are now separate
 - Author name fixed
+
+## 1.1.4 - 2019-08-01
+
+- Add settings link

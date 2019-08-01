@@ -52,6 +52,7 @@ class Gravityforms_Nutshell_Integration_Admin
     {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        $this-> _s_add_settings_link();
     }
 
     /**
@@ -108,5 +109,34 @@ class Gravityforms_Nutshell_Integration_Admin
             </div>
             <?php
         }
+    }
+
+    public function _s_add_settings_link() {
+        $file = $dir = '';
+        $dir = dirname(__DIR__);
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
+            if (strpos($fileInfo->getFilename(), 'nutshell') !== false) {
+                $file = $fileInfo->getFilename();
+            }
+        }
+
+        $page_link = pathinfo($file);
+        $page_link = $page_link['filename'];
+
+        error_log(print_r($page_link, true));
+
+
+        $dir = explode('/',$dir);
+        $dir = end($dir);
+        $file = $dir.DIRECTORY_SEPARATOR.$file;
+
+        error_log(print_r($file, true));
+
+        add_filter('plugin_action_links_'.$file , function( $links ) use ( $page_link ) {
+            $links = array_merge( array(
+                '<a href="' . esc_url( admin_url( 'options-general.php?page='.$page_link ) ) . '">' . __( 'Settings' ) . '</a>'
+            ), $links );
+            return $links;
+        });
     }
 }
