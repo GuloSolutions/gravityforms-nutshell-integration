@@ -16,8 +16,8 @@
  * Plugin Name:       WP GF Nutshell
  * Plugin URI:        https://wordpress.org/wp-gf-nutshell
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.1.2
- * Author:            Gulo
+ * Version:           1.1.3
+ * Author:            Gulo Solutions, LLC
  * Author URI:        https://www.gulosolutions.com/?utm_source=wp-admin&utm_medium=wp-plugin&utm_campaign=wp-gf-nutshell
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt

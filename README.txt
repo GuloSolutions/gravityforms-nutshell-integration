@@ -75,3 +75,8 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 - Minor improvements and cleanup
 - Add utm code
+
+## 1.1.3 - 2019-08-01
+
+- Admin form improvements: fixed: placeholder text and value text are now separate
+- Author name fixed
