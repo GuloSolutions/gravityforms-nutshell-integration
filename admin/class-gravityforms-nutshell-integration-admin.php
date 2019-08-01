@@ -123,14 +123,9 @@ class Gravityforms_Nutshell_Integration_Admin
         $page_link = pathinfo($file);
         $page_link = $page_link['filename'];
 
-        error_log(print_r($page_link, true));
-
-
         $dir = explode('/',$dir);
         $dir = end($dir);
         $file = $dir.DIRECTORY_SEPARATOR.$file;
-
-        error_log(print_r($file, true));
 
         add_filter('plugin_action_links_'.$file , function( $links ) use ( $page_link ) {
             $links = array_merge( array(
