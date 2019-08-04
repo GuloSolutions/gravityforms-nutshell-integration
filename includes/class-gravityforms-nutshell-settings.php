@@ -25,7 +25,6 @@ class GravityNutshellSettingsPage
      */
     public function add_plugin_page()
     {
-        // This page will be under "Settings"
         add_options_page(
             'Settings Admin',
             $this->name,
@@ -59,7 +58,7 @@ class GravityNutshellSettingsPage
     public function page_init()
     {
         $forms = GFAPI::get_forms();
-        $checkbox = [];
+        $api_fields = [];
 
         register_setting(
             'my_option_group', // Option group
@@ -123,9 +122,19 @@ class GravityNutshellSettingsPage
             );
 
             register_setting(
-                    'my_option_group', // Option group
-                    'checkbox' // Option name
-                );
+                'my_option_group',
+                'nutshell_tags_'.$form_title, // Option name
+                array( $this, 'sanitize_tags_forms' ) // Sanitize
+            );
+
+            add_settings_field(
+                'nutshell_tags_'.$form_title,
+                "Enter a tag to associate with the form",
+                array( $this, 'tags_callback'),
+                'wp-gf-nutshell-admin',
+                $form['title'],
+                array('title' => 'nutshell_tags_'.$form_title)
+            );
 
             foreach ($form['fields'] as $field) {
                 if (!empty($field->label)) {
@@ -138,10 +147,15 @@ class GravityNutshellSettingsPage
                     add_settings_field(
                         $option_name,
                         $field->label,
-                        array( $this, 'title_callback'),
+                        array( $this, 'dropdown_option_nutshell_callback' ),
                         'wp-gf-nutshell-admin',
                         $form['title'],
-                        array('label' => $option_name)
+                        array('label' => $form_title, 'field' => $option_name)
+                    );
+
+                    register_setting(
+                        'my_option_group',
+                        'dropdown_option_setting_option_name_'.$form_title .'_'.$option_name
                     );
                 }
             }
@@ -174,6 +188,15 @@ class GravityNutshellSettingsPage
         }
     }
 
+    public function sanitize_tags_forms($input)
+    {
+        $clean = '';
+
+        if ($clean = filter_var($input, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH)) {
+            return $clean;
+        }
+    }
+
     public function user_callback($args)
     {
         $current_option = $input_text ='';
@@ -192,22 +215,30 @@ class GravityNutshellSettingsPage
         $this->print_text_input($args);
     }
 
-    public function title_callback($args)
+    public function dropdown_option_nutshell_callback($args)
     {
-        $current_option = $input_text ='';
-        $current_option = get_option('checkbox');
 
-        if (!empty($current_option[$args['label']])) {
-            $current_option = 'checked';
-        } else {
-            $current_option = '';
-        }
+        $the_option = 'dropdown_option_setting_option_name_'.$args['label'].'_'.$args['field'];
+        $this->dropdown_option_setting_options = get_option( $the_option);
 
-        $input_text = 'Designate as a note';
-
-        printf(
-            sprintf('<input type="checkbox" name="checkbox[%s]" class="btn btn-primary" %s id="%s" data-toggle="toggle" data-size="large" aria-pressed="false" autocomplete="off">%s</input>', $args['label'], $current_option, $args['label'], $input_text)
-        );
+        ?>
+            <select name=<?php echo $the_option.'[dropdown_option_nutshell]' ?> id="dropdown_option_nutshell">
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell_sticky_media_url_sticky_pdf'] === 'name') ? 'selected' : '' ; ?>
+                    <option value="name" <?php echo $selected; ?>>Name</option>
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'email') ? 'selected' : '' ; ?>
+                    <option value="email" <?php echo $selected; ?>>Email</option>
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'address') ? 'selected'   : '' ; ?>
+                    <option value="address" <?php echo $selected; ?>>Address</option>
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'phone') ? 'selected'   : '' ; ?>
+                    <option value="phone" <?php echo $selected; ?>>Phone</option>
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'notes') ? 'selected'   : '' ; ?>
+                    <option value="notes" <?php echo $selected; ?>>Notes</option>
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'title') ? 'selected'   : '' ; ?>
+                    <option value="title" <?php echo $selected; ?>>Title</option>
+                <?php $selected = (isset( $this->dropdown_option_setting_options['dropdown_option_nutshell'] ) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'description') ? 'selected'   : '' ; ?>
+                    <option value="description" <?php echo $selected; ?>>Description</option>
+            </select>
+            <?
     }
 
     public function note_callback($args)
@@ -217,6 +248,16 @@ class GravityNutshellSettingsPage
         $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
 
         $this->print_text_input($args, 'email');
+    }
+
+    public function tags_callback($args)
+    {
+        $current_option=$input_text=$clean='';
+        $current_option = get_option($args['title']);
+
+        $args['value'] = filter_var($current_option, FILTER_SANITIZE_STRING);
+
+        $this->print_text_input($args, 'tag');
     }
 
     public function print_section_info()
@@ -234,11 +275,11 @@ class GravityNutshellSettingsPage
      */
     private function print_text_input($args, $type = 'value')
     {
-        $placeholder = "Please enter a $type";
+        $placeholder = strcspn(strtolower($type), "aeiou") > 0 ? "Please enter a $type" : "Please enter an $type" ;
         $value = !empty($args['value']) ? $args['value'] : '';
 
         printf(
-            sprintf('<input type="text" id=%s name="%s" placeholder="%s" value="%s"></input>', $args['title'], $args['title'], $placeholder, $value)
+            sprintf('<input type="text" id=%s name="%s" placeholder="%s" value="%s" ></input>', $args['title'], $args['title'], $placeholder, $value)
         );
     }
 }
