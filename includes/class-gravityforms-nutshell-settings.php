@@ -204,6 +204,12 @@ class GravityNutshellSettingsPage
         $current_option = get_option($args['title']);
         $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
 
+
+        error_log(print_r('user callback', true));
+
+
+        error_log(print_r($args['value'], true));
+
         $this->print_text_input($args);
     }
 
@@ -242,9 +248,13 @@ class GravityNutshellSettingsPage
 
     public function note_callback($args)
     {
-        $current_option = $input_text = $clean = '';
+        $current_option = '';
         $current_option = get_option($args['title']);
         $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
+
+        if ($args['value'] == '') {
+            $args['value'] = get_option('nutshell_api_username');
+        }
 
         $this->print_text_input($args, 'email');
     }
