@@ -147,4 +147,14 @@ class NutshellController
     {
         return $this->api->getUser($userId, $rev);
     }
+
+    public function findTags()
+    {
+        return $this->api->findTags();
+    }
+
+    public function newTag($tag)
+    {
+        return $this->api->findTags($tag);
+    }
 }

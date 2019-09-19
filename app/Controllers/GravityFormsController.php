@@ -90,16 +90,21 @@ class GravityFormsController
         return $this->nutshell->getUser($userId, $rev);
     }
 
+    public function findTags()
+    {
+        return $this->nutshell->findTags();
+    }
+
+    public function newTag($tag)
+    {
+        return $this->nutshell->newTag($tag);
+    }
+
     public static function getInstance()
     {
         if (empty(self::$instance)) {
             self::$instance = new GravityFormsController();
             return self::$instance;
         }
-    }
-
-    public function addMessage()
-    {
-        $this->nutshell->addMessage();
     }
 }
