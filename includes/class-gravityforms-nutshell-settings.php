@@ -106,13 +106,52 @@ class GravityNutshellSettingsPage
 
         foreach ($forms as $form) {
             add_settings_section(
-                    $form['title'], // ID
-                    $form['title'], // Title
-                    array($this, 'print_section_info'), // Callback
-                    'wp-gf-nutshell-admin'
-                );
+                $form['title'], // ID
+                $form['title'], // Title
+                array($this, 'print_section_info'), // Callback
+                'wp-gf-nutshell-admin'
+            );
 
             $form_title = $this->cleanFormTitle($form['title']);
+
+            foreach ($form['fields'] as $field) {
+                error_log(print_r($field->label, true));
+
+                if (!empty($field->label)) {
+                    $option_name = str_replace(' ', '_', $field->label);
+                    $option_name = strtolower($option_name);
+                    $option_name .= '_'.$form_title;
+                    $form_labels[] = $option_name;
+
+                    add_settings_field(
+                        $form_title,
+                        'Select a Nutshell user to associate with the form',
+                        array($this, 'dropdown_option_users_callback'),
+                        'wp-gf-nutshell-admin',
+                        $form['title'],
+                        array('title' => $form_title, 'field' => 'api_users')
+                    );
+
+                    register_setting(
+                        'my_option_group', // Option group
+                        'dropdown_option_setting_api_users_'.$form_title.'_api_users'
+                    );
+
+                    add_settings_field(
+                        $option_name,
+                        $field->label,
+                        array($this, 'dropdown_option_nutshell_callback'),
+                        'wp-gf-nutshell-admin',
+                        $form['title'],
+                        array('label' => $form_title, 'field' => $option_name)
+                    );
+
+                    register_setting(
+                        'my_option_group',
+                        'dropdown_option_setting_option_name_'.$form_title.'_'.$option_name
+                    );
+                }
+            }
 
             register_setting(
                 'my_option_group',
@@ -128,43 +167,6 @@ class GravityNutshellSettingsPage
                 $form['title'],
                 array('title' => 'nutshell_tags_'.$form_title)
             );
-
-            foreach ($form['fields'] as $field) {
-                if (!empty($field->label)) {
-                    $option_name = str_replace(' ', '_', $field->label);
-                    $option_name = strtolower($option_name);
-                    $option_name .= '_'.$form_title;
-                    $form_labels[] = $option_name;
-
-                    add_settings_field(
-                        $option_name,
-                        $field->label,
-                        array($this, 'dropdown_option_nutshell_callback'),
-                        'wp-gf-nutshell-admin',
-                        $form['title'],
-                        array('label' => $form_title, 'field' => $option_name)
-                    );
-
-                    register_setting(
-                        'my_option_group',
-                        'dropdown_option_setting_option_name_'.$form_title.'_'.$option_name
-                    );
-
-                    add_settings_field(
-                        $form_title,
-                        'Select a Nutshell user to associate with the form',
-                        array($this, 'dropdown_option_users_callback'),
-                        'wp-gf-nutshell-admin',
-                        $form['title'],
-                        array('title' => $form_title, 'field' => $option_name)
-                    );
-
-                    register_setting(
-                        'my_option_group', // Option group
-                        'dropdown_option_setting_api_users_'.$form_title.'_'.$option_name
-                    );
-                }
-            }
         }
     }
 
@@ -249,7 +251,7 @@ class GravityNutshellSettingsPage
     public function dropdown_option_users_callback($args)
     {
         $the_option_users = 'dropdown_option_api_users';
-        $the_option = 'dropdown_option_setting_api_users_'.$args['title'].'_'.$args['field'];
+        $the_option = 'dropdown_option_setting_api_users_'.$args['title'].'_api_users';
 
         $this->dropdown = get_option($the_option);
 
