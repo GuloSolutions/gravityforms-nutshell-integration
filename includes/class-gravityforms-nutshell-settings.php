@@ -9,6 +9,7 @@ class GravityNutshellSettingsPage
     private $name;
     private static $id;
     private $labels;
+    private $tags;
 
     /**
      * Start up.
@@ -25,6 +26,10 @@ class GravityNutshellSettingsPage
         add_action('admin_init', array($this, 'page_init'));
         add_action('admin_init', array($this, 'setApiUsers'));
         $this->name = $name;
+
+        $this->tags = $gravity_forms->findTags();
+
+        error_log(print_r($gravity_forms->findTags(), true));
     }
 
     /**
@@ -138,6 +143,20 @@ class GravityNutshellSettingsPage
                     );
 
                     add_settings_field(
+                        $form_title.'_tags',
+                        'Select a tag for this form',
+                        array($this, 'dropdown_option_tags_callback'),
+                        'wp-gf-nutshell-admin',
+                        $form['title'],
+                        array('label' => $form_title, 'field' => '_api_tags')
+                    );
+
+                    register_setting(
+                        'my_option_group',
+                        'dropdown_option_setting_tag_name_'.$form_title.'_api_tags'
+                    );
+
+                    add_settings_field(
                         $option_name,
                         $field->label,
                         array($this, 'dropdown_option_nutshell_callback'),
@@ -152,21 +171,6 @@ class GravityNutshellSettingsPage
                     );
                 }
             }
-
-            register_setting(
-                'my_option_group',
-                'nutshell_tags_'.$form_title, // Option name
-                array($this, 'sanitize_tags_forms') // Sanitize
-            );
-
-            add_settings_field(
-                'nutshell_tags_'.$form_title,
-                'Enter a tag to associate with the form',
-                array($this, 'tags_callback'),
-                'wp-gf-nutshell-admin',
-                $form['title'],
-                array('title' => 'nutshell_tags_'.$form_title)
-            );
         }
     }
 
@@ -275,13 +279,20 @@ class GravityNutshellSettingsPage
         echo '</select>';
     }
 
-    public function tags_callback($args)
+    public function dropdown_option_tags_callback($args)
     {
-        $current_option = $input_text = $clean = '';
-        $current_option = get_option($args['title']);
-        $args['value'] = filter_var($current_option, FILTER_SANITIZE_STRING);
+        $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
 
-        $this->print_text_input($args, 'tag');
+        $this->dropdown_option_tags = get_option($the_option);
+        ?>
+            <select name=<?php echo $the_option.'[]'; ?> id="dropdown_option_api_tags">
+        <?
+            foreach ($this->tags->Contacts as $tag) {
+            ?>
+               <option value=<?php echo $tag;?> <?php echo $selected; ?>><?php echo $tag;?></option>
+        <?php
+            }
+            echo '</select>';
     }
 
     public function print_section_info()
