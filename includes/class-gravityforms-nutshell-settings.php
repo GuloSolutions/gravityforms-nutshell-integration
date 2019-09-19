@@ -15,8 +15,15 @@ class GravityNutshellSettingsPage
      */
     public function __construct($name)
     {
+        global $gravity_forms;
+
+        if (null === $gravity_forms){
+            $gravity_forms = new Controllers\GravityFormsController();
+        }
+
         add_action('admin_menu', array($this, 'add_plugin_page'));
         add_action('admin_init', array($this, 'page_init'));
+        add_action('admin_init', array($this, 'setApiUsers'));
         $this->name = $name;
     }
 
@@ -42,7 +49,7 @@ class GravityNutshellSettingsPage
         ?>
     <div class="wrap">
         <?php echo '<h4>'.$this->name.' '.'Settings</h4>'; ?>
-        <form id="test" class="gf_nutshell_options" method="post" action="options.php">
+        <form id="wp_gf_options_settings" class="gf_nutshell_options" method="post" action="options.php">
             <?php
                 settings_fields('my_option_group');
         do_settings_sections('wp-gf-nutshell-admin');
@@ -105,21 +112,7 @@ class GravityNutshellSettingsPage
                     'wp-gf-nutshell-admin'
                 );
 
-            $form_title = str_replace(' ', '_', strtolower($form['title']));
-            register_setting(
-                    'my_option_group', // Option group
-                    $form_title, // Option name
-                    array($this, 'sanitize_email_forms') // Sanitize
-                );
-
-            add_settings_field(
-                $form_title,
-                'Select a Nutshell user to associate with the form',
-                array($this, 'note_callback'),
-                'wp-gf-nutshell-admin',
-                $form['title'],
-                array('title' => $form_title)
-            );
+            $form_title = $this->cleanFormTitle($form['title']);
 
             register_setting(
                 'my_option_group',
@@ -139,7 +132,6 @@ class GravityNutshellSettingsPage
             foreach ($form['fields'] as $field) {
                 if (!empty($field->label)) {
                     $option_name = str_replace(' ', '_', $field->label);
-                    $option_name = $option_name;
                     $option_name = strtolower($option_name);
                     $option_name .= '_'.$form_title;
                     $form_labels[] = $option_name;
@@ -156,6 +148,20 @@ class GravityNutshellSettingsPage
                     register_setting(
                         'my_option_group',
                         'dropdown_option_setting_option_name_'.$form_title.'_'.$option_name
+                    );
+
+                    add_settings_field(
+                        $form_title,
+                        'Select a Nutshell user to associate with the form',
+                        array($this, 'dropdown_option_users_callback'),
+                        'wp-gf-nutshell-admin',
+                        $form['title'],
+                        array('title' => $form_title, 'field' => $option_name)
+                    );
+
+                    register_setting(
+                        'my_option_group', // Option group
+                        'dropdown_option_setting_api_users_'.$form_title.'_'.$option_name
                     );
                 }
             }
@@ -204,12 +210,6 @@ class GravityNutshellSettingsPage
         $current_option = get_option($args['title']);
         $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
 
-
-        error_log(print_r('user callback', true));
-
-
-        error_log(print_r($args['value'], true));
-
         $this->print_text_input($args);
     }
 
@@ -246,24 +246,37 @@ class GravityNutshellSettingsPage
             <?php
     }
 
-    public function note_callback($args)
+    public function dropdown_option_users_callback($args)
     {
-        $current_option = '';
-        $current_option = get_option($args['title']);
-        $args['value'] = filter_var($current_option, FILTER_VALIDATE_EMAIL);
+        $the_option_users = 'dropdown_option_api_users';
+        $the_option = 'dropdown_option_setting_api_users_'.$args['title'].'_'.$args['field'];
 
-        if ($args['value'] == '') {
-            $args['value'] = get_option('nutshell_api_username');
+        $this->dropdown = get_option($the_option);
+
+        if (!isset($this->dropdown['dropdown_option_api_users'])) {
+            $this->dropdown['dropdown_option_api_users'] = get_option('nutshell_api_username');
         }
 
-        $this->print_text_input($args, 'email');
+        $this->dropdown_option_api_users = array_values(get_option($the_option_users));
+        ?>
+            <select name=<?php echo $the_option.'[dropdown_option_api_users]'; ?> id='dropdown_option_api_users'>
+        <?
+
+        $total = count($this->dropdown_option_api_users);
+
+        for ($i = 0; $i < $total; $i++ ) {
+        ?>
+            <?php $selected = (isset($this->dropdown['dropdown_option_api_users']) && $this->dropdown['dropdown_option_api_users'] == $this->dropdown_option_api_users[$i][1]) ? 'selected' : ''; ?>
+               <option value=<?php echo $this->dropdown_option_api_users[$i][1];?> <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0];?></option>
+            <?php
+        }
+        echo '</select>';
     }
 
     public function tags_callback($args)
     {
         $current_option = $input_text = $clean = '';
         $current_option = get_option($args['title']);
-
         $args['value'] = filter_var($current_option, FILTER_SANITIZE_STRING);
 
         $this->print_text_input($args, 'tag');
@@ -282,7 +295,7 @@ class GravityNutshellSettingsPage
     /*
      * Output text input
      */
-    private function print_text_input($args, $type = 'value')
+    public function print_text_input($args, $type = 'value')
     {
         $placeholder = strcspn(strtolower($type), 'aeiou') > 0 ? "Please enter a $type" : "Please enter an $type";
         $value = !empty($args['value']) ? $args['value'] : '';
@@ -290,5 +303,37 @@ class GravityNutshellSettingsPage
         printf(
             sprintf('<input type="text" id=%s name="%s" placeholder="%s" value="%s" ></input>', $args['title'], $args['title'], $placeholder, $value)
         );
+    }
+
+    public function setApiUsers ()
+    {
+        if (false === ($api_users = get_transient('_s_nutshell_users_results'))) {
+            $api_users = $this->getApiUsers();
+            set_transient('_s_nutshell_users_results', $api_users, 7 * DAY_IN_SECONDS);
+            update_option('dropdown_option_api_users', $api_users);
+        }
+    }
+
+    public function getApiUsers ()
+    {
+        global $gravity_forms;
+
+        $api_users = [];
+        $users = $gravity_forms->findApiUsers();
+
+        foreach($users as $user) {
+            if ($user->isEnabled) {
+                $api_users[] = [$user->name, $user->emails[0]];
+            }
+        }
+        return $api_users;
+    }
+
+    public function cleanFormTitle($raw_title)
+    {
+        $form_title = preg_replace("/[^A-Za-z0-9 ]/", '', $raw_title);
+        $form_title = str_replace(' ', '_', strtolower($form_title));
+
+        return $form_title;
     }
 }

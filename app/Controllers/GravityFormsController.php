@@ -65,9 +65,14 @@ class GravityFormsController
         return $this->nutshell->getInstanceData();
     }
 
-    public function findUsers($email)
+    public function findUsers($email='')
     {
         return $this->nutshell->findUsers($email);
+    }
+
+    public function findApiUsers($email='')
+    {
+        return $this->nutshell->findApiUsers($email);
     }
 
     public function searchContacts($name)

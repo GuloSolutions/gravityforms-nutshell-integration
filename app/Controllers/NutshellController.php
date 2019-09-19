@@ -128,6 +128,11 @@ class NutshellController
         return $this->api->searchContactsAndUsers(['string' => $email, 'stubResponses' => false ]);
     }
 
+    public function findApiUsers($email='')
+    {
+        return $this->api->findUsers(['string' => $email, 'stubResponses' => false ]);
+    }
+
     public function searchContacts($name)
     {
         return $this->api->searchContacts(['string' => $name]);
