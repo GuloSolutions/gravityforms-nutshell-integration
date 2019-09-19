@@ -155,6 +155,6 @@ class NutshellController
 
     public function newTag($tag)
     {
-        return $this->api->findTags($tag);
+        return $this->api->newTag($tag);
     }
 }
