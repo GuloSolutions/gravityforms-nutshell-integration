@@ -29,7 +29,7 @@ class GravityNutshellSettingsPage
 
         $this->tags = $gravity_forms->findTags();
 
-        error_log(print_r($gravity_forms->findTags(), true));
+        // error_log(print_r($gravity_forms->findCustomFields(), true));
     }
 
     /**
@@ -285,7 +285,7 @@ class GravityNutshellSettingsPage
 
         $this->dropdown_option_tags = get_option($the_option);
         ?>
-            <select name=<?php echo $the_option.'[]'; ?>  <?php echo 'multiple' ?> id="dropdown_option_api_tags">
+            <select name=<?php echo $the_option.'[dropdown_option_api_tags]'; ?>  <?php echo 'multiple' ?> id="dropdown_option_api_tags">
         <?
             foreach ($this->tags->Contacts as $tag) {
             ?>
@@ -293,6 +293,9 @@ class GravityNutshellSettingsPage
         <?php
             }
             echo '</select>';
+
+            error_log(print_r($this->dropdown_option_tags, true));
+
     }
 
     public function print_section_info()

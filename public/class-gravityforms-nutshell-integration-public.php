@@ -128,64 +128,23 @@ class Gravityforms_Nutshell_Integration_Public
                 $data_to_send[$option_name] = get_option($form_option)['dropdown_option_nutshell'];
             }
 
-            error_log(print_r('data to send', true));
-            error_log(print_r($data_to_send, true));
-
             // get form owner for admin
-            $form_owner = get_option($form_title);
+            $form_owner = get_option('dropdown_option_setting_api_users_'.$form_title.'_api_users')['dropdown_option_api_users'];
 
+            // get tags for admin
+            $tags_array = get_option('dropdown_option_setting_tag_name_'.$form_title.'_api_tags')['dropdown_option_api_tags'];
 
-            error_log(print_r('form owner', true));
+            $tag_object = new stdClass();
 
-
-            error_log(print_r($form_owner, true));
-
-
-            // get user id
-            // try {
-            //     $users = $gravity_forms->findUsers($form_owner);
-            //     // throw an exception if the user  is a Contact or does not exist
-            //     if ($users[0]->entityType != 'Users') {
-            //         if (isset($users[1]) && $users[1]->entityType != 'Users') {
-            //             throw new Exception('No user(s) with this email');
-            //         }
-            //     }
-            // } catch (Exception $e) {
-            //     error_log(print_r($e->getMessage(), true));
-
-            //     return;
-            // }
-
-            $filtered = array_filter((array) $users, function ($v) {
-                return $v->entityType != 'Contacts';
-            });
-
-            $user_id = array_values($filtered)[0]->id;
-
-            error_log(print_r('the form', true));
-
-            error_log(print_r($entry, true));
-
-            foreach ($entry as $k => $v) {
-                error_log(print_r($k, true));
-
-                // if (array_keys($idLabelMap, $k) !== null) {
-                //     if (!empty($idLabelMap[$k])) {
-                //         $dataToSend[strtolower($idLabelMap[$k])] = $v;
-                //     }
-                // }
+            if (count($tags_array) > 1) {
+                foreach($tags_array as $tag){
+                    $tag_object->tag->name = $tag;
+                    $tag_object->tag->entityType = 'Contacts';
+                }
+            } else {
+                $tag_object->tag->name = $tags_array;
+                $tag_object->tag->entityType = 'Contacts';
             }
-
-            foreach ($form['fields'] as $field) {
-                $option_name = str_replace(' ', '_', $field->label);
-                $option_name = strtolower($option_name);
-                $option_name .= '_'.$form_title;
-                $idLabelMap[$field->id] = $field->label;
-            }
-
-            error_log(print_r('labelmap', true));
-
-            error_log(print_r($idLabelMap, true));
 
             foreach ($entry as $k => $v) {
                 if (array_keys($idLabelMap, $k) !== null) {
@@ -195,37 +154,39 @@ class Gravityforms_Nutshell_Integration_Public
                 }
             }
 
-            error_log(print_r($idLabelMap, true));
-
-            // get options for admin form
-            foreach ($entry as $k => $v) {
-                $k = strval($k);
-
-                error_log(print_r($k, true));
-
-                error_log(print_r(gettype($k), true));
-
-                if (array_key_exists($k, $data_to_send)) {
-                    error_log(print_r('exists', true));
-
-                    error_log(print_r($k, true));
-                }
-                // foreach ($data_to_send as $kk => $vv) {
-                //     error_log(print_r($vv, true));
-                //     if ($k == $kk) {
-                //         error_log(print_r('equal', true));
-
-                //         //$all_options[$kk] = $v;
-                //     }
-                // }
+            foreach ($form['fields'] as $field) {
+                $option_name = str_replace(' ', '_', $field->label);
+                $option_name = strtolower($option_name);
+                $option_name .= '_'.$form_title;
+                $idLabelMap[$field->id] = $field->label;
             }
 
-            error_log(print_r($all_options, true));
+            foreach ($entry as $k => $v) {
+                if (array_keys($idLabelMap, $k) !== null) {
+                    if (!empty($idLabelMap[$k])) {
+                        $dataToSend[strtolower($idLabelMap[$k])] = $v;
+                    }
+                }
+            }
+
+            if (null !== $tags_array) {
+                $dataToSend['tags'] = [$tags_array];
+            }
+
+
+            $users = $gravity_forms->findApiUsers($form_owner);
+                // throw an exception if the user  is a Contact or does not exist
+
+            $filtered = array_filter((array) $users, function ($v) use ($form_owner) {
+                return $v->emails[0] = $form_owner;
+            });
+
+            error_log(print_r($filtered, true));
+
+            exit;
 
             // search methods return stubs; get methods full info
-            $contact = $gravity_forms->searchByEmail($all_options['email']);
-
-            exit();
+            $contact = $gravity_forms->searchByEmail($dataToSend['email']);
 
             if (!empty($contact->contacts[0]->id)) {
                 $editContact = $gravity_forms->getContact($contact->contacts[0]->id);
@@ -238,6 +199,10 @@ class Gravityforms_Nutshell_Integration_Public
                 $editContact->rev = (array) $editContact->rev;
                 $editContact->notes = (array) $editContact->notes;
 
+                if (property_exists($editContact, 'tags')){
+                    $editContact->tags = (array) $editContact->tags;
+                }
+
                 if (!$emailKey || !$phoneKey) {
                     $fields_to_update['email'] = $dataToSend['email'];
                     $fields_to_update['phone'] = $dataToSend['phone'];
@@ -247,6 +212,13 @@ class Gravityforms_Nutshell_Integration_Public
                 if (!empty($dataToSend['organization'])) {
                     $fields_to_update['description'] = $dataToSend['organization'];
                 }
+
+                if (!empty($dataToSend['tags'])) {
+                    $tags = array_merge($editContact->tags, $dataToSend['tags']);
+                    $fields_to_update['tags'] = $dataToSend['tags'];
+                }
+
+                error_log(print_r($fields_to_update, true));
 
                 $gravity_forms->editContact($editContact, $fields_to_update);
 
@@ -263,9 +235,16 @@ class Gravityforms_Nutshell_Integration_Public
                     $new_contact['description'] = $dataToSend['organization'];
                 }
 
+                if (!empty($dataToSend['tags'])) {
+                    $new_contact['tags'] = $dataToSend['tags'];
+                }
+
                 $params['contact'] = $new_contact;
 
                 if ($newContactId = $gravity_forms->addContact($params)) {
+
+                    error_log(print_r($newContactId, true));
+
                     if (!empty($dataToSend[$notes])) {
                         $gravity_forms->addNote(['entity' => ['entityType' => 'Contacts', 'id' => $newContactId, 'name' => $dataToSend['name']]], $dataToSend[$notes]);
                     }
