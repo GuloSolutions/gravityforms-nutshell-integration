@@ -117,7 +117,6 @@ class GravityNutshellSettingsPage
             $form_title = $this->cleanFormTitle($form['title']);
 
             foreach ($form['fields'] as $field) {
-                error_log(print_r($field->label, true));
 
                 if (!empty($field->label)) {
                     $option_name = str_replace(' ', '_', $field->label);
@@ -316,6 +315,7 @@ class GravityNutshellSettingsPage
         );
     }
 
+    // set api users in transients; renew in a week
     public function setApiUsers ()
     {
         if (false === ($api_users = get_transient('_s_nutshell_users_results'))) {
