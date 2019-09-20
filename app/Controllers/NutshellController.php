@@ -157,4 +157,8 @@ class NutshellController
     {
         return $this->api->newTag($tag);
     }
+    public function findCustomFields()
+    {
+        return $this->api->findCustomFields();
+    }
 }

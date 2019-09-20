@@ -26,10 +26,7 @@ class GravityNutshellSettingsPage
         add_action('admin_init', array($this, 'page_init'));
         add_action('admin_init', array($this, 'setApiUsers'));
         $this->name = $name;
-
         $this->tags = $gravity_forms->findTags();
-
-        // error_log(print_r($gravity_forms->findCustomFields(), true));
     }
 
     /**
@@ -285,17 +282,15 @@ class GravityNutshellSettingsPage
 
         $this->dropdown_option_tags = get_option($the_option);
         ?>
-            <select name=<?php echo $the_option.'[dropdown_option_api_tags]'; ?>  <?php echo 'multiple' ?> id="dropdown_option_api_tags">
+            <select name=<?php echo $the_option.'[dropdown_option_api_tags][]'; ?>  <?php echo 'multiple' ?> id="dropdown_option_api_tags">
         <?
             foreach ($this->tags->Contacts as $tag) {
             ?>
-               <option value=<?php echo $tag;?> <?php echo $selected; ?>><?php echo $tag;?></option>
+                <?php $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array($tag, $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : ''; ?>
+               <option value=<?php echo $tag; ?> <?php echo $selected;?> <?php echo "class='tags_selected'"?>><?php echo $tag;?></option>
         <?php
             }
             echo '</select>';
-
-            error_log(print_r($this->dropdown_option_tags, true));
-
     }
 
     public function print_section_info()

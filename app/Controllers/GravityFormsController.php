@@ -100,6 +100,11 @@ class GravityFormsController
         return $this->nutshell->newTag($tag);
     }
 
+    public function findCustomFields()
+    {
+        return $this->nutshell->findCustomFields();
+    }
+
     public static function getInstance()
     {
         if (empty(self::$instance)) {
