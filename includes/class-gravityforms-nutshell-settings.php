@@ -285,7 +285,7 @@ class GravityNutshellSettingsPage
 
         $this->dropdown_option_tags = get_option($the_option);
         ?>
-            <select name=<?php echo $the_option.'[]'; ?> id="dropdown_option_api_tags">
+            <select name=<?php echo $the_option.'[]'; ?>  <?php echo 'multiple' ?> id="dropdown_option_api_tags">
         <?
             foreach ($this->tags->Contacts as $tag) {
             ?>
