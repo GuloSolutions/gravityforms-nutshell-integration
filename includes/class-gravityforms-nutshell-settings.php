@@ -267,7 +267,7 @@ class GravityNutshellSettingsPage
 
         $total = count($this->dropdown_option_api_users);
 
-        for ($i = 0; $i < $total; $i++) {
+        for ($i = 0; $i < $total; ++$i) {
             ?>
     <?php $selected = (isset($this->dropdown['dropdown_option_api_users']) && $this->dropdown['dropdown_option_api_users'] == $this->dropdown_option_api_users[$i][1]) ? 'selected' : ''; ?>
     <option value=<?php echo $this->dropdown_option_api_users[$i][1]; ?> <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0]; ?>
@@ -281,15 +281,18 @@ class GravityNutshellSettingsPage
     {
         $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
 
+        $class = "class='tags_selected'";
+
         $this->dropdown_option_tags = get_option($the_option); ?>
     <select name=<?php echo $the_option.'[dropdown_option_api_tags][]'; ?>
-        <?php echo 'multiple' ?>
+        <?php echo 'multiple'; ?>
         id="dropdown_option_api_tags">
         <?php
             foreach ($this->tags->Contacts as $tag) {
                 ?>
         <?php $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array($tag, $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : ''; ?>
-        <option value=<?php echo $tag; ?> <?php echo $selected; ?> <?php echo "class='tags_selected'"?>><?php echo $tag; ?>
+        <option value=<?php echo $tag; ?> <?php echo $selected; ?> <?php if ($selected): echo $class;
+                endif; ?>><?php echo $tag; ?>
         </option>
         <?php
             }
@@ -341,12 +344,13 @@ class GravityNutshellSettingsPage
                 $api_users[] = [$user->name, $user->emails[0]];
             }
         }
+
         return $api_users;
     }
 
     public function cleanFormTitle($raw_title)
     {
-        $form_title = preg_replace("/[^A-Za-z0-9 ]/", '', $raw_title);
+        $form_title = preg_replace('/[^A-Za-z0-9 ]/', '', $raw_title);
         $form_title = str_replace(' ', '_', strtolower($form_title));
 
         return $form_title;
