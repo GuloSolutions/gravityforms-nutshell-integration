@@ -5,7 +5,7 @@ Donate link: https://www.gulosolutions.com/
 Tags: api, forms, gravityforms, Nutshell, crm
 Requires at least: 3.0.1
 Tested up to: 5.2.1
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,11 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 - Add settings link
 
 ## 1.1.5 - 2019-09-20
+
+- Add dropdown fields for settings derived from the Nutshell API, including users and tags
+- Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
+
+## 1.1.6 - 2019-09-25
 
 - Add dropdown fields for settings derived from the Nutshell API, including users and tags
 - Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
