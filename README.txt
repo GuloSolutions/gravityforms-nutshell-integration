@@ -93,3 +93,7 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 ## 1.1.6 - 2019-09-25
 
 - Fix parsing issue
+
+## 1.1.7 - 2019-09-25
+
+- Fix tag name in space

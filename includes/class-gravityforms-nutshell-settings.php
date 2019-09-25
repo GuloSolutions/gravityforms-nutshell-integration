@@ -267,7 +267,7 @@ class GravityNutshellSettingsPage
 
         $total = count($this->dropdown_option_api_users);
 
-        for ($i = 0; $i < $total; ++$i) {
+        for ($i = 0; $i < $total; $i++) {
             ?>
     <?php $selected = (isset($this->dropdown['dropdown_option_api_users']) && $this->dropdown['dropdown_option_api_users'] == $this->dropdown_option_api_users[$i][1]) ? 'selected' : ''; ?>
     <option value=<?php echo $this->dropdown_option_api_users[$i][1]; ?> <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0]; ?>
@@ -289,9 +289,9 @@ class GravityNutshellSettingsPage
         id="dropdown_option_api_tags">
         <?php
             foreach ($this->tags->Contacts as $tag) {
-                ?>
-        <?php $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array($tag, $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : ''; ?>
-        <option value=<?php echo $tag; ?> <?php echo $selected; ?> <?php if ($selected): echo $class;
+            ?>
+        <?php $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : ''; ?>
+        <option value=<?php echo str_replace(' ', '_', $tag); ?> <?php echo $selected; ?> <?php if (!empty($selected)): echo $class;
                 endif; ?>><?php echo $tag; ?>
         </option>
         <?php
