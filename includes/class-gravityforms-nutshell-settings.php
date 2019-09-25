@@ -280,7 +280,6 @@ class GravityNutshellSettingsPage
     public function dropdown_option_tags_callback($args)
     {
         $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
-
         $class = "class='tags_selected'";
 
         $this->dropdown_option_tags = get_option($the_option); ?>
