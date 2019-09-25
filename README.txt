@@ -92,5 +92,4 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 ## 1.1.6 - 2019-09-25
 
-- Add dropdown fields for settings derived from the Nutshell API, including users and tags
-- Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
+- Fix parsing issue
