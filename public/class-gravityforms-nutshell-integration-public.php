@@ -116,6 +116,12 @@ class Gravityforms_Nutshell_Integration_Public
 
             $tags_array = get_option($the_option);
 
+            $restore_tags = function($value) {
+                return str_replace('_',' ', $value);
+            };
+
+            $tags_array = array_map($restore_tags, $tags_array['dropdown_option_api_tags']);
+
             $tag_object = new ArrayObject($tags_array['dropdown_option_api_tags']);
 
             foreach ($entry as $k => $v) {
