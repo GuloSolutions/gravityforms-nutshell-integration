@@ -261,7 +261,7 @@ class GravityNutshellSettingsPage
         }
 
         $this->dropdown_option_api_users = array_values(get_option($the_option_users)); ?>
-<select name=<?php echo $the_option.'[dropdown_option_api_users]'; ?>
+    <select name=<?php echo $the_option.'[dropdown_option_api_users]'; ?>
     id='dropdown_option_api_users'>
     <?php
 

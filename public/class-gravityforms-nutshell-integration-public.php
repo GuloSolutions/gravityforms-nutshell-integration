@@ -107,7 +107,7 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             // get form owner for admin
-            $form_owner = get_option('dropdown_option_setting_api_users_'.$form_title.'_tags_api_users')['dropdown_option_api_users'];
+            $form_owner = get_option('dropdown_option_setting_api_users_'.$form_title.'_api_users')['dropdown_option_api_users'];
 
             $the_option = 'dropdown_option_setting_tag_name_'.$form_title.'_api_tags';
 
@@ -116,13 +116,13 @@ class Gravityforms_Nutshell_Integration_Public
 
             $tags_array = get_option($the_option);
 
-            $restore_tags = function($value) {
-                return str_replace('_',' ', $value);
+            $restore_tags = function ($value) {
+                return str_replace('_', ' ', $value);
             };
 
-            $tags_array = array_map($restore_tags, $tags_array['dropdown_option_api_tags']);
-
-            $tag_object = new ArrayObject($tags_array['dropdown_option_api_tags']);
+            if (!empty($tags_array)) {
+                $tags_array = array_map($restore_tags, $tags_array);
+            }
 
             foreach ($entry as $k => $v) {
                 if (array_keys($idLabelMap, $k) !== null) {
@@ -148,7 +148,7 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             if (null !== $tags_array) {
-                $dataToSend['tags'] = json_encode(array_values($tags_array));
+                // $dataToSend['tags'] = json_encode($tags_array['dropdown_option_api_tags']);
             }
 
             $users = $gravity_forms->findApiUsers($form_owner);
@@ -168,10 +168,16 @@ class Gravityforms_Nutshell_Integration_Public
 
             $custom_fields = $gravity_forms->findCustomFields();
 
-            if ($custom_fields->Contacts[0]->name == 'Source URL') {
-                $custom_fields_object = new ArrayObject(array());
-                $custom_fields_object[$custom_fields->contacts->name] = $source_url;
-                $dataToSend['customFields'] = $custom_fields_object;
+            $custom_fields_object = new stdClass();
+
+            foreach ($custom_fields as $k=>$v) {
+                if (strpos($v[0]->name, 'url') !== false) {
+                    $custom_fields_object[$v[0]->name] = $source_url;
+                    $dataToSend['customFields'] = $custom_fields_object;
+                    break;
+                } else {
+                    $dataToSend[$notes] = $source_url;
+                }
             }
 
             // search methods return stubs; get methods full info
