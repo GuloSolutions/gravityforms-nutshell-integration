@@ -73,7 +73,9 @@ class Gravityforms_Nutshell_Integration_Public
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts(){}
+    public function enqueue_scripts()
+    {
+    }
 
     public function startService()
     {
@@ -88,11 +90,12 @@ class Gravityforms_Nutshell_Integration_Public
         function send_data_to_nutshell($entry, $form)
         {
             global $gravity_forms;
-            $newContactId = $form_title = $form_owner = $user_id = $source_url = '';
             $notes = 'notes';
+            $newContactId = $form_title = $form_owner = $user_id = $source_url = '';
             $fields_to_update = $idLabelMap = $data_to_send = $new_contact = $editContact = $users = $all_options = $form_options = $dataToSend = [];
 
-            $form_title = str_replace(' ', '_', strtolower($form['title']));
+            $form_title = preg_replace('/[^A-Za-z0-9 ]/', '', $form['title']);
+            $form_title = str_replace(' ', '_', strtolower($form_title));
 
             foreach ($form['fields'] as $field) {
                 if (!empty($field->label)) {
@@ -104,20 +107,16 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             // get form owner for admin
-            $form_owner = get_option('dropdown_option_setting_api_users_'.$form_title.'_api_users')['dropdown_option_api_users'];
+            $form_owner = get_option('dropdown_option_setting_api_users_'.$form_title.'_tags_api_users')['dropdown_option_api_users'];
+
+            $the_option = 'dropdown_option_setting_tag_name_'.$form_title.'_api_tags';
 
             // get tags for admin
-            $tags_array = get_option('dropdown_option_setting_tag_name_'.$form_title.'_api_tags')['dropdown_option_api_tags'];
+            $the_option = 'dropdown_option_setting_tag_name_'.$form_title.'_api_tags';
 
-            $tag_object = new ArrayObject(array());
+            $tags_array = get_option($the_option);
 
-            if (count($tags_array) > 1) {
-                foreach($tags_array as $tag){
-                    $tag_object->append($tag);
-                }
-            } elseif (count($tags_array) == 1) {
-                $tag_object->append = $tags_array[0];
-            }
+            $tag_object = new ArrayObject($tags_array['dropdown_option_api_tags']);
 
             foreach ($entry as $k => $v) {
                 if (array_keys($idLabelMap, $k) !== null) {
@@ -143,20 +142,20 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             if (null !== $tags_array) {
-                $dataToSend['tags'] = $tag_object;
+                $dataToSend['tags'] = json_encode(array_values($tags_array));
             }
 
             $users = $gravity_forms->findApiUsers($form_owner);
 
-            foreach($users as $user) {
-                if (in_array($form_owner, $user->emails)){
+            foreach ($users as $user) {
+                if (in_array($form_owner, $user->emails)) {
                     $user_id = $user->id;
                     break;
                 }
             }
 
             foreach ($entry as $k => $v) {
-                if ($k == 'source_url'){
+                if ($k == 'source_url') {
                     $source_url = $v;
                 }
             }
@@ -167,7 +166,7 @@ class Gravityforms_Nutshell_Integration_Public
                 $custom_fields_object = new ArrayObject(array());
                 $custom_fields_object[$custom_fields->contacts->name] = $source_url;
                 $dataToSend['customFields'] = $custom_fields_object;
-             }
+            }
 
             // search methods return stubs; get methods full info
             $contact = $gravity_forms->searchByEmail($dataToSend['email']);
@@ -183,7 +182,7 @@ class Gravityforms_Nutshell_Integration_Public
                 $editContact->rev = (array) $editContact->rev;
                 $editContact->notes = (array) $editContact->notes;
 
-                if (property_exists($editContact, 'tags')){
+                if (property_exists($editContact, 'tags')) {
                     $editContact->tags = (array) $editContact->tags;
                 }
 
@@ -224,7 +223,6 @@ class Gravityforms_Nutshell_Integration_Public
                 $params['contact'] = $new_contact;
 
                 if ($newContactId = $gravity_forms->addContact($params)) {
-
                     if (!empty($dataToSend[$notes])) {
                         $gravity_forms->addNote(['entity' => ['entityType' => 'Contacts', 'id' => $newContactId, 'name' => $dataToSend['name']]], $dataToSend[$notes]);
                     }
