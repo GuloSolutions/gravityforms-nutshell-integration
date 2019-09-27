@@ -78,30 +78,30 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 1.1.3 - 2019-08-01
 
-- Admin form improvements: fixed: placeholder text and value text are now separate
-- Author name fixed
+* Admin form improvements: fixed: placeholder text and value text are now separate
+* Author name fixed
 
 1.1.4 - 2019-08-01
 
-- Add settings link
+* Add settings link
 
 1.1.5 - 2019-09-20
 
-- Add dropdown fields for settings derived from the Nutshell API, including users and tags
-- Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
+* Add dropdown fields for settings derived from the Nutshell API, including users and tags
+* Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
 
 1.1.6 - 2019-09-25
 
-- Fix parsing issue
+* Fix parsing issue
 
 1.1.7 - 2019-09-25
 
-- Fix Nutshell tag name issue when tag is more than a single word
+* Fix Nutshell tag name issue when tag is more than a single word
 
 1.1.8 - 2019-09-25
 
-- Fix plugin tag issue
+* Fix plugin tag issue
 
 1.1.9 - 2019-09-27
 
-- Fix tag array passed to Nutshell
+* Fix tag array passed to Nutshell
