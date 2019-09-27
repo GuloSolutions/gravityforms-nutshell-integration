@@ -109,8 +109,6 @@ class Gravityforms_Nutshell_Integration_Public
             // get form owner for admin
             $form_owner = get_option('dropdown_option_setting_api_users_'.$form_title.'_api_users')['dropdown_option_api_users'];
 
-            $the_option = 'dropdown_option_setting_tag_name_'.$form_title.'_api_tags';
-
             // get tags for admin
             $the_option = 'dropdown_option_setting_tag_name_'.$form_title.'_api_tags';
 
