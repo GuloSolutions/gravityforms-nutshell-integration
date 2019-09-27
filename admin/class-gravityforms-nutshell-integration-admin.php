@@ -61,7 +61,8 @@ class Gravityforms_Nutshell_Integration_Admin
      * @since    1.0.0
      */
 
-    public function enqueue_styles() {
+    public function enqueue_styles()
+    {
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/gravityforms-nutshell-integration-admin.css', array(), $this->version, 'all');
     }
 
@@ -70,8 +71,9 @@ class Gravityforms_Nutshell_Integration_Admin
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'js/chosen.js', array(), $this->version, 'all');
+    public function enqueue_scripts()
+    {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/gravityforms-nutshell-integration-admin.js', array(), $this->version, 'all');
     }
 
     public function add_error_message()
@@ -81,14 +83,16 @@ class Gravityforms_Nutshell_Integration_Admin
 
         if ($error) {
             ?>
-            <div class="error notice">
-                <p><?php _e('There has been an error -- '.$err_message.'!', 'my_plugin_textdomain'); ?></p>
-            </div>
-            <?php
+<div class="error notice">
+    <p><?php _e('There has been an error -- '.$err_message.'!', 'my_plugin_textdomain'); ?>
+    </p>
+</div>
+<?php
         }
     }
 
-    public function _s_add_settings_link() {
+    public function _s_add_settings_link()
+    {
         $file = $dir = '';
         $dir = dirname(__DIR__);
         foreach (new DirectoryIterator($dir) as $fileInfo) {
@@ -100,14 +104,14 @@ class Gravityforms_Nutshell_Integration_Admin
         $page_link = pathinfo($file);
         $page_link = $page_link['filename'];
 
-        $dir = explode('/',$dir);
+        $dir = explode('/', $dir);
         $dir = end($dir);
         $file = $dir.DIRECTORY_SEPARATOR.$file;
 
-        add_filter('plugin_action_links_'.$file , function( $links ) use ( $page_link ) {
-            $links = array_merge( array(
-                '<a href="' . esc_url( admin_url( 'options-general.php?page='.$page_link ) ) . '">' . __( 'Settings' ) . '</a>'
-            ), $links );
+        add_filter('plugin_action_links_'.$file, function ($links) use ($page_link) {
+            $links = array_merge(array(
+                '<a href="' . esc_url(admin_url('options-general.php?page='.$page_link)) . '">' . __('Settings') . '</a>'
+            ), $links);
             return $links;
         });
     }
