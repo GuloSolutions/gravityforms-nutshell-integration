@@ -5,7 +5,7 @@ Donate link: https://www.gulosolutions.com/
 Tags: api, forms, gravityforms, Nutshell, crm
 Requires at least: 3.0.1
 Tested up to: 5.2.1
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,3 +101,7 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 ## 1.1.8 - 2019-09-25
 
 - Fix plugin tag issue
+
+## 1.1.9 - 2019-09-27
+
+- Fix tag array passed to Nutshell
