@@ -124,6 +124,15 @@ class Gravityforms_Nutshell_Integration_Public
                 $tags_array = array_map($restore_tags, $tags_array);
             }
 
+            $tags_list = [];
+
+            foreach ($tags_array as $tag) {
+                array_push($tags_list, $tag);
+            }
+
+            error_log(print_r($tags_list, true));
+
+
             foreach ($entry as $k => $v) {
                 if (array_keys($idLabelMap, $k) !== null) {
                     if (!empty($idLabelMap[$k])) {
@@ -148,8 +157,10 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             if (null !== $tags_array) {
-                // $dataToSend['tags'] = json_encode($tags_array['dropdown_option_api_tags']);
+                $dataToSend['tags'] = array_values($tags_array)[0];
             }
+
+            error_log(print_r($dataToSend, true));
 
             $users = $gravity_forms->findApiUsers($form_owner);
 

@@ -154,7 +154,7 @@ class Gravityforms_Nutshell_Integration
     {
         $plugin_admin = new Gravityforms_Nutshell_Integration_Admin($this->get_plugin_name(), $this->get_version());
         $this->loader->add_action('admin_notices', $plugin_admin, 'add_error_message', 1, 10);
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_admin, 'enqueue_admin_scripts');
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
     }
 
     private function enqueue_styles($hook)
@@ -162,12 +162,6 @@ class Gravityforms_Nutshell_Integration
         if ('options-general_wp-gf-nutshell-admin.php' !== $hook) {
             return;
         }
-    }
-
-    private function enqueue_admin_scripts($hook)
-    {
-
-        wp_enqueue_script('form_script', plugin_dir_url(__FILE__) . 'admin/js/chosen.js');
     }
 
     private function enqueue_scripts($hook)
