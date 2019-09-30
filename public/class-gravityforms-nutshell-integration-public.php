@@ -65,7 +65,7 @@ class Gravityforms_Nutshell_Integration_Public
      */
     public function enqueue_styles()
     {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__).'css/gravityforms-nutshell-integration-public.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__).'/css/gravityforms-nutshell-integration-public.css', array(), $this->version, 'all');
     }
 
     /**
@@ -145,7 +145,7 @@ class Gravityforms_Nutshell_Integration_Public
                 }
             }
 
-            if ( !empty($tags_array)) {
+            if (!empty($tags_array)) {
                 $dataToSend['tags'] = array_values($tags_array)[0];
             }
 
