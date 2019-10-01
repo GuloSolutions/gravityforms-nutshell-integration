@@ -10,6 +10,8 @@ class GravityNutshellSettingsPage
     private static $id;
     private $labels;
     private $tags;
+    private $customFields;
+
 
     /**
      * Start up.
@@ -27,6 +29,16 @@ class GravityNutshellSettingsPage
         add_action('admin_init', array($this, 'setApiUsers'));
         $this->name = $name;
         $this->tags = $gravity_forms->findTags();
+        $this->customFields = $gravity_forms->findCustomFields();
+
+
+        foreach($this->customFields as $k=>$v) {
+            if (is_array($v)) {
+                foreach($v as $vv){
+                    error_log(print_r($vv->name, true));
+                }
+            }
+        }
     }
 
     /**
@@ -228,27 +240,37 @@ class GravityNutshellSettingsPage
         $the_option = 'dropdown_option_setting_option_name_'.$args['label'].'_'.$args['field'];
 
         $this->dropdown_option_setting_options = get_option($the_option); ?>
-
-    <select name=<?php echo $the_option.'[dropdown_option_nutshell]'; ?>
-        id="dropdown_option_nutshell">
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'name') ? 'selected' : ''; ?>
-        <option value="name" <?php echo $selected; ?>>Name</option>
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'email') ? 'selected' : ''; ?>
-        <option value="email" <?php echo $selected; ?>>Email</option>
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'address') ? 'selected' : ''; ?>
-        <option value="address" <?php echo $selected; ?>>Address
-        </option>
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'phone') ? 'selected' : ''; ?>
-        <option value="phone" <?php echo $selected; ?>>Phone</option>
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'notes') ? 'selected' : ''; ?>
-        <option value="notes" <?php echo $selected; ?>>Notes</option>
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'title') ? 'selected' : ''; ?>
-        <option value="title" <?php echo $selected; ?>>Title</option>
-        <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'description') ? 'selected' : ''; ?>
-        <option value="description" <?php echo $selected; ?>>Description
-        </option>
-    </select>
-<?php
+<select name=<?php echo $the_option.'[dropdown_option_nutshell]'; ?>
+    id="dropdown_option_nutshell">
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'name') ? 'selected' : ''; ?>
+    <option value="name" <?php echo $selected; ?>>Name</option>
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'email') ? 'selected' : ''; ?>
+    <option value="email" <?php echo $selected; ?>>Email</option>
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'address') ? 'selected' : ''; ?>
+    <option value="address" <?php echo $selected; ?>>Address</option>
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'phone') ? 'selected' : ''; ?>
+    <option value="phone" <?php echo $selected; ?>>Phone</option>
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'notes') ? 'selected' : ''; ?>
+    <option value="notes" <?php echo $selected; ?>>Notes</option>
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'title') ? 'selected' : ''; ?>
+    <option value="title" <?php echo $selected; ?>>Title</option>
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'description') ? 'selected' : ''; ?>
+    <option value="description" <?php echo $selected; ?>>Description
+    </option>
+    <?php
+        foreach($this->customFields as $k=>$v) {
+            if (is_array($v)) {
+                foreach($v as $vv){
+                    ?>
+                    <?php $selected = (isset($this->dropdown_option_tags['dropdown_option_nutshell']) && $this->dropdown_option_tags['dropdown_option_nutshell'] === str_replace(' ', '_', $vv->name)) ? 'selected' : ''; ?>
+                    <option value=<?php echo str_replace(' ', '_', $vv->name); ?>
+                        <?php echo $selected; ?>><?php echo $vv->name; ?>
+                    </option>
+                    <?php
+                }
+            }
+        }
+        echo '</select>';
     }
 
     public function dropdown_option_users_callback($args)
@@ -282,16 +304,12 @@ class GravityNutshellSettingsPage
     public function dropdown_option_tags_callback($args)
     {
         $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
-        $class = "class='results-selected'";
+        $class = "class='tags_selected'";
 
-        $this->dropdown_option_tags = get_option($the_option);?>
-
-
-    <div id="output"></div>
-    <form method="get">
+        $this->dropdown_option_tags = get_option($the_option); ?>
     <select name=<?php echo $the_option.'[dropdown_option_api_tags][]'; ?>
         <?php echo 'multiple'; ?>
-        id="dropdown_option_api_tags" data-placeholder="Choose tags ..." class=<?php echo "chosen-select"?>>
+        id="dropdown_option_api_tags">
         <?php
             foreach ($this->tags->Contacts as $tag) {
                 ?>
@@ -302,8 +320,7 @@ class GravityNutshellSettingsPage
         </option>
         <?php
             }
-        echo '</select></form>';
-
+        echo '</select>';
     }
 
     public function print_section_info()
