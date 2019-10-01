@@ -30,15 +30,6 @@ class GravityNutshellSettingsPage
         $this->name = $name;
         $this->tags = $gravity_forms->findTags();
         $this->customFields = $gravity_forms->findCustomFields();
-
-
-        foreach($this->customFields as $k=>$v) {
-            if (is_array($v)) {
-                foreach($v as $vv){
-                    error_log(print_r($vv->name, true));
-                }
-            }
-        }
     }
 
     /**
