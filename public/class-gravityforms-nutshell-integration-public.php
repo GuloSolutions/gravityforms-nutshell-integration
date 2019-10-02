@@ -128,14 +128,11 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             foreach ($entry as $k => $v) {
-                error_log(print_r($k, true));
                 if (array_key_exists($k, $mapped)) {
                     $dataToSend[$mapped[$k]] = $v;
                 }
             }
 
-            error_log(print_r('after mapped', true));
-            error_log(print_r($dataToSend, true));
 
             if (!empty($tags_array)) {
                 $dataToSend['tags'] = array_values($tags_array)[0];
