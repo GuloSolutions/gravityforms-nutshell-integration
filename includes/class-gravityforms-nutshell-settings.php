@@ -233,6 +233,7 @@ class GravityNutshellSettingsPage
         $this->dropdown_option_setting_options = get_option($the_option); ?>
 <select name=<?php echo $the_option.'[dropdown_option_nutshell]'; ?>
     id="dropdown_option_nutshell">
+
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'name') ? 'selected' : ''; ?>
     <option value="name" <?php echo $selected; ?>>Name</option>
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'email') ? 'selected' : ''; ?>
@@ -253,7 +254,7 @@ class GravityNutshellSettingsPage
             if (is_array($v)) {
                 foreach($v as $vv){
                     ?>
-                    <?php $selected = (isset($this->dropdown_option_tags['dropdown_option_nutshell']) && $this->dropdown_option_tags['dropdown_option_nutshell'] === str_replace(' ', '_', $vv->name)) ? 'selected' : ''; ?>
+                    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell']  === str_replace(' ', '_', $vv->name)) ? 'selected' : ''; ?>
                     <option value=<?php echo str_replace(' ', '_', $vv->name); ?>
                         <?php echo $selected; ?>><?php echo $vv->name; ?>
                     </option>

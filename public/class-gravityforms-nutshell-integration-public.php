@@ -92,7 +92,7 @@ class Gravityforms_Nutshell_Integration_Public
             global $gravity_forms;
             $notes = 'notes';
             $newContactId = $form_title = $form_owner = $user_id = $source_url = '';
-            $fields_to_update = $idLabelMap = $data_to_send = $new_contact = $editContact = $users = $all_options = $form_options = $dataToSend = [];
+            $fields_to_update = $idLabelMap = $mapped = $data_to_send = $new_contact = $editContact = $users = $all_options = $form_options = $dataToSend = [];
 
             $form_title = preg_replace('/[^A-Za-z0-9 ]/', '', $form['title']);
             $form_title = str_replace(' ', '_', strtolower($form_title));
@@ -103,7 +103,12 @@ class Gravityforms_Nutshell_Integration_Public
                     $option_name = strtolower($option_name);
                     $form_option = 'dropdown_option_setting_option_name_'.$form_title.'_'.$option_name.'_'.$form_title;
                 }
-                $data_to_send[$option_name] = get_option($form_option)['dropdown_option_nutshell'];
+                $mapped[$field->id] = get_option($form_option)['dropdown_option_nutshell'];
+            }
+
+            // get mapped values and assign them to keys
+            foreach($mapped as $key=>$value){
+                $dataToSend[$value] = $value;
             }
 
             // get form owner for admin
@@ -112,8 +117,8 @@ class Gravityforms_Nutshell_Integration_Public
             // get tags for admin
             $the_option = 'dropdown_option_setting_tag_name_'.$form_title.'_api_tags';
 
+            // get tag values from settings
             $tags_array = get_option($the_option);
-
             $restore_tags = function ($value) {
                 return str_replace('_', ' ', $value);
             };
@@ -123,27 +128,14 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             foreach ($entry as $k => $v) {
-                if (array_keys($idLabelMap, $k) !== null) {
-                    if (!empty($idLabelMap[$k])) {
-                        $dataToSend[strtolower($idLabelMap[$k])] = $v;
-                    }
+                error_log(print_r($k, true));
+                if (array_key_exists($k, $mapped)) {
+                    $dataToSend[$mapped[$k]] = $v;
                 }
             }
 
-            foreach ($form['fields'] as $field) {
-                $option_name = str_replace(' ', '_', $field->label);
-                $option_name = strtolower($option_name);
-                $option_name .= '_'.$form_title;
-                $idLabelMap[$field->id] = $field->label;
-            }
-
-            foreach ($entry as $k => $v) {
-                if (array_keys($idLabelMap, $k) !== null) {
-                    if (!empty($idLabelMap[$k])) {
-                        $dataToSend[strtolower($idLabelMap[$k])] = $v;
-                    }
-                }
-            }
+            error_log(print_r('after mapped', true));
+            error_log(print_r($dataToSend, true));
 
             if (!empty($tags_array)) {
                 $dataToSend['tags'] = array_values($tags_array)[0];
@@ -165,18 +157,29 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             $custom_fields = $gravity_forms->findCustomFields();
-
+            $custom_fields = (array) $custom_fields;
             $custom_fields_object = new stdClass();
 
-            foreach ($custom_fields as $k=>$v) {
-                if (strpos($v[0]->name, 'url') !== false) {
-                    $custom_fields_object[$v[0]->name] = $source_url;
-                    $dataToSend['customFields'] = $custom_fields_object;
-                    break;
-                } else {
-                    $dataToSend[$notes] = $source_url;
-                }
+            if (empty($dataToSend[$notes])) {
+                $dataToSend[$notes] = '';
             }
+
+            $dataToSend[$notes] = $dataToSend[$notes]."\r\n Source URL: ".$source_url;
+
+            // foreach ($custom_fields as $field) {s
+            //     if (is_array($field)) {
+            //         foreach ($field as $ff) {
+            //             if (in_array($ff->name, $custom_fields->Contacts)) {
+            //                 $custom_fields_object[$ff->name] = $source_url;
+            //                 $dataToSend['customFields'] = $custom_fields_object;
+            //                 break;
+            //             } else {
+            //                 $dataToSend[$notes] = $dataToSend[$notes]."\r\n Source URL: ".$source_url;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
 
             // search methods return stubs; get methods full info
             $contact = $gravity_forms->searchByEmail($dataToSend['email']);
