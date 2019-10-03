@@ -54,7 +54,7 @@ class GravityNutshellSettingsPage
         ?>
 <div class="wrap">
     <?php echo '<h4>'.$this->name.' '.'Settings</h4>'; ?>
-    <form id="wp_gf_options_settings" cls="gf_nutshell_options" method="post" action="options.php">
+    <form id="wp_gf_options_settings" class="gf_nutshell_options" method="post" action="options.php">
         <?php
                 settings_fields('my_option_group');
         do_settings_sections('wp-gf-nutshell-admin');
@@ -250,15 +250,15 @@ class GravityNutshellSettingsPage
     <option value="description" <?php echo $selected; ?>>Description
     </option>
     <?php
-        foreach($this->customFields as $k=>$v) {
+        foreach ($this->customFields as $k=>$v) {
             if (is_array($v)) {
-                foreach($v as $vv){
+                foreach ($v as $vv) {
                     ?>
-                    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell']  === str_replace(' ', '_', $vv->name)) ? 'selected' : ''; ?>
-                    <option value=<?php echo str_replace(' ', '_', $vv->name); ?>
-                        <?php echo $selected; ?>><?php echo $vv->name; ?>
-                    </option>
-                    <?php
+    <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell']  === str_replace(' ', '_', $vv->name)) ? 'selected' : ''; ?>
+    <option value=<?php echo str_replace(' ', '_', $vv->name); ?>
+        <?php echo $selected; ?>><?php echo $vv->name; ?>
+    </option>
+    <?php
                 }
             }
         }
@@ -277,18 +277,18 @@ class GravityNutshellSettingsPage
         }
 
         $this->dropdown_option_api_users = array_values(get_option($the_option_users)); ?>
-<select name=<?php echo $the_option.'[dropdown_option_api_users]'; ?>
-    id='dropdown_option_api_users'>
-    <?php
+    <select name=<?php echo $the_option.'[dropdown_option_api_users]'; ?>
+        id='dropdown_option_api_users'>
+        <?php
 
         $total = count($this->dropdown_option_api_users);
 
         for ($i = 0; $i < $total; $i++) {
             ?>
-    <?php $selected = (isset($this->dropdown['dropdown_option_api_users']) && $this->dropdown['dropdown_option_api_users'] == $this->dropdown_option_api_users[$i][1]) ? 'selected' : ''; ?>
-    <option value=<?php echo $this->dropdown_option_api_users[$i][1]; ?> <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0]; ?>
-    </option>
-    <?php
+        <?php $selected = (isset($this->dropdown['dropdown_option_api_users']) && $this->dropdown['dropdown_option_api_users'] == $this->dropdown_option_api_users[$i][1]) ? 'selected' : ''; ?>
+        <option value=<?php echo $this->dropdown_option_api_users[$i][1]; ?> <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0]; ?>
+        </option>
+        <?php
         }
         echo '</select>';
     }
@@ -300,32 +300,28 @@ class GravityNutshellSettingsPage
 
         $this->dropdown_option_tags = get_option($the_option); ?>
 
-	<div class="asItemDetail">
-	    <h3><?php _e('Tags', 'wp-content-likes'); ?></h3>
-	    <p><?php _e('Please select one or more tags for this form:', 'wp-gf-nutshell'); ?></p>
-	    <p><label><?php _e('Tags: ', 'wp-gf-nutshell'); ?></label>
-	<?php
+        <?php
 
     $output = '';
 
-	if (!empty($this->tags->Contacts)) {
-        $output .= '<select id="dropdown_option_api_tags" multiple="multiple" style="min-width:50%;" >';
-        foreach ($this->tags->Contacts as $tag) {
+        echo  '<div id="output">';
+
+        if (!empty($this->tags->Contacts)) {
+            $output .= '<select id="dropdown_option_api_tags" multiple class="chosen-select" style="min-width:50%;" >';
+
+            foreach ($this->tags->Contacts as $tag) {
                 $value = str_replace(' ', '_', trim(strval($tag)));
                 $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : '';
-	            $output .= '<option value="' . $value . '"' . $selected . '>' . $tag . '</option>';
-	    }
-	    $output .= '</select>';
-	} else {
-	    $output .= '<p>'.__('No tags found.', 'wp-content-likes').'</p>';
-	}
-	echo $output;
-	?>
-</p>
+                $output .= '<option value="' . $value . '"' . $selected . '>' . $tag . '</option>';
+            }
+            $output .= '</select>';
+        } else {
+            $output .= '<p>'.__('No tags found.', 'wp-gf-nutshell').'</p>';
+        }
+        echo $output; ?>
+        </p>
 
-<?php
-
-
+        <?php
     }
 
     public function print_section_info()
