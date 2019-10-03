@@ -77,7 +77,6 @@ class Gravityforms_Nutshell_Integration_Admin
      */
     public function enqueue_admin_scripts($hook)
     {
-
         if ('settings_page_gravityforms-nutshell-integration' !== $hook) {
             return;
         }
