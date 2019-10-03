@@ -61,8 +61,12 @@ class Gravityforms_Nutshell_Integration_Admin
      * @since    1.0.0
      */
 
-    public function enqueue_styles()
+    public function enqueue_admin_styles($hook)
     {
+        if ('settings_page_gravityforms-nutshell-integration' !== $hook) {
+            return;
+        }
+
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . '/css/gravityforms-nutshell-integration-admin.css', array(), $this->version, 'all');
     }
 
@@ -71,8 +75,13 @@ class Gravityforms_Nutshell_Integration_Admin
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts()
+    public function enqueue_admin_scripts($hook)
     {
+
+        if ('settings_page_gravityforms-nutshell-integration' !== $hook) {
+            return;
+        }
+
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . '/js/gravityforms-nutshell-integration-admin.js', array('jquery'), $this->version, 'all');
     }
 
