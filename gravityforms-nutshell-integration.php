@@ -16,7 +16,7 @@
  * Plugin Name:       WP GF Nutshell
  * Plugin URI:        https://wordpress.org/wp-gf-nutshell
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.1.10
+ * Version:           1.1.11
  * Author:            Gulo Solutions, LLC
  * Author URI:        https://www.gulosolutions.com/?utm_source=wp-admin&utm_medium=wp-plugin&utm_campaign=wp-gf-nutshell
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if (! defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('PLUGIN_NAME_VERSION', '1.1.10');
+define('PLUGIN_NAME_VERSION', '1.1.11');
 
 /**
  * The code that runs during plugin activation.
