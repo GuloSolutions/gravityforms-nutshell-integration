@@ -302,8 +302,8 @@ class GravityNutshellSettingsPage
 
 	<div class="asItemDetail">
 	    <h3><?php _e('Tags', 'wp-content-likes'); ?></h3>
-	    <p><?php _e('Please select one or more tags for this form:', 'wp-content-likes'); ?></p>
-	    <p><label><?php _e('Tags: ', 'wp-content-likes'); ?></label>
+	    <p><?php _e('Please select one or more tags for this form:', 'wp-gf-nutshell'); ?></p>
+	    <p><label><?php _e('Tags: ', 'wp-gf-nutshell'); ?></label>
 	<?php
 
     $output = '';
