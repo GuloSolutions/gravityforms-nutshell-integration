@@ -231,7 +231,8 @@ class GravityNutshellSettingsPage
         $the_option = 'dropdown_option_setting_option_name_'.$args['label'].'_'.$args['field'];
 
         $this->dropdown_option_setting_options = get_option($the_option); ?>
-<select name=<?php echo $the_option.'[dropdown_option_nutshell]'; ?>
+<select data_form_id=<?php echo $args['label'] ?>
+    name=<?php echo $the_option.'[dropdown_option_nutshell]'; ?>
     id="dropdown_option_nutshell">
 
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'name') ? 'selected' : ''; ?>
@@ -297,18 +298,15 @@ class GravityNutshellSettingsPage
     {
         $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
         $class = "class='results-selected'";
+        $this->dropdown_option_tags = get_option($the_option);
 
-        $this->dropdown_option_tags = get_option($the_option); ?>
-
-        <?php
-
-    $output = '';
+        $output = '';
+        $name =  $the_option.'[dropdown_option_api_tags][]';
 
         echo  '<div id="output">';
 
         if (!empty($this->tags->Contacts)) {
-            $output .= '<select id="dropdown_option_api_tags" multiple class="chosen-select" style="min-width:50%;" >';
-
+            $output .= '<select data-id="'.$args['label'].'"data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form" multiple class="chosen-select" style="min-width:30%;" >';
             foreach ($this->tags->Contacts as $tag) {
                 $value = str_replace(' ', '_', trim(strval($tag)));
                 $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : '';
