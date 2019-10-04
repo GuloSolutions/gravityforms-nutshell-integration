@@ -92,7 +92,7 @@ class Gravityforms_Nutshell_Integration_Admin
         if ($error) {
             ?>
 <div class="error notice">
-    <p><?php _e('There has been an error -- '.$err_message.'!', 'my_plugin_textdomain'); ?>
+    <p><?php _e('There has been an error -- '.$err_message.'!', 'wp-gf-nutshell'); ?>
     </p>
 </div>
 <?php
