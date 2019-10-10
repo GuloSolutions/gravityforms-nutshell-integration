@@ -58,6 +58,8 @@ class GravityNutshellSettingsPage
         <?php
                 settings_fields('my_option_group');
         do_settings_sections('wp-gf-nutshell-admin');
+       echo '<div id="wp_content_likes_notification"></div>';
+
         submit_button(); ?>
     </form>
 </div>
@@ -240,7 +242,8 @@ class GravityNutshellSettingsPage
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'email') ? 'selected' : ''; ?>
     <option value="email" <?php echo $selected; ?>>Email</option>
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'address') ? 'selected' : ''; ?>
-    <option value="address" <?php echo $selected; ?>>Address</option>
+    <option value="address" <?php echo $selected; ?>>Address
+    </option>
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'phone') ? 'selected' : ''; ?>
     <option value="phone" <?php echo $selected; ?>>Phone</option>
     <?php $selected = (isset($this->dropdown_option_setting_options['dropdown_option_nutshell']) && $this->dropdown_option_setting_options['dropdown_option_nutshell'] === 'notes') ? 'selected' : ''; ?>
@@ -287,7 +290,8 @@ class GravityNutshellSettingsPage
         for ($i = 0; $i < $total; $i++) {
             ?>
         <?php $selected = (isset($this->dropdown['dropdown_option_api_users']) && $this->dropdown['dropdown_option_api_users'] == $this->dropdown_option_api_users[$i][1]) ? 'selected' : ''; ?>
-        <option value=<?php echo $this->dropdown_option_api_users[$i][1]; ?> <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0]; ?>
+        <option value=<?php echo $this->dropdown_option_api_users[$i][1]; ?>
+            <?php echo $selected; ?>><?php echo $this->dropdown_option_api_users[$i][0]; ?>
         </option>
         <?php
         }
@@ -297,16 +301,15 @@ class GravityNutshellSettingsPage
     public function dropdown_option_tags_callback($args)
     {
         $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
-        $class = "class='results-selected'";
         $this->dropdown_option_tags = get_option($the_option);
 
         $output = '';
         $name =  $the_option.'[dropdown_option_api_tags][]';
 
-        echo  '<div id="output">';
+        echo  '<div id="output" data-id="'.$args['label'].'">';
 
         if (!empty($this->tags->Contacts)) {
-            $output .= '<select data-id="'.$args['label'].'"data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form" multiple class="chosen-select" style="min-width:30%;" >';
+            $output .= '<select data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form" multiple class="chosen-select" style="min-width:30%;" >';
             foreach ($this->tags->Contacts as $tag) {
                 $value = str_replace(' ', '_', trim(strval($tag)));
                 $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : '';

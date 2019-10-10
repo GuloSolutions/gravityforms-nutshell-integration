@@ -1,6 +1,5 @@
 (function($) {
     'use strict';
-    var tags = [];
 
     $(".chosen-select").chosen({
         disable_search_threshold: 10,
@@ -12,27 +11,35 @@
         e.preventDefault();
         e.stopPropagation();
 
-        $('*[id*=tags]').each(function() {
-            let tag =  $(this).find(":selected").val();
-            if (typeof tag !== 'undefined') {
-                tags.push(tag);
+        var all_tags = [];
+
+        $('*[class*=search-choice]').each(function() {
+            var id = '';
+            var tag = '';
+            var tags = {};
+            var form_tags = [];
+
+            string_tag = $(this).text();
+            id = $(this).closest('div').parent().attr('data-id');
+
+            if (string_tag) {
+                tags.id = id;
+                tags.tag = tag;
+            }
+
+            if (!jQuery.isEmptyObject(tags)) {
+                all_tags.push(tags);
             }
         });
-
-        console.log(tags);
-
+        settingsSavedmessage();
     });
 
     function settingsSavedmessage() {
         $("#wp_content_likes_notification").
                 fadeIn("slow").
                 html('Settings Saved <span class="wp_content_likes_notification-dismiss"><a title="dismiss message">X</a></span>').
-                delay(500).
+                delay(1000).
                 fadeOut("slow");
         }
-
         settingsSavedmessage();
-
-        document.getElementById('output').innerHTML = location.search;
-
 })(jQuery);

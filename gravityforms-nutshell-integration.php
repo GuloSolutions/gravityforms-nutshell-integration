@@ -93,6 +93,7 @@ function run_gravityforms_nutshell_integration()
 
     // load settings
     if (is_admin() && !is_null($plugin_name)) {
+        $plugin_name = get_plugin_data(__FILE__, $markup = true, $translate = true)['Name'];
         $my_settings_page = new GravityNutshellSettingsPage($plugin_name);
     }
     // run plugin if API info exists
