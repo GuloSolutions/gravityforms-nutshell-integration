@@ -82,6 +82,25 @@ class Gravityforms_Nutshell_Integration_Admin
         }
 
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . '/js/gravityforms-nutshell-integration-admin.js', array('jquery'), $this->version, 'all');
+
+        wp_localize_script(
+            $this->plugin_name,
+            'nutshell_tags',
+            ['ajax_url' => admin_url('admin-ajax.php')]
+        );
+    }
+
+    public function process_nutshell_tags()
+    {
+        error_log(print_r("called", true));
+
+        $tags = $_POST['nutshell_tags'];
+
+        error_log(print_r("called", true));
+        error_log(print_r($tags, true));
+
+        echo (json_encode("test"));
+        wp_die();
     }
 
     public function add_error_message()
