@@ -158,6 +158,8 @@ class Gravityforms_Nutshell_Integration
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_admin_styles');
         $this->loader->add_action('wp_ajax_nopriv_process_nutshell_tags', $plugin_admin, 'process_nutshell_tags');
         $this->loader->add_action('wp_ajax_process_nutshell_tags', $plugin_admin, 'process_nutshell_tags');
+        $this->loader->add_action('wp_ajax_process_saved_tags', $plugin_admin, 'process_saved_tags');
+        $this->loader->add_action('wp_ajax_process_saved_tags', $plugin_admin, 'process_saved_tags');
     }
 
     /**

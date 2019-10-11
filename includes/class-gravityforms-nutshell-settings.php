@@ -58,7 +58,7 @@ class GravityNutshellSettingsPage
         <?php
                 settings_fields('my_option_group');
         do_settings_sections('wp-gf-nutshell-admin');
-       echo '<div id="wp_content_likes_notification"></div>';
+        echo '<div id="wp_content_likes_notification"></div>';
 
         submit_button(); ?>
     </form>
@@ -303,6 +303,14 @@ class GravityNutshellSettingsPage
         $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
         $this->dropdown_option_tags = get_option($the_option);
 
+        $this->dropdown_option_tags = get_option('wp_gf_nutshell_tags');
+
+        error_log(print_r('tags', true));
+
+        error_log(print_r($this->dropdown_option_tags, true));
+
+
+
         $output = '';
         $name =  $the_option.'[dropdown_option_api_tags][]';
 
@@ -312,8 +320,9 @@ class GravityNutshellSettingsPage
             $output .= '<select data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form" multiple class="chosen-select" style="min-width:30%;" >';
             foreach ($this->tags->Contacts as $tag) {
                 $value = str_replace(' ', '_', trim(strval($tag)));
-                $selected = (isset($this->dropdown_option_tags['dropdown_option_api_tags']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['dropdown_option_api_tags'])) ? 'selected' : '';
-                $output .= '<option value="' . $value . '"' . $selected . '>' . $tag . '</option>';
+                $selected = (isset($this->dropdown_option_tags['tag_text']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['tag_text'])) ? 'selected' : '';
+                $class = (isset($this->dropdown_option_tags['tag_text']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['tag_text'])) ? 'search-choice' : '';
+                $output .= '<option value="' . $value . '"' . $selected . $class . '>' . $tag . '</option>';
             }
             $output .= '</select>';
         } else {

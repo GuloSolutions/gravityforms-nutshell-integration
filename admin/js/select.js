@@ -7,11 +7,12 @@
         width: "65%"
     })
 
+
     $("#submit").click(function(e){
         e.preventDefault();
         e.stopPropagation();
 
-        var all_tags = {};
+        var all_tags = [];
 
         $('*[class*=search-choice]').each(function() {
             var id = '';
@@ -23,26 +24,33 @@
             id = $(this).closest('div').parent().attr('data-id');
 
             if (string_tag) {
-                tags.id = id;
-                tags.tag = tag;
+                if (tags.id) {
+                    tags.tag_text = string_tag;
+                } else {
+                    tags.id = id;
+                    tags.tag_text = string_tag;
+                }
             }
 
             if (!$.isEmptyObject(tags)) {
-                all_tags = tags;
+                all_tags.push(tags);
             }
         });
 
         var data = {
             'action': 'process_nutshell_tags',
-            data: all_tags
+            'ntags': all_tags
         }
 
         jQuery.ajax({
             url: nutshell_tags.ajax_url,
             data: data,
             method: 'POST',
-            success: function(data) {
-                settingsSavedmessage();
+            dataType: 'json',
+            success: function(res) {
+                if (res == '1') {
+                    settingsSavedmessage();
+                }
             }
         });
     });

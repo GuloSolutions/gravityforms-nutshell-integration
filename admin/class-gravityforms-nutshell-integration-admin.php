@@ -42,6 +42,16 @@ class Gravityforms_Nutshell_Integration_Admin
     private $version;
 
     /**
+     * The tags option string for this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $tagsoption    The current saved tags.
+     */
+
+    const TAGS_SAVED_OPTIONS = 'wp_gf_nutshell_tags';
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
@@ -88,18 +98,33 @@ class Gravityforms_Nutshell_Integration_Admin
             'nutshell_tags',
             ['ajax_url' => admin_url('admin-ajax.php')]
         );
+
+        wp_localize_script(
+            $this->plugin_name,
+            'saved_nutshell_tags',
+            ['ajax_url' => admin_url('admin-ajax.php')]
+        );
     }
 
     public function process_nutshell_tags()
     {
-        error_log(print_r("called", true));
+        $option = 'wp_gf_nutshell_tags';
+        $tags = $_POST['ntags'];
 
-        $tags = $_POST['nutshell_tags'];
+        if (update_option($option, $tags) !== false) {
+            echo json_encode('1');
+            wp_die();
+        }
 
-        error_log(print_r("called", true));
-        error_log(print_r($tags, true));
+        wp_die();
+    }
 
-        echo (json_encode("test"));
+    public function process_saved_tags()
+    {
+        $options = get_option('wp_gf_nutshell_tags');
+
+        echo json_encode($options);
+
         wp_die();
     }
 
