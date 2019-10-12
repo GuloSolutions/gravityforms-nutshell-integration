@@ -1,7 +1,7 @@
 const path = require( 'path' );
 const config = {
 	entry: {
-		backend: ['./admin/js/chosen.js', './admin/js/select.js', './admin/js/load.js']
+		backend: ['./admin/js/chosen.js', './admin/js/select.js']
 	},
 	output: {
 		filename: 'gravityforms-nutshell-integration-admin.js',

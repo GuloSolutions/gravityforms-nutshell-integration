@@ -300,29 +300,39 @@ class GravityNutshellSettingsPage
 
     public function dropdown_option_tags_callback($args)
     {
-        $the_option = 'dropdown_option_setting_tag_name_'.$args['label'].'_api_tags';
-        $this->dropdown_option_tags = get_option($the_option);
-
         $this->dropdown_option_tags = get_option('wp_gf_nutshell_tags');
-
-        error_log(print_r('tags', true));
-
-        error_log(print_r($this->dropdown_option_tags, true));
-
-
-
-        $output = '';
-        $name =  $the_option.'[dropdown_option_api_tags][]';
+        $this->dropdown_option_tags = array_values($this->dropdown_option_tags);
+        $tags_num = count($this->dropdown_option_tags);
 
         echo  '<div id="output" data-id="'.$args['label'].'">';
 
         if (!empty($this->tags->Contacts)) {
-            $output .= '<select data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form" multiple class="chosen-select" style="min-width:30%;" >';
+            $output = '';
+            $temp = '';
+
+            $output .= '<select data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form_select" multiple class="chosen-select" style="min-width:30%;" >';
             foreach ($this->tags->Contacts as $tag) {
+                $i = 0;
+                $value = '';
                 $value = str_replace(' ', '_', trim(strval($tag)));
-                $selected = (isset($this->dropdown_option_tags['tag_text']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['tag_text'])) ? 'selected' : '';
-                $class = (isset($this->dropdown_option_tags['tag_text']) && in_array(str_replace(' ', '_', $tag), $this->dropdown_option_tags['tag_text'])) ? 'search-choice' : '';
-                $output .= '<option value="' . $value . '"' . $selected . $class . '>' . $tag . '</option>';
+
+                while ($i < $tags_num) {
+                    $key = '';
+
+                    $key = array_search($value, array_column($this->dropdown_option_tags, 'tag_text'));
+                    $id = $this->dropdown_option_tags[$key]['id'];
+                    $saved_tag = $this->dropdown_option_tags[$key]['tag_text'];
+
+                    if (($saved_tag == $value) && ($id == $args['label'])) {
+                        $selected = 'selected';
+
+                        $temp = '<option value="'.$value.'"'. ' '.$selected.'>'.trim($tag).'</option>';
+                    } else {
+                        $temp = '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
+                    }
+                    $i++;
+                }
+                $output.=$temp;
             }
             $output .= '</select>';
         } else {

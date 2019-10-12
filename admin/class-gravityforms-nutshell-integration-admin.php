@@ -98,12 +98,6 @@ class Gravityforms_Nutshell_Integration_Admin
             'nutshell_tags',
             ['ajax_url' => admin_url('admin-ajax.php')]
         );
-
-        wp_localize_script(
-            $this->plugin_name,
-            'saved_nutshell_tags',
-            ['ajax_url' => admin_url('admin-ajax.php')]
-        );
     }
 
     public function process_nutshell_tags()
@@ -115,15 +109,6 @@ class Gravityforms_Nutshell_Integration_Admin
             echo json_encode('1');
             wp_die();
         }
-
-        wp_die();
-    }
-
-    public function process_saved_tags()
-    {
-        $options = get_option('wp_gf_nutshell_tags');
-
-        echo json_encode($options);
 
         wp_die();
     }

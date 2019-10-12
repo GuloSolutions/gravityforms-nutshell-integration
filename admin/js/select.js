@@ -21,6 +21,8 @@
             var tags = {};
 
             string_tag = $(this).text();
+            string_tag = string_tag.replace(/ /g,"_");
+
             id = $(this).closest('div').parent().attr('data-id');
 
             if (string_tag) {
