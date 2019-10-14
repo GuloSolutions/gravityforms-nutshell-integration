@@ -58,9 +58,9 @@
     });
 
     function settingsSavedmessage() {
-        $("#wp_content_likes_notification").
+        $("#wp-gf-notification").
                 fadeIn("slow").
-                html('Settings Saved <span class="wp_content_likes_notification-dismiss"><a title="dismiss message">X</a></span>').
+                html('Settings Saved <span class="wp-gf-notification-dismiss"><a title="dismiss message">X</a></span>').
                 delay(1000).
                 fadeOut("slow");
         }

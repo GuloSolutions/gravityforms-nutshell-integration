@@ -58,7 +58,7 @@ class GravityNutshellSettingsPage
         <?php
                 settings_fields('my_option_group');
         do_settings_sections('wp-gf-nutshell-admin');
-        echo '<div id="wp_content_likes_notification"></div>';
+        echo '<div id="wp-gf-notification"></div>';
 
         submit_button(); ?>
     </form>
@@ -363,7 +363,7 @@ class GravityNutshellSettingsPage
         $value = !empty($args['value']) ? $args['value'] : '';
 
         printf(
-            sprintf('<input type="text" id=%s name="%s" placeholder="%s" value="%s" ></input>', $args['title'], $args['title'], $placeholder, $value)
+            sprintf('<input type="text" id=%s name="%s" placeholder="%s" value="%s"></input>', $args['title'], $args['title'], $placeholder, $value)
         );
     }
 
