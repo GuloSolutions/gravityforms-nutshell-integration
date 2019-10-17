@@ -27,8 +27,8 @@ class GravityNutshellSettingsPage
         add_action('admin_menu', array($this, 'add_plugin_page'));
         add_action('admin_init', array($this, 'page_init'));
         add_action('admin_init', array($this, 'setApiUsers'));
+        add_action('admin_init', array($this, 'setApiTags'));
         $this->name = $name;
-        $this->tags = $gravity_forms->findTags();
         $this->customFields = $gravity_forms->findCustomFields();
     }
 
@@ -301,6 +301,7 @@ class GravityNutshellSettingsPage
     public function dropdown_option_tags_callback($args)
     {
         $this->dropdown_option_tags = get_option('wp_gf_nutshell_tags');
+        $this->tags = get_option('dropdown_option_api_tags');
         $this->dropdown_option_tags = array_values($this->dropdown_option_tags);
         $tags_num = count($this->dropdown_option_tags);
 
@@ -377,6 +378,16 @@ class GravityNutshellSettingsPage
         }
     }
 
+    // set api users in transients; renew in a week
+    public function setApiTags()
+    {
+        if (false === ($api_tags = get_transient('_s_nutshell_tags_results'))) {
+            $api_tags = $this->getApiTags();
+            set_transient('_s_nutshell_tags_results', $api_tags, 2 * DAY_IN_SECONDS);
+            update_option('dropdown_option_api_tags', $api_tags);
+        }
+    }
+
     public function getApiUsers()
     {
         global $gravity_forms;
@@ -391,6 +402,17 @@ class GravityNutshellSettingsPage
         }
 
         return $api_users;
+    }
+
+    public function getApiTags()
+    {
+        global $gravity_forms;
+
+        $api_tags = [];
+
+        $api_tags = $gravity_forms->findTags();
+
+        return $api_tags;
     }
 
     public function cleanFormTitle($raw_title)
