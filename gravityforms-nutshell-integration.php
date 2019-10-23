@@ -43,6 +43,16 @@ define('PLUGIN_NAME_VERSION', '1.1.12');
  */
 function activate_gravityforms_nutshell_integration()
 {
+    if ( !function_exists( 'is_plugin_active' ) ) {
+        include_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+    }
+
+    if ( current_user_can( 'activate_plugins' ) && !is_plugin_active( 'gravityforms/gravityforms.php' )) {
+        deactivate_plugins( plugin_basename( __FILE__ ) );
+        $error_message = '<p style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif;font-size: 13px;line-height: 1.5;color:#444;">' . esc_html__( 'This plugin requires ', 'wp-gf-nutshell' ) . '<a href="' . esc_url( 'https://www.gravityforms.com/' ) . '">Gravity Forms</a>' . esc_html__( ' to be active.', 'wp-gf-nutshell' ) . '</p>';
+        die($error_message);
+    }
+
     require_once plugin_dir_path(__FILE__) . 'includes/class-gravityforms-nutshell-integration-activator.php';
     Gravityforms_Nutshell_Integration_Activator::activate();
 }
