@@ -20,6 +20,10 @@ class GravityNutshellSettingsPage
     {
         global $gravity_forms;
 
+        if (is_plugin_active('gravityforms/gravityforms.php')){
+            $this->customFields = $gravity_forms->findCustomFields();
+        }
+
         if (null === $gravity_forms) {
             $gravity_forms = new Controllers\GravityFormsController();
         }
@@ -29,7 +33,6 @@ class GravityNutshellSettingsPage
         add_action('admin_init', array($this, 'setApiUsers'));
         add_action('admin_init', array($this, 'setApiTags'));
         $this->name = $name;
-        $this->customFields = $gravity_forms->findCustomFields();
     }
 
     /**
