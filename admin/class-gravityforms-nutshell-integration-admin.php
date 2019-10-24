@@ -155,7 +155,7 @@ class Gravityforms_Nutshell_Integration_Admin
         if ( !is_plugin_active( 'gravityforms/gravityforms.php') ) {
             $error_message='WP GF Nutshell has been deactivated because a dependency -- Gravity Forms -- has been deactivated.';
             do_action('admin_notices', $error_message);
-            deactivate_plugins(ABSPATH .'/wp-content/plugins/gravityforms-nutshell-integration/gravityforms-nutshell-integration.php');
+            deactivate_plugins(ABSPATH .'/wp-content/plugins/wp-gf-nutshell/gravityforms-nutshell-integration.php');
         }
     }
 }
