@@ -308,7 +308,6 @@ class GravityNutshellSettingsPage
             $tags_num = count($this->dropdown_option_tags);
         }
 
-
         echo  '<div id="output" data-id="'.$args['label'].'">';
 
         if (!empty($this->tags->Contacts)) {

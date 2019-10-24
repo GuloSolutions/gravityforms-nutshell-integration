@@ -153,11 +153,12 @@ class Gravityforms_Nutshell_Integration
     private function define_admin_hooks()
     {
         $plugin_admin = new Gravityforms_Nutshell_Integration_Admin($this->get_plugin_name(), $this->get_version());
-        $this->loader->add_action('admin_notices', $plugin_admin, 'add_error_message', 1, 10);
+        $this->loader->add_action('admin_notices', $plugin_admin, 'add_error_message', 2, 10);
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_admin_scripts');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_admin_styles');
         $this->loader->add_action('wp_ajax_nopriv_process_nutshell_tags', $plugin_admin, 'process_nutshell_tags');
         $this->loader->add_action('wp_ajax_process_nutshell_tags', $plugin_admin, 'process_nutshell_tags');
+        $this->loader->add_action('update_option_active_plugins', $plugin_admin, 'deactivate_plugin_if_gf_not_active');
     }
 
     /**

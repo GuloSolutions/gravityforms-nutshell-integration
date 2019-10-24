@@ -113,15 +113,12 @@ class Gravityforms_Nutshell_Integration_Admin
         wp_die();
     }
 
-    public function add_error_message()
+    public function add_error_message($err_msg='')
     {
-        global $error;
-        global $err_message;
-
-        if ($error) {
+        if (!empty($err_msg)) {
             ?>
 <div class="error notice">
-    <p><?php _e('There has been an error -- '.$err_message.'!', 'wp-gf-nutshell'); ?>
+    <p><?php _e($err_msg.'!', 'wp-gf-nutshell'); ?>
     </p>
 </div>
 <?php
@@ -151,5 +148,14 @@ class Gravityforms_Nutshell_Integration_Admin
             ), $links);
             return $links;
         });
+    }
+
+    public function deactivate_plugin_if_gf_not_active()
+    {
+        if ( !is_plugin_active( 'gravityforms/gravityforms.php') ) {
+            $error_message='WP GF Nutshell has been deactivated because a dependency -- Gravity Forms -- has been deactivated.';
+            do_action('admin_notices', $error_message);
+            deactivate_plugins(ABSPATH .'/wp-content/plugins/gravityforms-nutshell-integration/gravityforms-nutshell-integration.php');
+        }
     }
 }
