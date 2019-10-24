@@ -20,19 +20,16 @@ class GravityNutshellSettingsPage
     {
         global $gravity_forms;
 
-        if (is_plugin_active('gravityforms/gravityforms.php')){
+        if (null === $gravity_forms && class_exists('GFCommon')) {
+            $gravity_forms = new Controllers\GravityFormsController();
+
+            add_action('admin_menu', array($this, 'add_plugin_page'));
+            add_action('admin_init', array($this, 'page_init'));
+            add_action('admin_init', array($this, 'setApiUsers'));
+            add_action('admin_init', array($this, 'setApiTags'));
+            $this->name = $name;
             $this->customFields = $gravity_forms->findCustomFields();
         }
-
-        if (null === $gravity_forms) {
-            $gravity_forms = new Controllers\GravityFormsController();
-        }
-
-        add_action('admin_menu', array($this, 'add_plugin_page'));
-        add_action('admin_init', array($this, 'page_init'));
-        add_action('admin_init', array($this, 'setApiUsers'));
-        add_action('admin_init', array($this, 'setApiTags'));
-        $this->name = $name;
     }
 
     /**
@@ -303,10 +300,14 @@ class GravityNutshellSettingsPage
 
     public function dropdown_option_tags_callback($args)
     {
+        $tags_num = 0;
         $this->dropdown_option_tags = get_option('wp_gf_nutshell_tags');
         $this->tags = get_option('dropdown_option_api_tags');
-        $this->dropdown_option_tags = array_values($this->dropdown_option_tags);
-        $tags_num = count($this->dropdown_option_tags);
+        if ($this->dropdown_option_tags) {
+            $this->dropdown_option_tags = array_values($this->dropdown_option_tags);
+            $tags_num = count($this->dropdown_option_tags);
+        }
+
 
         echo  '<div id="output" data-id="'.$args['label'].'">';
 
@@ -320,21 +321,26 @@ class GravityNutshellSettingsPage
                 $value = '';
                 $value = str_replace(' ', '_', trim(strval($tag)));
 
-                while ($i < $tags_num) {
-                    $key = '';
+                if ($this->dropdown_option_tags) {
+                    while ($i < $tags_num) {
+                        $key = '';
 
-                    $key = array_search($value, array_column($this->dropdown_option_tags, 'tag_text'));
-                    $id = $this->dropdown_option_tags[$key]['id'];
-                    $saved_tag = $this->dropdown_option_tags[$key]['tag_text'];
+                        $key = array_search($value, array_column($this->dropdown_option_tags, 'tag_text'));
+                        $id = $this->dropdown_option_tags[$key]['id'];
+                        $saved_tag = $this->dropdown_option_tags[$key]['tag_text'];
 
-                    if (($saved_tag == $value) && ($id == $args['label'])) {
-                        $selected = 'selected';
+                        if (($saved_tag == $value) && ($id == $args['label'])) {
+                            $selected = 'selected';
 
-                        $temp = '<option value="'.$value.'"'. ' '.$selected.'>'.trim($tag).'</option>';
-                    } else {
-                        $temp = '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
+                            $temp = '<option value="'.$value.'"'. ' '.$selected.'>'.trim($tag).'</option>';
+                        } else {
+                            $temp = '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
+                        }
+                        $i++;
                     }
-                    $i++;
+                    $output.=$temp;
+                } else {
+                    $temp = '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
                 }
                 $output.=$temp;
             }
