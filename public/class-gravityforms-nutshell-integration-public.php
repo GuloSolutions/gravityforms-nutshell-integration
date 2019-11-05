@@ -107,7 +107,7 @@ class Gravityforms_Nutshell_Integration_Public
             }
 
             // get mapped values and assign them to keys
-            foreach($mapped as $key=>$value){
+            foreach ($mapped as $key=>$value) {
                 $dataToSend[$value] = $value;
             }
 
@@ -239,26 +239,6 @@ class Gravityforms_Nutshell_Integration_Public
                 } else {
                     throw new Exception($e);
                 }
-            }
-        }
-    }
-
-    public function pre_render_add_note()
-    {
-        add_action('gform_pre_render', 'set_is_note', 10, 1);
-
-        function set_is_note($form)
-        {
-            if ($form['title'] != 'Newsletter') {
-                $props = array(
-                'id' => 100,
-                'type' => 'hidden',
-                'value' => 'Test',
-            );
-                $field = GF_Fields::create($props);
-                array_push($form['fields'], $field);
-
-                return $form;
             }
         }
     }
