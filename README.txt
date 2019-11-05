@@ -44,71 +44,15 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 == Changelog ==
 
-1.0.0 - 2019-03-01
+1.1.13 - 2019-11-05
 
-* Initial release
+* Remove pre_render GF hook
+* Add checks for Gravity Forms classes before activation
+* Disable plugin if GF is inactive
 
-1.0.1 - 2019-03-04
+1.1.12 - 2019-10-22
 
-* Add API creds in admin section
-
-1.0.2 - 2019-03-04
-
-* Remove unused imports
-
-1.0.3 - 2019-04-09
-
-* Add more Nutshell API methods
-* Remove API info after uninstall
-* Run frontend functionality if API keys exist
-
-1.1.0 - 2019-04-09
-
-* Latest tag only stable
-
-1.1.1 - 2019-05-22
-
-* Changes to the admin interface, plugin name, sanitization of input, admin forms
-* Catch NUTSHELL API errors if no key or missing user
-
-1.1.2 - 2019-07-31
-
-- Minor improvements and cleanup
-- Add utm code
-
-1.1.3 - 2019-08-01
-
-* Admin form improvements: fixed: placeholder text and value text are now separate
-* Author name fixed
-
-1.1.4 - 2019-08-01
-
-* Add settings link
-
-1.1.5 - 2019-09-20
-
-* Add dropdown fields for settings derived from the Nutshell API, including users and tags
-* Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
-
-1.1.6 - 2019-09-25
-
-* Fix parsing issue
-
-1.1.7 - 2019-09-25
-
-* Fix Nutshell tag name issue when tag is more than a single word
-
-1.1.8 - 2019-09-25
-
-* Fix plugin tag issue
-
-1.1.9 - 2019-09-27
-
-* Fix tag array passed to Nutshell
-
-1.1.10 - 2019-09-27
-
-* Add webpack and scripts
+* Added chosen JS lib for backend dropdown
 
 1.1.11 - 2019-10-01
 
@@ -116,12 +60,68 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 * Add custom fields tp backend UI
 * Add source url as note
 
-1.1.12 - 2019-10-22
+1.1.10 - 2019-09-27
 
-* Added chosen JS lib for backend dropdown
+* Add webpack and scripts
 
-1.1.13 - 2019-11-05
+1.1.9 - 2019-09-27
 
-* Remove pre_render GF hook
-* Add checks for Gravity Forms classes before activation
-* Disable plugin if GF is inactive
+* Fix tag array passed to Nutshell
+
+1.1.8 - 2019-09-25
+
+* Fix plugin tag issue
+
+1.1.7 - 2019-09-25
+
+* Fix Nutshell tag name issue when tag is more than a single word
+
+1.1.6 - 2019-09-25
+
+* Fix parsing issue
+
+1.1.5 - 2019-09-20
+
+* Add dropdown fields for settings derived from the Nutshell API, including users and tags
+* Add Nutshell API methods to allow appending tags and source url to a form and Nutshell Contact
+
+1.1.4 - 2019-08-01
+
+* Add settings link
+
+1.1.3 - 2019-08-01
+
+* Admin form improvements: fixed: placeholder text and value text are now separate
+* Author name fixed
+
+1.1.2 - 2019-07-31
+
+- Minor improvements and cleanup
+- Add utm code
+
+1.1.1 - 2019-05-22
+
+* Changes to the admin interface, plugin name, sanitization of input, admin forms
+* Catch NUTSHELL API errors if no key or missing user
+
+1.1.0 - 2019-04-09
+
+* Latest tag only stable
+
+1.0.3 - 2019-04-09
+
+* Add more Nutshell API methods
+* Remove API info after uninstall
+* Run frontend functionality if API keys exist
+
+1.0.2 - 2019-03-04
+
+* Remove unused imports
+
+1.0.1 - 2019-03-04
+
+* Add API creds in admin section
+
+1.0.0 - 2019-03-01
+
+* Initial release
