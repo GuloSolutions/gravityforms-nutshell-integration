@@ -338,10 +338,7 @@ class GravityNutshellSettingsPage
                         $i++;
                     }
                     $output.=$temp;
-                } else {
-                    $temp = '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
                 }
-                $output.=$temp;
             }
             $output .= '</select>';
         } else {

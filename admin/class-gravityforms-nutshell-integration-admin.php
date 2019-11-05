@@ -91,7 +91,7 @@ class Gravityforms_Nutshell_Integration_Admin
             return;
         }
 
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . '/js/gravityforms-nutshell-integration-admin.js', array('jquery'), $this->version);
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . '/js/gravityforms-nutshell-integration-admin.js', array('jquery'), $this->version, 'all');
 
         wp_localize_script(
             $this->plugin_name,
