@@ -116,7 +116,12 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 * Add custom fields tp backend UI
 * Add source url as note
 
-
 1.1.12 - 2019-10-22
 
 * Added chosen JS lib for backend dropdown
+
+1.1.13 - 2019-11-05
+
+* Remove pre_render GF hook
+* Add checks for Gravity Forms classes before activation
+* Disable plugin if GF is inactive
