@@ -60,7 +60,8 @@ class GravityNutshellSettingsPage
         do_settings_sections('wp-gf-nutshell-admin');
         echo '<div id="wp-gf-notification"></div>';
 
-        submit_button(); ?>
+        $other_attributes = array( 'id' => 'wp-gf-submit-button-id' );
+        submit_button( __( 'Save Settings', 'wp-gf-nutshell' ), 'primary', 'wp-gf-nutshell-save-settings', true, $other_attributes );?>
     </form>
 </div>
 <?php
