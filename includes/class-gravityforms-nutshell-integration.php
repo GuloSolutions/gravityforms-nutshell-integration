@@ -161,6 +161,8 @@ class Gravityforms_Nutshell_Integration
         $this->loader->add_action('update_option_active_plugins', $plugin_admin, 'deactivate_plugin_if_gf_not_active');
     }
 
+
+
     /**
      * Register all of the hooks related to the public-facing functionality
      * of the plugin.
@@ -171,12 +173,10 @@ class Gravityforms_Nutshell_Integration
     private function define_public_hooks()
     {
         $plugin_public = new Gravityforms_Nutshell_Integration_Public($this->get_plugin_name(), $this->get_version());
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_action('init', $plugin_public, 'startService', 10);
-        $this->loader->add_action('after_setup_theme', $plugin_public, 'after_submission', 10, 2);
-        $this->loader->add_action('init', $plugin_public, 'pre_render_add_note', 1, 1);
+        $this->loader->add_action('init', $plugin_public, 'after_submission', 10, 2);
     }
+
 
     /**
      * Run the loader to execute all of the hooks with WordPress.

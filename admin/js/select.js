@@ -7,10 +7,11 @@
         width: "65%"
     })
 
-
-    $("#submit").click(function(e){
+    $("#wp-gf-submit-button-id").click(function(e){
         e.preventDefault();
         e.stopPropagation();
+
+        console.log('clicked');
 
         var all_tags = [];
 
