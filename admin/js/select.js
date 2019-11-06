@@ -10,9 +10,6 @@
     $("#wp-gf-submit-button-id").click(function(e){
         e.preventDefault();
         e.stopPropagation();
-
-        console.log('clicked');
-
         var all_tags = [];
 
         $('*[class*=search-choice]').each(function() {

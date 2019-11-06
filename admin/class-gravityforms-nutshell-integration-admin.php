@@ -105,8 +105,6 @@ class Gravityforms_Nutshell_Integration_Admin
         $option = 'wp_gf_nutshell_tags';
         $tags = $_POST['ntags'];
 
-        error_log(print_r("called ", true));
-
         if (update_option($option, $tags) !== false) {
             echo json_encode('1');
             wp_die();
