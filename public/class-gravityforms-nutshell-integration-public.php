@@ -146,14 +146,7 @@ class Gravityforms_Nutshell_Integration_Public
                 $dataToSend[$notes] = '';
             }
 
-
-
             $dataToSend[$notes] = $dataToSend[$notes]."\r\n Source URL: ".$source_url;
-
-
-            error_log(print_r($dataToSend, true));
-
-            exit;
 
 
             // foreach ($custom_fields as $field) {s
@@ -172,7 +165,9 @@ class Gravityforms_Nutshell_Integration_Public
             // }
 
             // search methods return stubs; get methods full info
-            $contact = $gravity_forms->searchByEmail($dataToSend['email']);
+            if (isset($dataToSend['email'])) {
+                $contact = $gravity_forms->searchByEmail($dataToSend['email']);
+            }
 
             if (!empty($contact->contacts[0]->id)) {
                 $editContact = $gravity_forms->getContact($contact->contacts[0]->id);
@@ -189,17 +184,21 @@ class Gravityforms_Nutshell_Integration_Public
                     $editContact->tags = (array) $editContact->tags;
                 }
 
-                if (!$emailKey || !$phoneKey) {
+                if (!$emailKey) {
                     $fields_to_update['email'] = $dataToSend['email'];
-                    $fields_to_update['phone'] = $dataToSend['phone'];
-                    $fields_to_update['owner'] = ['entityType' => 'Users', 'id' => $user_id];
                 }
 
-                if (!empty($dataToSend['organization'])) {
+                if (!$phoneKey) {
+                    $fields_to_update['phone'] = isset($dataToSend['phone']) ? $dataToSend['phone'] : '';
+                }
+
+                $fields_to_update['owner'] = ['entityType' => 'Users', 'id' => $user_id];
+
+                if (isset($dataToSend['organization'])) {
                     $fields_to_update['description'] = $dataToSend['organization'];
                 }
 
-                if (!empty($dataToSend['tags'])) {
+                if (isset($dataToSend['tags'])) {
                     $tags = array_merge($editContact->tags, $dataToSend['tags']);
                     $fields_to_update['tags'] = $dataToSend['tags'];
                 }
@@ -210,9 +209,9 @@ class Gravityforms_Nutshell_Integration_Public
                     $gravity_forms->addNote(['entity' => ['entityType' => 'Contacts', 'id' => $editContact->id]], $dataToSend[$notes]);
                 }
             } else {
-                $new_contact['name'] = $dataToSend['name'];
-                $new_contact['email'] = $dataToSend['email'];
-                $new_contact['phone'] = $dataToSend['phone'];
+                $new_contact['name'] = isset($dataToSend['name']) ? $dataToSend['name'] : ' ' ;
+                $new_contact['email'] = isset($dataToSend['email']) ? $dataToSend['email'] : ' ' ;
+                $new_contact['phone'] = isset($dataToSend['phone']) ? $dataToSend['phone'] : ' ' ;
                 $new_contact['owner'] = ['entityType' => 'Users', 'id' => $user_id];
 
                 if (!empty($dataToSend['organization'])) {
@@ -223,14 +222,20 @@ class Gravityforms_Nutshell_Integration_Public
                     $new_contact['tags'] = $dataToSend['tags'];
                 }
 
+                error_log(print_r($new_contact, true));
+
                 $params['contact'] = $new_contact;
 
-                if ($newContactId = $gravity_forms->addContact($params)) {
-                    if (!empty($dataToSend[$notes])) {
-                        $gravity_forms->addNote(['entity' => ['entityType' => 'Contacts', 'id' => $newContactId, 'name' => $dataToSend['name']]], $dataToSend[$notes]);
+                try {
+                    if ($newContactId = $gravity_forms->addContact($params)) {
+                        error_log(print_r($newContactId, true));
+
+                        if (!empty($dataToSend[$notes])) {
+                            $gravity_forms->addNote(['entity' => ['entityType' => 'Contacts', 'id' => $newContactId, 'name' => $dataToSend['name']]], $dataToSend[$notes]);
+                        }
                     }
-                } else {
-                    throw new Exception($e);
+                } catch (Exception $e) {
+                    error_log(print_r($e, true));
                 }
             }
         }
