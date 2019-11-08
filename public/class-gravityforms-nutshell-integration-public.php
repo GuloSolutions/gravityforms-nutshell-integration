@@ -76,7 +76,7 @@ class Gravityforms_Nutshell_Integration_Public
 
             global $gravity_forms;
             $notes = 'notes';
-            $newContactId = $form_title = $form_owner = $user_id = $source_url = '';
+            $newContactId = $form_title = $form_owner = $user_id = $source_url = $phoneKey = '';
             $fields_to_update = $idLabelMap = $mapped = $data_to_send = $new_contact = $editContact = $users = $all_options = $form_options = $dataToSend = [];
 
             $form_title = preg_replace('/[^A-Za-z0-9 ]/', '', $form['title']);
@@ -117,7 +117,6 @@ class Gravityforms_Nutshell_Integration_Public
                     $dataToSend[$mapped[$k]] = $v;
                 }
             }
-
 
             if (!empty($tags_array)) {
                 $dataToSend['tags'] = array_values($tags_array)[0];
@@ -173,7 +172,9 @@ class Gravityforms_Nutshell_Integration_Public
                 $editContact = $gravity_forms->getContact($contact->contacts[0]->id);
 
                 $emailKey = array_search($dataToSend['email'], (array) $editContact->email);
-                $phoneKey = array_search($dataToSend['phone'], (array) $editContact->phone);
+                if (isset($dataToSend['phone'])) {
+                    $phoneKey = array_search($dataToSend['phone'], (array) $editContact->phone);
+                }
 
                 $editContact->phone = (array) $editContact->phone;
                 $editContact->email = (array) $editContact->email;
@@ -185,11 +186,17 @@ class Gravityforms_Nutshell_Integration_Public
                 }
 
                 if (!$emailKey) {
-                    $fields_to_update['email'] = $dataToSend['email'];
+                    $fields_to_update['email'] = (isset($dataToSend['email']) && !is_null($dataToSend['email']) ? $dataToSend['email'] : ' ');
+                } else {
+                    $fields_to_update['email'][] = (array)$editContact->phone[$phoneKey];
+                    $fields_to_update['email'][] = $dataToSend['email'];
                 }
 
                 if (!$phoneKey) {
-                    $fields_to_update['phone'] = isset($dataToSend['phone']) ? $dataToSend['phone'] : '';
+                    $fields_to_update['phone'] = (isset($dataToSend['phone']) && !is_null($dataToSend['phone']) ? $dataToSend['phone'] : '111-111-1111');
+                } else {
+                    $fields_to_update['phone'][] = (array)$editContact->phone[$phoneKey];
+                    $fields_to_update['phone'][] = $dataToSend['phone'];
                 }
 
                 $fields_to_update['owner'] = ['entityType' => 'Users', 'id' => $user_id];
@@ -211,7 +218,7 @@ class Gravityforms_Nutshell_Integration_Public
             } else {
                 $new_contact['name'] = isset($dataToSend['name']) ? $dataToSend['name'] : ' ' ;
                 $new_contact['email'] = isset($dataToSend['email']) ? $dataToSend['email'] : ' ' ;
-                $new_contact['phone'] = isset($dataToSend['phone']) ? $dataToSend['phone'] : ' ' ;
+                $new_contact['phone'] = isset($dataToSend['phone']) ? $dataToSend['phone'] : '111-111-1111' ;
                 $new_contact['owner'] = ['entityType' => 'Users', 'id' => $user_id];
 
                 if (!empty($dataToSend['organization'])) {
@@ -222,14 +229,10 @@ class Gravityforms_Nutshell_Integration_Public
                     $new_contact['tags'] = $dataToSend['tags'];
                 }
 
-                error_log(print_r($new_contact, true));
-
                 $params['contact'] = $new_contact;
 
                 try {
                     if ($newContactId = $gravity_forms->addContact($params)) {
-                        error_log(print_r($newContactId, true));
-
                         if (!empty($dataToSend[$notes])) {
                             $gravity_forms->addNote(['entity' => ['entityType' => 'Contacts', 'id' => $newContactId, 'name' => $dataToSend['name']]], $dataToSend[$notes]);
                         }
