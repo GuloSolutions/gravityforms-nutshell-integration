@@ -62,7 +62,6 @@ class Gravityforms_Nutshell_Integration_Admin
     {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        $this-> _s_add_settings_link();
     }
 
     /**
@@ -138,7 +137,7 @@ class Gravityforms_Nutshell_Integration_Admin
         $page_link = pathinfo($file);
         $page_link = $page_link['filename'];
 
-        $dir = explode('/', $dir);
+        $dir = explode(DIRECTORY_SEPARATOR, $dir);
         $dir = end($dir);
         $file = $dir.DIRECTORY_SEPARATOR.$file;
 

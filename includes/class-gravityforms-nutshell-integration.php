@@ -159,9 +159,8 @@ class Gravityforms_Nutshell_Integration
         $this->loader->add_action('wp_ajax_nopriv_process_nutshell_tags', $plugin_admin, 'process_nutshell_tags');
         $this->loader->add_action('wp_ajax_process_nutshell_tags', $plugin_admin, 'process_nutshell_tags');
         $this->loader->add_action('update_option_active_plugins', $plugin_admin, 'deactivate_plugin_if_gf_not_active');
+        $this->loader->add_action('admin_init', $plugin_admin, '_s_add_settings_link');
     }
-
-
 
     /**
      * Register all of the hooks related to the public-facing functionality

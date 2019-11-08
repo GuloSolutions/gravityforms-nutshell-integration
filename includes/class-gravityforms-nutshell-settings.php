@@ -61,7 +61,7 @@ class GravityNutshellSettingsPage
         echo '<div id="wp-gf-notification"></div>';
 
         $other_attributes = array( 'id' => 'wp-gf-submit-button-id' );
-        submit_button( __( 'Save Settings', 'wp-gf-nutshell' ), 'primary', 'wp-gf-nutshell-save-settings', true, $other_attributes );?>
+        submit_button( __( 'Save Settings'), 'primary', 'wp-gf-nutshell-save-settings', true, $other_attributes );?>
     </form>
 </div>
 <?php
@@ -255,6 +255,9 @@ class GravityNutshellSettingsPage
     <option value="description" <?php echo $selected; ?>>Description
     </option>
     <?php
+        if (!$this->customFields) {
+            return;
+        }
         foreach ($this->customFields as $k=>$v) {
             if (is_array($v)) {
                 foreach ($v as $vv) {
