@@ -328,12 +328,9 @@ class GravityNutshellSettingsPage
                 if ($this->dropdown_option_tags) {
                     while ($i < $tags_num) {
                         $key = '';
-
                         $key = array_search($value, array_column($this->dropdown_option_tags, 'tag_text'));
                         $id = $this->dropdown_option_tags[$key]['id'];
                         $saved_tag = $this->dropdown_option_tags[$key]['tag_text'];
-
-                        error_log(print_r($saved_tag, true));
 
                         if (($saved_tag == $value) && ($id == $args['label'])) {
                             $selected = 'selected';
@@ -345,6 +342,8 @@ class GravityNutshellSettingsPage
                         $i++;
                     }
                     $output.=$temp;
+                } else {
+                    $output .= '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
                 }
             }
             $output .= '</select>';
