@@ -20,7 +20,7 @@ class GravityNutshellSettingsPage
     {
         global $gravity_forms;
 
-        if (null === $gravity_forms && class_exists('GFCommon')) {
+        if (class_exists('GFCommon')) {
             $gravity_forms = new Controllers\GravityFormsController();
 
             add_action('admin_menu', array($this, 'add_plugin_page'));
@@ -61,7 +61,7 @@ class GravityNutshellSettingsPage
         echo '<div id="wp-gf-notification"></div>';
 
         $other_attributes = array( 'id' => 'wp-gf-submit-button-id' );
-        submit_button( __( 'Save Settings'), 'primary', 'wp-gf-nutshell-save-settings', true, $other_attributes );?>
+        submit_button(__('Save Settings'), 'primary', 'wp-gf-nutshell-save-settings', true, $other_attributes); ?>
     </form>
 </div>
 <?php
@@ -307,6 +307,7 @@ class GravityNutshellSettingsPage
         $tags_num = 0;
         $this->dropdown_option_tags = get_option('wp_gf_nutshell_tags');
         $this->tags = get_option('dropdown_option_api_tags');
+
         if ($this->dropdown_option_tags) {
             $this->dropdown_option_tags = array_values($this->dropdown_option_tags);
             $tags_num = count($this->dropdown_option_tags);
@@ -331,6 +332,8 @@ class GravityNutshellSettingsPage
                         $key = array_search($value, array_column($this->dropdown_option_tags, 'tag_text'));
                         $id = $this->dropdown_option_tags[$key]['id'];
                         $saved_tag = $this->dropdown_option_tags[$key]['tag_text'];
+
+                        error_log(print_r($saved_tag, true));
 
                         if (($saved_tag == $value) && ($id == $args['label'])) {
                             $selected = 'selected';
@@ -392,6 +395,7 @@ class GravityNutshellSettingsPage
     {
         if (false === ($api_tags = get_transient('_s_nutshell_tags_results'))) {
             $api_tags = $this->getApiTags();
+
             set_transient('_s_nutshell_tags_results', $api_tags, 2 * DAY_IN_SECONDS);
             update_option('dropdown_option_api_tags', $api_tags);
         }
