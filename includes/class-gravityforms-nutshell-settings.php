@@ -306,7 +306,7 @@ class GravityNutshellSettingsPage
     {
         $tags_num = 0;
         $this->dropdown_option_tags = get_option('wp_gf_nutshell_tags');
-        $this->tags = get_option('dropdown_option_api_tags');
+        $this->tags = get_transient('_s_nutshell_tags_results');
 
         if ($this->dropdown_option_tags) {
             $this->dropdown_option_tags = array_values($this->dropdown_option_tags);
@@ -322,31 +322,35 @@ class GravityNutshellSettingsPage
             $output .= '<select data-placeholder="Select one or more tags for this form" id="dropdown_option_api_tags_form_select" multiple class="chosen-select" style="min-width:30%;" >';
             foreach ($this->tags->Contacts as $tag) {
                 $i = 0;
-                $value = '';
+                $value = $temp = '';
                 $value = str_replace(' ', '_', trim(strval($tag)));
+
+                $keys = array_column($this->dropdown_option_tags, 'tag_text');
+
+                $form = array_search($args['label'], array_column($this->dropdown_option_tags, 'id'));
 
                 if ($this->dropdown_option_tags) {
                     while ($i < $tags_num) {
-                        $key = '';
-                        $key = array_search($value, array_column($this->dropdown_option_tags, 'tag_text'));
-                        $id = $this->dropdown_option_tags[$key]['id'];
-                        $saved_tag = $this->dropdown_option_tags[$key]['tag_text'];
+                        $key = null;
+                        $id = $selected = '';
+
+                        $id = $this->dropdown_option_tags[$i]['id'];
+                        $saved_tag = $this->dropdown_option_tags[$i]['tag_text'];
 
                         if (($saved_tag == $value) && ($id == $args['label'])) {
                             $selected = 'selected';
-
                             $temp = '<option value="'.$value.'"'. ' '.$selected.'>'.trim($tag).'</option>';
-                        } else {
-                            $temp = '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
                         }
                         $i++;
                     }
                     $output.=$temp;
+                    $output .= '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
+
                 } else {
                     $output .= '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
                 }
             }
-            $output .= '</select>';
+            $output .=$temp.= '</select>';
         } else {
             $output .= '<p>'.__('No tags found.', 'wp-gf-nutshell').'</p>';
         }
