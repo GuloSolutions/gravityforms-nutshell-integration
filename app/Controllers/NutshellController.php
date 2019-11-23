@@ -22,7 +22,7 @@ class NutshellController
         if ($username && $apiKey) {
             try {
                 $this->api = new \NutshellApi($username, $apiKey);
-            } catch (\NutshellApiException $e) {
+            } catch (NutshellApiException $e) {
                 $this->addMessage($e);
                 return;
             }
@@ -35,14 +35,14 @@ class NutshellController
             try {
                 $this->id = $this->api->instanceData()->id;
                 return $this->id;
-            } catch (\NutshellApiException $e) {
+            } catch (NutshellApiException $e) {
                 $this->addMessage($e);
                 return;
             }
         }
     }
 
-    public function addMessage(\NutshellApiException $e)
+    public function addMessage(NutshellApiException $e)
     {
         global $error;
         global $err_message;
@@ -150,15 +150,29 @@ class NutshellController
 
     public function findTags()
     {
-        return $this->api->findTags();
+        if ($this->api) {
+            try {
+                return $this->api->findTags();
+            } catch (\NutshellApiException $e) {}
+        }
     }
 
     public function newTag($tag)
     {
-        return $this->api->newTag($tag);
+        if ($this->api) {
+            try {
+                return $this->api->newTag($tag);
+            } catch (\NutshellApiException $e) {}
+        }
     }
+
     public function findCustomFields()
     {
-        return $this->api->findCustomFields();
+        if ($this->api) {
+            try {
+                return $this->api->findCustomFields();
+            } catch (\NutshellApiException $e) {
+            }
+        }
     }
 }
