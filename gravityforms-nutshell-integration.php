@@ -16,7 +16,7 @@
  * Plugin Name:       WP GF Nutshell
  * Plugin URI:        https://wordpress.org/wp-gf-nutshell
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.1.16
+ * Version:           1.1.17
  * Author:            Gulo Solutions, LLC
  * Author URI:        https://www.gulosolutions.com/?utm_source=wp-admin&utm_medium=wp-plugin&utm_campaign=wp-gf-nutshell
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if (! defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('PLUGIN_NAME_VERSION', '1.1.16');
+define('PLUGIN_NAME_VERSION', '1.1.17');
 
 /**
  * The code that runs during plugin activation.
@@ -109,7 +109,7 @@ function run_gravityforms_nutshell_integration()
         $my_settings_page = new GravityNutshellSettingsPage($plugin_name);
     }
     // run plugin if API info exists
-    if (get_option('nutshell_api_username') && get_option('nutshell_api_key')) {
+    if (false !== get_option('nutshell_api_username') && false !== get_option('nutshell_api_key')) {
         $plugin = new Gravityforms_Nutshell_Integration();
         $plugin->run();
     }
