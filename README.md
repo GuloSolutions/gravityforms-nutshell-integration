@@ -4,8 +4,8 @@
 * Contributors: radboris, zwilson, fsimmons
 * Tags: api, forms, gravityforms, Nutshell, crm
 * Requires at least: 3.0.1
-* Tested up to: 5.2.4
-* Stable tag: 1.1.17
+* Tested up to: 5.3
+* Stable tag: 1.1.18
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
