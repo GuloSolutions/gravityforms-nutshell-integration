@@ -21,7 +21,7 @@ class GravityNutshellSettingsPage
         global $gravity_forms;
 
         if (class_exists('GFCommon')) {
-            $gravity_forms = new Controllers\GravityFormsController();
+            $gravity_forms = Controllers\GravityFormsController::getInstance();
 
             add_action('admin_menu', array($this, 'add_plugin_page'));
             add_action('admin_init', array($this, 'page_init'));
@@ -345,7 +345,6 @@ class GravityNutshellSettingsPage
                     }
                     $output.=$temp;
                     $output .= '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
-
                 } else {
                     $output .= '<option value="'.$value.'"'. ' '.'>'.trim($tag).'</option>';
                 }
