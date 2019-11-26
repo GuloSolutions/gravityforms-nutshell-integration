@@ -44,7 +44,7 @@ The plugin creates Nutshell entries form GravityForms submissions. It allows use
 
 == Changelog ==
 
-1.1.17 - 2019-11-022
+1.1.17 - 2019-11-22
 
 * Fixed: tags display
 

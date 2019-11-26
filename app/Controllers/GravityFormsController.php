@@ -11,7 +11,7 @@ class GravityFormsController
     private $contacts = [];
     public $gf_data;
 
-    public function __construct()
+    private function __construct()
     {
         if (!$this->checkIfGFActive()) {
             return;

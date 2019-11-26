@@ -61,7 +61,7 @@ class Gravityforms_Nutshell_Integration_Public
     public function startService()
     {
         global $gravity_forms;
-        $gravity_forms = new Controllers\GravityFormsController();
+        $gravity_forms =  Controllers\GravityFormsController::getInstance();
     }
 
     public function after_submission()
